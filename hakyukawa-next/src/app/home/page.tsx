@@ -58,7 +58,7 @@ export default function Home() {
                 <div className={styles.icon}></div>
             </div>
 
-            {GroupArray.map((group) => (
+            {GroupArray.slice(0, 3).map((group) => (
                 <Group
                     key={group.id}
                     GroupName={group.GroupName}
