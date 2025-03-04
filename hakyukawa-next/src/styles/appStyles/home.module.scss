@@ -26,7 +26,10 @@
         }
     }
 
-    .messageHeader {
+    .groupHeader {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
         h2 {
             font-size: 1.8rem;
             font-weight: 600;
@@ -34,6 +37,11 @@
         p {
             color: #757575;
             font-size: 1.3rem;
+        }
+        .seeAll {
+            display: flex;
+            font-size: 1.3rem;
+            align-items: center;
         }
     }
 }

@@ -60,11 +60,13 @@ export default function Home() {
             </div>
 
             <div>
-                <div className={styles.messageHeader}>
+                <div className={styles.groupHeader}>
                     <h2>メッセージ</h2>
                     <button>
-                        すべて見る
-                        <IoIosArrowForward color="#757575" />
+                        <p className={styles.seeAll}>
+                            すべて見る
+                            <IoIosArrowForward color="#757575" />
+                        </p>
                     </button>
                 </div>
 
