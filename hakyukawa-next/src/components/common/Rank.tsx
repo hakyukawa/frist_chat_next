@@ -13,20 +13,17 @@ export default function Rank(props: RankProps) {
 
     return (
         <div className={styles.rankWrap}>
-            <div>
-                <h2>
-                    Rank.<span>{props.rank}</span>
-                </h2>
-                <div className={styles.rankBarWrap}>
-                    <div className={clsx(styles.rankGrayBar, styles.rankBars)}></div>
-                    <div
-                        className={clsx(styles.rankBlueBar, styles.rankBars)}
-                        style={{ width: `${rankBarWidth}px` }}
-                    ></div>
-                </div>
-                <p>{props.points}/5000</p>
+            <h2>
+                Rank.<span>{props.rank}</span>
+            </h2>
+            <div className={styles.rankBarWrap}>
+                <div className={clsx(styles.rankGrayBar, styles.rankBars)}></div>
+                <div
+                    className={clsx(styles.rankBlueBar, styles.rankBars)}
+                    style={{ width: `${rankBarWidth}px` }}
+                ></div>
             </div>
-            <div className={styles.icon}></div>
+            <p>{props.points}/5000</p>
         </div>
     );
 }

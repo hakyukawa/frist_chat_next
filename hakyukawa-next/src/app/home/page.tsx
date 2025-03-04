@@ -26,6 +26,7 @@ export default function Home() {
                 <p className={styles.userId}>@{demo.user_id}</p>
                 <Rank rank={demo.rank} points={demo.points} />
             </div>
+            <div className={styles.icon}></div>
         </div>
     );
 }
