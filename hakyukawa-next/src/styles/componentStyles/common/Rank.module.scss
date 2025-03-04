@@ -8,11 +8,13 @@
     .rankBarWrap {
         position: relative;
         width: 220px;
+        border-radius: 50%;
         .rankBars {
             position: absolute;
             top: -5px;
             left: 0;
             height: 7px;
+            border-radius: 8px;
         }
         .rankGrayBar {
             width: 100%;
