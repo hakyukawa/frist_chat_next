@@ -3,6 +3,7 @@ import clsx from "clsx";
 interface RankProps {
     rank: number;
     points: number;
+    rankFontSize: string;
 }
 
 export default function Rank(props: RankProps) {
@@ -13,7 +14,7 @@ export default function Rank(props: RankProps) {
 
     return (
         <div className={styles.rankWrap}>
-            <h2>
+            <h2 style={{ fontSize: props.rankFontSize }}>
                 Rank.<span>{props.rank}</span>
             </h2>
             <div className={styles.rankBarWrap}>

@@ -24,7 +24,7 @@ export default function Home() {
             <div className={styles.userInfo}>
                 <h1>{demo.user_name}</h1>
                 <p className={styles.userId}>@{demo.user_id}</p>
-                <Rank rank={demo.rank} points={demo.points} />
+                <Rank rank={demo.rank} points={demo.points} rankFontSize="1.8rem" />
             </div>
             <div className={styles.icon}></div>
         </div>
