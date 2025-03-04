@@ -21,7 +21,7 @@ export default function Home() {
 
     return (
         <div className={styles.container}>
-            <div>
+            <div className={styles.userInfo}>
                 <h1>{demo.user_name}</h1>
                 <p className={styles.userId}>@{demo.user_id}</p>
                 <Rank rank={demo.rank} points={demo.points} />
