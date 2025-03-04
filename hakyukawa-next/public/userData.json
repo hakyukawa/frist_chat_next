@@ -1,0 +1,8 @@
+{
+    "user_id": 12345,
+    "user_name": "example_user",
+    "email": "example@example.com",
+    "password": "password123",
+    "rank": 50,
+    "points": 1500
+}
