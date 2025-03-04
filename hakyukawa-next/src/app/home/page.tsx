@@ -33,6 +33,18 @@ export default function Home() {
             GroupName: "トマト",
             LastMessageTime: 60,
         },
+        {
+            id: 3,
+            GroupMember: ["user6", "user7", "user8", "user9"],
+            GroupName: "みかん",
+            LastMessageTime: 90,
+        },
+        {
+            id: 4,
+            GroupMember: ["user10", "user11", "user12"],
+            GroupName: "コーラ",
+            LastMessageTime: 300,
+        },
     ];
 
     return (
