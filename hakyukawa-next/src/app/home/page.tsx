@@ -1,7 +1,7 @@
 import Rank from "@/components/common/Rank";
 import Group from "@/components/common/Group";
 import { IoIosArrowForward } from "react-icons/io";
-import styles from "@/styles/appStyles/home.module.scss";
+
 interface Demo {
     user_id: number;
     user_name: string;
@@ -49,21 +49,21 @@ export default function Home() {
     ];
 
     return (
-        <div className={styles.container}>
-            <div className={styles.userInfoWrap}>
-                <div className={styles.userInfo}>
-                    <h1>{demo.user_name}</h1>
-                    <p className={styles.userId}>@{demo.user_id}</p>
+        <div className="p-[16px]">
+            <div className="flex items-center justify-between">
+                <div className="flex flex-col justify-between h-[100px]">
+                    <h1 className="text-[2rem] font-semibold">{demo.user_name}</h1>
+                    <p className="text-[#757575] text-[1.4rem]">@{demo.user_id}</p>
                     <Rank rank={demo.rank} points={demo.points} rankFontSize="1.8rem" />
                 </div>
-                <div className={styles.icon}></div>
+                <div className="w-[70px] h-[70px] bg-[#21b5ff] rounded-full"></div>
             </div>
 
             <div>
-                <div className={styles.groupHeader}>
-                    <h2>メッセージ</h2>
+                <div className="flex justify-between my-5">
+                    <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
                     <button>
-                        <p className={styles.seeAll}>
+                        <p className="flex items-center text-[#757575] text-[1.3rem]">
                             すべて見る
                             <IoIosArrowForward color="#757575" />
                         </p>
