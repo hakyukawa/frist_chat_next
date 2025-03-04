@@ -22,7 +22,7 @@ export default function Home() {
         <div>
             <h1>{demo.user_name}</h1>
             <p>{demo.user_id}</p>
-            <Rank />
+            <Rank rank={demo.rank} points={demo.points} />
         </div>
     );
 }
