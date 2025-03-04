@@ -25,4 +25,15 @@
             border-radius: 50%;
         }
     }
+
+    .messageHeader {
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        p {
+            color: #757575;
+            font-size: 1.3rem;
+        }
+    }
 }

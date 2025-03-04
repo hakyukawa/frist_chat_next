@@ -1,5 +1,6 @@
 import Rank from "@/components/common/Rank";
 import Group from "@/components/common/Group";
+import { IoIosArrowForward } from "react-icons/io";
 import styles from "@/styles/appStyles/home.module.scss";
 interface Demo {
     user_id: number;
@@ -58,14 +59,24 @@ export default function Home() {
                 <div className={styles.icon}></div>
             </div>
 
-            {GroupArray.slice(0, 3).map((group) => (
-                <Group
-                    key={group.id}
-                    GroupName={group.GroupName}
-                    NumberOfPerson={group.GroupMember.length}
-                    LastMessageTime={group.LastMessageTime}
-                />
-            ))}
+            <div>
+                <div className={styles.messageHeader}>
+                    <h2>メッセージ</h2>
+                    <button>
+                        すべて見る
+                        <IoIosArrowForward color="#757575" />
+                    </button>
+                </div>
+
+                {GroupArray.slice(0, 3).map((group) => (
+                    <Group
+                        key={group.id}
+                        GroupName={group.GroupName}
+                        NumberOfPerson={group.GroupMember.length}
+                        LastMessageTime={group.LastMessageTime}
+                    />
+                ))}
+            </div>
         </div>
     );
 }
