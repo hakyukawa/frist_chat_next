@@ -1,4 +1,4 @@
-import Rank from "@/components/Rank";
+import Rank from "@/components/common/Rank";
 interface Demo {
     user_id: number;
     user_name: string;
