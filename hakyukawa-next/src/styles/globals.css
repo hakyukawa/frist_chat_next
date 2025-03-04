@@ -62,8 +62,9 @@ html {
 *::before,
 *::after {
     box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+    /* CSSが競合している為コメントアウト */
+    /* padding: 0;
+    margin: 0; */
 }
 
 ol,
