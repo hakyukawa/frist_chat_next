@@ -1,5 +1,5 @@
 import Rank from "@/components/common/Rank";
-import styles from "@/styles/appStyles/home.module.css";
+import styles from "@/styles/appStyles/home.module.scss";
 interface Demo {
     user_id: number;
     user_name: string;
@@ -22,7 +22,7 @@ export default function Home() {
     return (
         <div className={styles.container}>
             <h1>{demo.user_name}</h1>
-            <p>{demo.user_id}</p>
+            <p className={styles.userId}>@{demo.user_id}</p>
             <Rank rank={demo.rank} points={demo.points} />
         </div>
     );
