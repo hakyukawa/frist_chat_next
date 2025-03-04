@@ -1,0 +1,23 @@
+.container {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    .icon {
+        background-color: #21b5ff;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        margin-right: 16px;
+    }
+    .groupName {
+        font-size: 1.8rem;
+        display: flex;
+        align-items: center;
+    }
+    .receptionTime {
+        font-size: 1.5rem;
+        color: #21b5ff;
+        display: flex;
+        align-items: center;
+    }
+}

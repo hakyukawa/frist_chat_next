@@ -1,4 +1,5 @@
 import { BsChatTextFill } from "react-icons/bs";
+import styles from "@/styles/componentStyles/common/Group.module.scss";
 
 interface GroupProps {
     GroupName: string;
@@ -8,15 +9,15 @@ interface GroupProps {
 
 export default function Group(props: GroupProps) {
     return (
-        <div className="my-[20px] flex items-center">
-            <div className="bg-blue-400 w-[46px] h-[46px] rounded-full mr-[16px]"></div>
+        <div className={styles.container}>
+            <div className={styles.icon}></div>
             <div>
-                <h2 className="text-[18px] flex items-center">
+                <h2 className={styles.groupName}>
                     {props.GroupName}
                     {props.NumberOfPerson >= 2 && `(${props.NumberOfPerson})`}
                 </h2>
-                <p className="text-[15px] text-blue-400 flex items-center">
-                    <BsChatTextFill className="w-[21px]" />
+                <p className={styles.receptionTime}>
+                    <BsChatTextFill />
                     受信
                     {props.LastMessageTime < 60
                         ? `${props.LastMessageTime}分前`
