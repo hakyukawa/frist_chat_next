@@ -1,4 +1,6 @@
 import Rank from "@/components/common/Rank";
+import Group from "@/components/common/Group";
+import { IoIosArrowForward } from "react-icons/io";
 import styles from "@/styles/appStyles/home.module.scss";
 interface Demo {
     user_id: number;
@@ -19,14 +21,64 @@ export default function Home() {
         points: 1500,
     };
 
+    const GroupArray = [
+        {
+            id: 1,
+            GroupMember: ["user1", "user2"],
+            GroupName: "餃子",
+            LastMessageTime: 30,
+        },
+        {
+            id: 2,
+            GroupMember: ["user3", "user4", "user5"],
+            GroupName: "トマト",
+            LastMessageTime: 60,
+        },
+        {
+            id: 3,
+            GroupMember: ["user6", "user7", "user8", "user9"],
+            GroupName: "みかん",
+            LastMessageTime: 90,
+        },
+        {
+            id: 4,
+            GroupMember: ["user10", "user11", "user12"],
+            GroupName: "コーラ",
+            LastMessageTime: 300,
+        },
+    ];
+
     return (
         <div className={styles.container}>
-            <div className={styles.userInfo}>
-                <h1>{demo.user_name}</h1>
-                <p className={styles.userId}>@{demo.user_id}</p>
-                <Rank rank={demo.rank} points={demo.points} rankFontSize="1.8rem" />
+            <div className={styles.userInfoWrap}>
+                <div className={styles.userInfo}>
+                    <h1>{demo.user_name}</h1>
+                    <p className={styles.userId}>@{demo.user_id}</p>
+                    <Rank rank={demo.rank} points={demo.points} rankFontSize="1.8rem" />
+                </div>
+                <div className={styles.icon}></div>
             </div>
-            <div className={styles.icon}></div>
+
+            <div>
+                <div className={styles.groupHeader}>
+                    <h2>メッセージ</h2>
+                    <button>
+                        <p className={styles.seeAll}>
+                            すべて見る
+                            <IoIosArrowForward color="#757575" />
+                        </p>
+                    </button>
+                </div>
+
+                {GroupArray.slice(0, 3).map((group) => (
+                    <Group
+                        key={group.id}
+                        GroupName={group.GroupName}
+                        NumberOfPerson={group.GroupMember.length}
+                        LastMessageTime={group.LastMessageTime}
+                    />
+                ))}
+            </div>
         </div>
     );
 }
