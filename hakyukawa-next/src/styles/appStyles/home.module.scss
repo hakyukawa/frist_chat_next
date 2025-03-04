@@ -1,5 +1,8 @@
 .container {
     padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     h1 {
         font-size: 2rem;
         font-weight: 600;
@@ -7,5 +10,11 @@
     .userId {
         color: #757575;
         font-size: 1.4rem;
+    }
+    .icon {
+        width: 70px;
+        height: 70px;
+        background-color: #21b5ff;
+        border-radius: 50%;
     }
 }
