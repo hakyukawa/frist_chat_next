@@ -1,5 +1,6 @@
 import Rank from "@/components/common/Rank";
 import Group from "@/components/common/Group";
+import Header from "@/components/common/Header";
 import { IoIosArrowForward } from "react-icons/io";
 
 interface Demo {
@@ -65,61 +66,64 @@ export default function Home() {
     };
 
     return (
-        <div className="p-[16px]">
-            <div className="flex items-center justify-between">
-                <div className="flex flex-col justify-between h-[100px]">
-                    <h1 className="text-[2rem] font-semibold">{demo.user_name}</h1>
-                    <p className="text-[#757575] text-[1.4rem]">@{demo.user_id}</p>
-                    <Rank rank={demo.rank} points={demo.points} rankFontSize="1.8rem" />
+        <>
+            <Header setting backPage backPageText="雑談" core addFriend addGroup notice search />
+            <div className="p-[16px]">
+                <div className="flex items-center justify-between">
+                    <div className="flex flex-col justify-between h-[100px]">
+                        <h1 className="text-[2rem] font-semibold">{demo.user_name}</h1>
+                        <p className="text-[#757575] text-[1.4rem]">@{demo.user_id}</p>
+                        <Rank rank={demo.rank} points={demo.points} rankFontSize="1.8rem" />
+                    </div>
+                    <div className="w-[70px] h-[70px] bg-main rounded-full"></div>
                 </div>
-                <div className="w-[70px] h-[70px] bg-main rounded-full"></div>
-            </div>
-            <button className="w-full rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold">
-                フレンド
-                <div className="text-subText text-[2rem] flex items-center">
-                    {friendArray.slice(0, 4).map((friend, index) => friendIcons(index))}
-                    <IoIosArrowForward />
-                </div>
-            </button>
+                <button className="w-full rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold">
+                    フレンド
+                    <div className="text-subText text-[2rem] flex items-center">
+                        {friendArray.slice(0, 4).map((friend, index) => friendIcons(index))}
+                        <IoIosArrowForward />
+                    </div>
+                </button>
 
-            <div>
-                <div className="flex justify-between my-5">
-                    <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
-                    <button>
-                        <p className="flex items-center text-[#757575] text-[1.3rem]">
-                            すべて見る
-                            <IoIosArrowForward color="#757575" />
-                        </p>
-                    </button>
-                </div>
-                {friendArray.slice(0, 2).map((friend) => (
-                    <Group
-                        key={friend.id}
-                        type="friend"
-                        Name={friend.friendName}
-                        LastMessageTime={friend.LastMessageTime}
-                    />
-                ))}
+                <div>
+                    <div className="flex justify-between my-5">
+                        <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
+                        <button>
+                            <p className="flex items-center text-[#757575] text-[1.3rem]">
+                                すべて見る
+                                <IoIosArrowForward color="#757575" />
+                            </p>
+                        </button>
+                    </div>
+                    {friendArray.slice(0, 2).map((friend) => (
+                        <Group
+                            key={friend.id}
+                            type="friend"
+                            Name={friend.friendName}
+                            LastMessageTime={friend.LastMessageTime}
+                        />
+                    ))}
 
-                <div className="flex justify-between my-5">
-                    <h2 className="text-subText text-[1.6rem] font-semibold">グループ</h2>
-                    <button>
-                        <p className="flex items-center text-[#757575] text-[1.3rem]">
-                            すべて見る
-                            <IoIosArrowForward color="#757575" />
-                        </p>
-                    </button>
+                    <div className="flex justify-between my-5">
+                        <h2 className="text-subText text-[1.6rem] font-semibold">グループ</h2>
+                        <button>
+                            <p className="flex items-center text-[#757575] text-[1.3rem]">
+                                すべて見る
+                                <IoIosArrowForward color="#757575" />
+                            </p>
+                        </button>
+                    </div>
+                    {GroupArray.slice(0, 3).map((group) => (
+                        <Group
+                            key={group.id}
+                            type="group"
+                            Name={group.GroupName}
+                            NumberOfPerson={group.GroupMember.length}
+                            LastMessageTime={group.LastMessageTime}
+                        />
+                    ))}
                 </div>
-                {GroupArray.slice(0, 3).map((group) => (
-                    <Group
-                        key={group.id}
-                        type="group"
-                        Name={group.GroupName}
-                        NumberOfPerson={group.GroupMember.length}
-                        LastMessageTime={group.LastMessageTime}
-                    />
-                ))}
             </div>
-        </div>
+        </>
     );
 }
