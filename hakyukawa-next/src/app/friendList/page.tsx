@@ -1,6 +1,6 @@
 import Header from "@/components/common/Header";
 import Group from "@/components/common/Group";
-import { IoIosSearch } from "react-icons/io";
+import Search from "@/components/common/Search";
 
 const friendArray = [
     { id: 1, friendName: "friend1", LastMessageTime: 30 },
@@ -14,11 +14,7 @@ export default function friendList() {
         <>
             <Header backPage backPageLink="/home" backPageText="フレンド" addFriend setting />
             <div className="p-4">
-                <div className="p-3 w-full border border-border rounded-[10px] flex items-center text-[1.3rem]">
-                    <IoIosSearch size="20px" style={{ marginRight: "5px" }} />
-                    <input type="text" className="w-full  rounded-md" placeholder="検索" />
-                </div>
-
+                <Search />
                 {friendArray.map((friend) => (
                     <Group
                         key={friend.id}
