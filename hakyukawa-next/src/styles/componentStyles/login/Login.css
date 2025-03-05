@@ -1,9 +1,11 @@
+#title{
+    margin: 20px 0px;
+    font-size: 24px;
+}
 label {
     display: block;
     font-weight: bold;
   }
-
-
 .loginwrap{
     display: flex;
     flex-direction: column;
@@ -17,25 +19,32 @@ label {
     font-size: 16px;  
 }
 
-.form{
+.input{
     padding: 10px 0px;
 }
 
 #login{
     border: none;
-    padding: 10px 10em ;
+    padding: 10px 15em ;
     margin: 20px 0px;
     border-radius: 90px;
     background-color: #21B5FF;
     color: azure;
 }
-#forgetpassword{
-    text-align: center;
+.forgetpassword{
+    color: #21B5FF;
+    padding: 10px auto;
+    display: block;
+    text-align: right;
 }
 form{
     border-bottom: 1px solid gray;
 }
 
 #signUp{
-    margin: 10px 0px;
+    margin: 20px 0px;
+}
+
+.links {
+    color: #21B5FF;
 }
