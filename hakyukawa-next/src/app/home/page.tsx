@@ -48,7 +48,12 @@ export default function Home() {
         },
     ];
 
-    const friendArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const friendArray = [
+        { id: 1, friendName: "friend1", LastMessageTime: 30 },
+        { id: 2, friendName: "friend2", LastMessageTime: 60 },
+        { id: 3, friendName: "friend3", LastMessageTime: 90 },
+        { id: 4, friendName: "friend4", LastMessageTime: 300 },
+    ];
 
     const friendIcons = (key: number) => {
         return (
@@ -87,11 +92,29 @@ export default function Home() {
                         </p>
                     </button>
                 </div>
+                {friendArray.slice(0, 2).map((friend) => (
+                    <Group
+                        key={friend.id}
+                        type="friend"
+                        Name={friend.friendName}
+                        LastMessageTime={friend.LastMessageTime}
+                    />
+                ))}
 
+                <div className="flex justify-between my-5">
+                    <h2 className="text-subText text-[1.6rem] font-semibold">グループ</h2>
+                    <button>
+                        <p className="flex items-center text-[#757575] text-[1.3rem]">
+                            すべて見る
+                            <IoIosArrowForward color="#757575" />
+                        </p>
+                    </button>
+                </div>
                 {GroupArray.slice(0, 3).map((group) => (
                     <Group
                         key={group.id}
-                        GroupName={group.GroupName}
+                        type="group"
+                        Name={group.GroupName}
                         NumberOfPerson={group.GroupMember.length}
                         LastMessageTime={group.LastMessageTime}
                     />

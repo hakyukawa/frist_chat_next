@@ -1,19 +1,25 @@
+"use client";
 import { BsChatTextFill } from "react-icons/bs";
 
 interface GroupProps {
-    GroupName: string;
+    Name: string;
     LastMessageTime: number;
-    NumberOfPerson: number;
+    NumberOfPerson?: number;
+    type: string;
 }
 
 export default function Group(props: GroupProps) {
+    function handleGroupClick() {
+        console.log(`${props.Name}をクリックしました`);
+    }
+
     return (
-        <div className="my-5 flex items-center">
+        <button onClick={handleGroupClick} className="my-5 flex items-center">
             <div className="bg-main w-[46px] h-[46px] rounded-full mr-4"></div>
             <div>
                 <h2 className="text-[1.8rem] flex items-center">
-                    {props.GroupName}
-                    {props.NumberOfPerson >= 2 && `(${props.NumberOfPerson})`}
+                    {props.Name}
+                    {props.type == "group" && `(${props.NumberOfPerson})`}
                 </h2>
                 <p className="text-[1.5rem] text-main flex items-center">
                     <BsChatTextFill />
@@ -23,6 +29,6 @@ export default function Group(props: GroupProps) {
                         : `${Math.floor(props.LastMessageTime / 60)}時間前`}
                 </p>
             </div>
-        </div>
+        </button>
     );
 }
