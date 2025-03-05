@@ -10,7 +10,6 @@ function InputField (props) {
     );
 }
 
-
 function Login () {
     return(
         <div className= "loginwrap">
