@@ -1,6 +1,17 @@
+@import "tailwindcss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind screens;
+
+@theme {
+    --color-main: #ec891f;
+    --color-sub: #404147;
+    --color-subText: #afafaf;
+    --color-background: #2e2f34;
+    --color-border: #717171;
+}
 
 :root {
     --background: #ffffff;
@@ -10,7 +21,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #0a0a0a;
-        --foreground: #000000;
+        --foreground: #ffffff;
     }
 }
 
@@ -23,8 +34,6 @@ body {
 
 :where(a, button) {
     text-decoration: none;
-
-
 
     color: inherit;
 
@@ -40,9 +49,6 @@ body {
 
 :where(button, input, textarea) {
     outline: none;
-    border: none;
-    padding: 0;
-    margin: 0;
     user-select: none;
 }
 
@@ -55,8 +61,9 @@ html {
 *::before,
 *::after {
     box-sizing: border-box;
+    /* CSSが競合している為コメントアウト 
     padding: 0;
-    margin: 0;
+    margin: 0; */
 }
 
 ol,
@@ -83,7 +90,7 @@ h6 {
 
 body {
     overflow-x: hidden;
-    background-color: #f1f1f1;
+    background-color: #2e2f34;
     background-size: contain;
     background-position: top center;
 }
