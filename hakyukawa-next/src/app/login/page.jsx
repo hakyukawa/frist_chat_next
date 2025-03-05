@@ -13,16 +13,16 @@ function InputField (props) {
 function Login () {
     return(
         <div className= "loginwrap">
-            <form method="POST" id="form">
-                <p id="title">ログイン</p>
+            <h2 id="title">ログイン</h2>
+            <form method="POST" >
                 <div id="loginforms">
                     <InputField label = "ユーザーID" type = "text" name = "userId" placeholder = "ユーザIDを入力"/>
                     <InputField label = "パスワード" type = "password" name = "password" placeholder = "" />
-                    <p className="forgetpassword"><a href="">パスワードをお忘れの方</a></p>
+                    <small className="forgetpassword"><a href="">パスワードをお忘れの方</a></small>
                 </div>
                 <input type="submit" value="ログイン" id="login"></input>
             </form>
-            <p id="signUp">アカウントをお持ちでない方は<span className="links"><a href="">登録</a></span></p>
+            <small id="signUp">アカウントをお持ちでない方は<span className="links"><a href="">登録</a></span></small>
         </div>
     );
 }
