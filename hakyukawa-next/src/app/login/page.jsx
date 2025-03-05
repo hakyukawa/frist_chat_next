@@ -1,4 +1,5 @@
 import React  from "react";
+import styles from "@/styles/componentStyles/login/Login.css";
 
 function InputField (props) {
     return(
@@ -27,4 +28,3 @@ function Login () {
 }
 
 export default Login;
-
