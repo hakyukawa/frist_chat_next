@@ -2,6 +2,7 @@ import Rank from "@/components/common/Rank";
 import Group from "@/components/common/Group";
 import Header from "@/components/common/Header";
 import { IoIosArrowForward } from "react-icons/io";
+import Link from "next/link";
 
 interface Demo {
     user_id: number;
@@ -77,13 +78,17 @@ export default function Home() {
                     </div>
                     <div className="w-[70px] h-[70px] bg-main rounded-full"></div>
                 </div>
-                <button className="w-full rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold">
+                <Link
+                    href="/friendList"
+                    passHref
+                    className="w-full rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
+                >
                     フレンド
                     <div className="text-subText text-[2rem] flex items-center">
                         {friendArray.slice(0, 4).map((friend, index) => friendIcons(index))}
                         <IoIosArrowForward />
                     </div>
-                </button>
+                </Link>
 
                 <div>
                     <div className="flex justify-between my-5">
