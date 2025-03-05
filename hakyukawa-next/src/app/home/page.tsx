@@ -81,7 +81,7 @@ export default function Home() {
                 <Link
                     href="/friendList"
                     passHref
-                    className="w-full rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
+                    className="w-full my-5 rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
                 >
                     フレンド
                     <div className="text-subText text-[2rem] flex items-center">
