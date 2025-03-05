@@ -2,28 +2,29 @@ import React  from "react";
 
 function InputField (props) {
     return(
-        <div>
+        <div className="input">
             <label>{props.label}</label>
             <input type={props.type} name= {props.name}  className="textbox" placeholder={props.placeholder}></input>
         </div>
     );
 }
 
-
 function Login () {
     return(
-        <div>
-            <h2 className="text-center">ログイン</h2>
-            <form action="POST">
-                <div id="loginform">
+        <div className= "loginwrap">
+            <h2 id="title">ログイン</h2>
+            <form method="POST" >
+                <div id="loginforms">
                     <InputField label = "ユーザーID" type = "text" name = "userId" placeholder = "ユーザIDを入力"/>
                     <InputField label = "パスワード" type = "password" name = "password" placeholder = "" />
-                    <small>パスワードをお忘れの方</small>
+                    <small className="forgetpassword"><a href="">パスワードをお忘れの方</a></small>
                 </div>
-                <input type="submit" value="ログイン"></input>
+                <input type="submit" value="ログイン" id="login"></input>
             </form>
-            <small>アカウントをお持ちでない方は登録</small>
+            <small id="signUp">アカウントをお持ちでない方は<span className="links"><a href="">登録</a></span></small>
         </div>
     );
 }
+
+export default Login;
 
