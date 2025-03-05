@@ -67,7 +67,7 @@ export default function Home() {
 
     return (
         <>
-            <Header setting backPage backPageText="雑談" core addFriend addGroup notice search />
+            <Header setting addFriend notice />
             <div className="p-[16px]">
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col justify-between h-[100px]">
