@@ -5,10 +5,12 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosSearch } from "react-icons/io";
 import { BsFire } from "react-icons/bs";
+import Link from "next/link";
 
 interface HeaderProps {
     backPage?: boolean;
     backPageText?: string;
+    backPageLink?: string;
     core?: boolean;
     addFriend?: boolean;
     addGroup?: boolean;
@@ -19,9 +21,13 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
     return (
-        <header className="flex justify-between items-center p-4 text-[20px]">
+        <header className="flex p-4 justify-between items-center text-[20px]">
             <div className="flex items-center font-semibold">
-                {props.backPage && <IoIosArrowBack size="25px" style={{ marginRight: "5px" }} />}
+                {props.backPage && props.backPageLink && (
+                    <Link href={props.backPageLink}>
+                        <IoIosArrowBack size="25px" style={{ marginRight: "5px" }} />
+                    </Link>
+                )}
                 {props.backPageText && <p style={{ marginRight: "5px" }}>{props.backPageText}</p>}
                 {props.core && <BsFire />}
             </div>
