@@ -1,5 +1,3 @@
-import styles from "@/styles/componentStyles/common/Rank.module.scss";
-import clsx from "clsx";
 interface RankProps {
     rank: number;
     points: number;
@@ -13,18 +11,18 @@ export default function Rank(props: RankProps) {
     console.log(rankBarWidth);
 
     return (
-        <div className={styles.rankWrap}>
+        <div>
             <h2 style={{ fontSize: props.rankFontSize }}>
-                Rank.<span>{props.rank}</span>
+                Rank.<span className="font-semibold">{props.rank}</span>
             </h2>
-            <div className={styles.rankBarWrap}>
-                <div className={clsx(styles.rankGrayBar, styles.rankBars)}></div>
+            <div className="relative w-55 rouded-full">
+                <div className="absolute -top-[5px] left-0 h-[7px] rounded-[8px] w-full bg-[#d9d9d9]"></div>
                 <div
-                    className={clsx(styles.rankBlueBar, styles.rankBars)}
+                    className="absolute -top-[5px] left-0 h-[7px] rounded-[8px] bg-main"
                     style={{ width: `${rankBarWidth}px` }}
                 ></div>
             </div>
-            <p>{props.points}/5000</p>
+            <p className="text-main text-[1.3rem]">{props.points}/5000</p>
         </div>
     );
 }
