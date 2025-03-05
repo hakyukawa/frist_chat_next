@@ -15,7 +15,7 @@ export default function Group(props: GroupProps) {
                     {props.GroupName}
                     {props.NumberOfPerson >= 2 && `(${props.NumberOfPerson})`}
                 </h2>
-                <p className="text-[1.5rem] text-[#21b5ff] flex items-center">
+                <p className="text-[1.5rem] text-main flex items-center">
                     <BsChatTextFill />
                     受信
                     {props.LastMessageTime < 60

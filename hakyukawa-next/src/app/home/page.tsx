@@ -56,7 +56,7 @@ export default function Home() {
                     <p className="text-[#757575] text-[1.4rem]">@{demo.user_id}</p>
                     <Rank rank={demo.rank} points={demo.points} rankFontSize="1.8rem" />
                 </div>
-                <div className="w-[70px] h-[70px] bg-[#21b5ff] rounded-full"></div>
+                <div className="w-[70px] h-[70px] bg-main rounded-full"></div>
             </div>
 
             <div>
