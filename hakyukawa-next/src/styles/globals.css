@@ -9,6 +9,7 @@
     --color-main: #ec891f;
     --color-sub: #404147;
     --color-subText: #afafaf;
+    --color-background: #2e2f34;
 }
 
 :root {
@@ -47,9 +48,6 @@ body {
 
 :where(button, input, textarea) {
     outline: none;
-    border: none;
-    padding: 0;
-    margin: 0;
     user-select: none;
 }
 
@@ -62,8 +60,8 @@ html {
 *::before,
 *::after {
     box-sizing: border-box;
-    /* CSSが競合している為コメントアウト */
-    /* padding: 0;
+    /* CSSが競合している為コメントアウト 
+    padding: 0;
     margin: 0; */
 }
 

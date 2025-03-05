@@ -48,6 +48,17 @@ export default function Home() {
         },
     ];
 
+    const friendArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    const friendIcons = (key: number) => {
+        return (
+            <div
+                key={key}
+                className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
+            ></div>
+        );
+    };
+
     return (
         <div className="p-[16px]">
             <div className="flex items-center justify-between">
@@ -58,6 +69,13 @@ export default function Home() {
                 </div>
                 <div className="w-[70px] h-[70px] bg-main rounded-full"></div>
             </div>
+            <button className="w-full rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold">
+                フレンド
+                <div className="text-subText text-[2rem] flex items-center">
+                    {friendArray.slice(0, 4).map((friend, index) => friendIcons(index))}
+                    <IoIosArrowForward />
+                </div>
+            </button>
 
             <div>
                 <div className="flex justify-between my-5">
