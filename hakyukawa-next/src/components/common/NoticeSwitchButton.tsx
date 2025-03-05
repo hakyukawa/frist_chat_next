@@ -46,6 +46,8 @@ const IOSSwitch = styled((props: SwitchProps) => (
 
 interface NoticeSwitchButtonProps {
     label: string;
+    checked: boolean;
+    onChange: (checked: boolean) => void;
 }
 
 export default function NoticeSwitchButton(props: NoticeSwitchButtonProps) {
@@ -55,7 +57,13 @@ export default function NoticeSwitchButton(props: NoticeSwitchButtonProps) {
             <FormGroup>
                 <FormControlLabel
                     sx={{ mr: 0 }}
-                    control={<IOSSwitch sx={{ mx: 0, my: 1 }} defaultChecked />}
+                    control={
+                        <IOSSwitch
+                            sx={{ mx: 0, my: 1 }}
+                            checked={props.checked}
+                            onChange={(e) => props.onChange(e.target.checked)}
+                        />
+                    }
                     label=""
                 />
             </FormGroup>
