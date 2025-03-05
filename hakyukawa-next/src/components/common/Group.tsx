@@ -14,7 +14,7 @@ export default function Group(props: GroupProps) {
     }
 
     return (
-        <button onClick={handleGroupClick} className="my-5 flex items-center">
+        <button onClick={handleGroupClick} className="my-7 flex items-center">
             <div className="bg-main w-[46px] h-[46px] rounded-full mr-4"></div>
             <div>
                 <h2 className="text-[1.8rem] flex items-center">
@@ -22,8 +22,8 @@ export default function Group(props: GroupProps) {
                     {props.type == "group" && `(${props.NumberOfPerson})`}
                 </h2>
                 <p className="text-[1.5rem] text-main flex items-center">
-                    <BsChatTextFill />
-                    受信
+                    <BsChatTextFill style={{ marginRight: "5px" }} />
+                    <span style={{ marginRight: "5px" }}>受信</span>
                     {props.LastMessageTime < 60
                         ? `${props.LastMessageTime}分前`
                         : `${Math.floor(props.LastMessageTime / 60)}時間前`}
