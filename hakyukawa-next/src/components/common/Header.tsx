@@ -27,10 +27,10 @@ export default function Header(props: HeaderProps) {
             </div>
             <div className="flex text-[26px]">
                 {props.addFriend && <GoPersonAdd />}
-                {props.addGroup && <AiOutlineUsergroupAdd style={{ marginLeft: "5px" }} />}
-                {props.notice && <GoBell style={{ marginLeft: "5px" }} />}
-                {props.search && <IoIosSearch style={{ marginLeft: "5px" }} />}
-                {props.setting && <IoSettingsOutline style={{ marginLeft: "5px" }} />}
+                {props.addGroup && <AiOutlineUsergroupAdd style={{ marginLeft: "8px" }} />}
+                {props.notice && <GoBell style={{ marginLeft: "8px" }} />}
+                {props.search && <IoIosSearch style={{ marginLeft: "8px" }} />}
+                {props.setting && <IoSettingsOutline style={{ marginLeft: "8px" }} />}
             </div>
         </header>
     );
