@@ -6,9 +6,9 @@
 @tailwind screens;
 
 @theme {
-    --color-main: oklch(0.79 0.21 233);
-    --color-sub: oklch(0.87 0.14 198);
-    --color-subText: (0.46 0.03 0);
+    --color-main: #ec891f;
+    --color-sub: #404147;
+    --color-subText: #afafaf;
 }
 
 :root {
@@ -19,7 +19,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #0a0a0a;
-        --foreground: #000000;
+        --foreground: #ffffff;
     }
 }
 
@@ -91,7 +91,7 @@ h6 {
 
 body {
     overflow-x: hidden;
-    background-color: #f1f1f1;
+    background-color: #2e2f34;
     background-size: contain;
     background-position: top center;
 }
