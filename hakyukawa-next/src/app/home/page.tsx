@@ -94,9 +94,9 @@ export default function Home() {
                     <div className="flex justify-between my-5">
                         <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
                         <button>
-                            <p className="flex items-center text-[#757575] text-[1.3rem]">
+                            <p className="text-subText flex items-center text-[1.3rem]">
                                 すべて見る
-                                <IoIosArrowForward color="#757575" />
+                                <IoIosArrowForward />
                             </p>
                         </button>
                     </div>
@@ -111,12 +111,12 @@ export default function Home() {
 
                     <div className="flex justify-between my-5">
                         <h2 className="text-subText text-[1.6rem] font-semibold">グループ</h2>
-                        <button>
-                            <p className="flex items-center text-[#757575] text-[1.3rem]">
+                        <Link href="/groupList">
+                            <p className="text-subText flex items-center text-[1.3rem]">
                                 すべて見る
-                                <IoIosArrowForward color="#757575" />
+                                <IoIosArrowForward />
                             </p>
-                        </button>
+                        </Link>
                     </div>
                     {GroupArray.slice(0, 3).map((group) => (
                         <Group
