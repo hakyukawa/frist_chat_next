@@ -48,6 +48,7 @@ function InputField(props: InputFieldProps) {
                 pattern={props.pattern}
                 placeholder={props.placeholder}
                 value={props.value}
+                autoComplete="off"
                 onChange={props.onChange}
                 className={`p-[10px] text-[13px]  font-light border ${
                     props.error ? "border-red-500" : "border-main"
@@ -144,7 +145,7 @@ function Signup() {
 
     return (
         <div className="p-[16px]">
-            <Header backPage backPageLink="/" backPageText="戻る" />
+            <Header backPage backPageLink="/login" backPageText="戻る" />
             <form onSubmit={handleSubmit} className="p-[14px] border-b border-subText">
                 <p className="text-[18px] font-bold text-center font-semibold">
                     新規アカウント登録
@@ -210,7 +211,7 @@ function Signup() {
             <p className="text-center text-[14px] p-[10px]">
                 アカウントをお持ちの方は
                 <span className="text-main underline">
-                    <a href="">ログイン</a>
+                    <a href="/login">ログイン</a>
                 </span>
                 してください
             </p>
