@@ -25,7 +25,7 @@ export default function newGroupList() {
     return (
         <>
             <Header backPage backPageLink="/groupList" backPageText="グループ新規作成" />
-            <div className="p-4">
+            <div className="p-[16px]">
                 <GroupInfo />
                 <Link
                     href="/friendList"
