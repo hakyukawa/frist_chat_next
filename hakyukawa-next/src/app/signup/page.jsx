@@ -60,7 +60,6 @@ function Signup() {
 
     // ユーザー名のチェック
     if (!formData.username ) newErrors.username = "記入してください";
-
     // ユーザーIDのチェック
     if (!formData.userId){
         newErrors.userId = "記入してください";
@@ -72,8 +71,7 @@ function Signup() {
 
 
     // メールアドレスのチェック
-    const domain = formData.mailaddress.split('@')[1];
-
+    const domain = formData.mailaddress.split('@')[1]
     if (!formData.mailaddress) {
         newErrors.mailaddress = "記入してください";
     } else if (/[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A\u3000\uFF01-\uFF5E\u3040-\u309F]/.test(formData.mailaddress) || /[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A\u3000\uFF01-\uFF5E\u3040-\u309F]/.test(domain)) { // 全角文字をチェック
@@ -121,7 +119,6 @@ function Signup() {
       <Header backPage backPageLink="/" backPageText="戻る" />
       <form onSubmit={handleSubmit} className="p-[14px] border-b border-subText">
         <p className="text-[18px] font-bold text-center font-semibold">新規アカウント登録</p>
-        
         <InputField
           label="ユーザー名"
           subtext=""
@@ -189,9 +186,6 @@ function Signup() {
             ? "bg-main" : "bg-border"
           }`}
         />
-        
-        
-        
       </form>
 
       <p className="text-center text-[14px] p-[10px]">
