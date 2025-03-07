@@ -1,7 +1,6 @@
 "use client";
 import Drawer from "@mui/material/Drawer";
 import { useState } from "react";
-import TimePicker from "react-time-picker";
 
 export default function TimePickerOption() {
     const [open, setOpen] = useState(false);
@@ -22,7 +21,6 @@ export default function TimePickerOption() {
             </button>
             <Drawer anchor="bottom" open={open} onClose={toggleDrawer}>
                 <p>いいいいい</p>
-                <TimePicker value={`${hour}:${minute}`} />
             </Drawer>
         </div>
     );
