@@ -7,6 +7,16 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { useState } from "react";
 
 export default function ReplayOption() {
+    const [dayOfWeekOption, setDayOfWeekOption] = useState<boolean[]>([
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+    ]);
+
     const [selectedTime, setSelectedTime] = useState<string>("");
 
     // handleChangeの引数をSelectChangeEvent<string>に修正
@@ -49,13 +59,25 @@ export default function ReplayOption() {
                     </Select>
                 </div>
             </div>
-            <div className="bg-gradient-to-b from-[#FDBB71] to-[#8E8E8E] rounded-[10px] py-3 my-6">
+            <div className=" bg-[linear-gradient(to_bottom,#FDBB71_0%,#8E8E8E_78%)] rounded-[10px] py-3 my-6">
                 <ReplayTimeHeadline label="コアタイム" />
-                <div className="p-[16px] text-[1.6rem] text-background flex justify-between items-center">
+                <div className="px-[16px] my-[8px] text-[1.6rem] text-background flex justify-between items-center">
                     <TimePicker />
                     <FaArrowRightLong />
                     <TimePicker />
                 </div>
+                <div className="px-[16px] my-[8px] text-[1.6rem] text-background ">
+                    <p className="text-[14px] font-semibold p-[4px]">返信不要の時間帯</p>
+                    <div className="flex justify-between items-center">
+                        <TimePicker />
+                        <FaArrowRightLong />
+                        <TimePicker />
+                    </div>
+                </div>
+            </div>
+            <div className="bg-[#8E8E8E] px-[16px] py-[14px] rounded-[10px]">
+                <h2 className="text-background font-semibold text-[14px]">返信不要の曜日</h2>
+                <div className="bg-background rounded-[12px] py-[15px] px-[8px]"></div>
             </div>
         </div>
     );
