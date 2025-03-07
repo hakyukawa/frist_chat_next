@@ -1,8 +1,8 @@
 import Header from "@/components/common/Header";
 import GroupInfo from "@/components/common/GroupInfo";
 import Link from "next/link";
-import NoticeOption from "@/components/common/NoticeOption";
-import ReplayOption from "@/components/common/ReplayOption";
+import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
+import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import { IoIosArrowForward } from "react-icons/io";
 
 const friendArray = [
