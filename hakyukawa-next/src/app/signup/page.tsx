@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/common/Header";
+import useApi from "@/hooks/useApi";
 
 interface InputFieldProps {
     label: string;
@@ -15,17 +16,17 @@ interface InputFieldProps {
 }
 
 interface FormData {
-    username: string;
-    userId: string;
-    mailaddress: string;
+    user_id: string;
+    user_name: string;
+    mail: string;
     password: string;
     password_confirmation: string;
 }
 
 interface Error {
-    username?: string | undefined;
-    userId?: string | undefined;
-    mailaddress?: string | undefined;
+    user_name?: string | undefined;
+    user_id?: string | undefined;
+    mail?: string | undefined;
     password?: string | undefined;
     password_confirmation?: string | undefined;
 }
@@ -57,21 +58,26 @@ function InputField(props: InputFieldProps) {
 }
 
 function Signup() {
-    //テスト用メールアドレス
-    const demoMailAddress = ["aiueo@exsample.com", "sample@sample.com", "test@test.com"];
-    //テスト用ユーザーID
-    const demoUserNames = ["user01", "user02", "user03"];
-    // フォームの入力データとエラー状態の管理
+    const demomail = ["aiueo@exsample.com", "sample@sample.com", "test@test.com"];
+    const demouser_names = ["user01", "user02", "user03"];
+
     const [formData, setFormData] = useState<FormData>({
-        username: "",
-        userId: "",
-        mailaddress: "",
+        user_id: "",
+        user_name: "",
+        mail: "",
         password: "",
         password_confirmation: "",
     });
 
-    const [errors, setErrors] = useState<Error>({} as Error);
-    // 入力内容の変更を反映
+    const [errors, setErrors] = useState<Error>({});
+
+    // useApiフックの利用
+    const { data, error, loading, fetchData } = useApi<{ message: string }>(
+        "http://localhost:3001/api/v1/signup",
+        "POST",
+        formData
+    );
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({
@@ -80,75 +86,61 @@ function Signup() {
         });
     };
 
-    // バリデーションチェック
     const validate = () => {
         const newErrors: Error = {};
+        if (!formData.user_name) newErrors.user_name = "記入してください";
+        if (!formData.user_id) newErrors.user_id = "記入してください";
+        else if (demouser_names.includes(formData.user_id))
+            newErrors.user_id = "このIDは既に使用されています";
+        else if (!/^[A-Za-z0-9]+$/.test(formData.user_id))
+            newErrors.user_id = "半角英数字で入力してください";
 
-        // ユーザー名のチェック
-        if (!formData.username) newErrors.username = "記入してください";
-
-        // ユーザーIDのチェック
-        if (!formData.userId) {
-            newErrors.userId = "記入してください";
-        } else if (demoUserNames.includes(formData.userId)) {
-            newErrors.userId = "このIDは既に使用されています";
-        } else if (!/^[A-Za-z0-9]+$/.test(formData.userId)) {
-            newErrors.userId = "半角英数字で入力してください";
-        }
-
-        // メールアドレスのチェック
-        const domain = formData.mailaddress.split("@")[1];
-
-        if (!formData.mailaddress) {
-            newErrors.mailaddress = "記入してください";
-        } else if (
+        const domain = formData.mail.split("@")[1];
+        if (!formData.mail) newErrors.mail = "記入してください";
+        else if (
             /[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A\u3000\uFF01-\uFF5E\u3040-\u309F]/.test(
-                formData.mailaddress
+                formData.mail
             ) ||
             /[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A\u3000\uFF01-\uFF5E\u3040-\u309F]/.test(domain)
         ) {
-            // 全角文字をチェック
-            newErrors.mailaddress = "半角英数字で入力してください";
-        } else if (
-            !/\S+@\S+\.\S+/.test(formData.mailaddress) ||
-            formData.mailaddress.includes(" ")
-        ) {
-            // メールアドレスの形式チェック
-            newErrors.mailaddress = "メールアドレスを正しくご入力ください";
-        } else if (demoMailAddress.includes(formData.mailaddress)) {
-            newErrors.mailaddress = "このメールアドレスは既に使用されています";
+            newErrors.mail = "半角英数字で入力してください";
+        } else if (!/\S+@\S+\.\S+/.test(formData.mail) || formData.mail.includes(" ")) {
+            newErrors.mail = "メールアドレスを正しくご入力ください";
+        } else if (demomail.includes(formData.mail)) {
+            newErrors.mail = "このメールアドレスは既に使用されています";
         }
 
-        // パスワードのチェック
-        if (!formData.password) {
-            newErrors.password = "記入してください";
-        } else if (formData.password.length < 8) {
+        if (!formData.password) newErrors.password = "記入してください";
+        else if (formData.password.length < 8) {
             newErrors.password = "パスワードは8文字以上で入力してください";
             newErrors.password_confirmation = "パスワードは8文字以上で入力してください";
         }
 
-        // パスワード確認のチェック
-        if (!formData.password_confirmation) {
-            newErrors.password_confirmation = "記入してください";
-        } else if (formData.password !== formData.password_confirmation) {
+        if (!formData.password_confirmation) newErrors.password_confirmation = "記入してください";
+        else if (formData.password !== formData.password_confirmation) {
             newErrors.password_confirmation = "パスワードが一致しません";
             newErrors.password = "パスワードが一致しません";
         }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0; // エラーがなければtrue
+        return Object.keys(newErrors).length === 0;
     };
 
-    // フォーム送信時
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        // バリデーションを実行
         if (validate()) {
-            console.log("フォーム送信");
-            alert("登録が完了しました");
+            await fetchData(); // useApi の fetchData を実行
         }
     };
+
+    useEffect(() => {
+        if (data) {
+            alert("登録が完了しました");
+        }
+        if (error) {
+            alert(`エラー: ${error}`);
+        }
+    }, [data, error]);
 
     return (
         <div className="p-[16px]">
@@ -159,37 +151,33 @@ function Signup() {
                 </p>
                 <InputField
                     label="ユーザー名"
-                    subtext=""
                     type="text"
-                    name="username"
+                    name="user_name"
                     placeholder="ユーザー名を入力"
-                    value={formData.username}
+                    value={formData.user_name}
                     onChange={handleChange}
-                    error={errors.username}
+                    error={errors.user_name}
                 />
                 <InputField
                     label="ユーザーID"
-                    subtext=""
                     type="text"
-                    name="userId"
+                    name="user_id"
                     placeholder="ユーザーIDを入力"
-                    value={formData.userId}
+                    value={formData.user_id}
                     onChange={handleChange}
-                    error={errors.userId}
+                    error={errors.user_id}
                 />
                 <InputField
                     label="メールアドレス"
-                    subtext=""
                     type="text"
-                    name="mailaddress"
+                    name="mail"
                     placeholder="sample@email.com"
-                    value={formData.mailaddress}
+                    value={formData.mail}
                     onChange={handleChange}
-                    error={errors.mailaddress}
+                    error={errors.mail}
                 />
                 <InputField
                     label="パスワード"
-                    subtext="8文字以上の半角英数記号"
                     type="password"
                     name="password"
                     value={formData.password}
@@ -198,7 +186,6 @@ function Signup() {
                 />
                 <InputField
                     label="パスワード(確認用)"
-                    subtext=""
                     type="password"
                     name="password_confirmation"
                     value={formData.password_confirmation}
@@ -213,16 +200,11 @@ function Signup() {
                 </p>
                 <input
                     type="submit"
-                    value="アカウントを作成"
+                    value={loading ? "送信中..." : "アカウントを作成"}
                     className={`bg-border border-none rounded-[40px] w-full p-[10px] text-[15px] ${
-                        Object.values(formData).every((value) => value.trim() !== "") &&
-                        Object.keys(errors).length === 0
-                            ? "bg-main"
-                            : Object.values(formData).every((value) => value.trim() !== "") &&
-                              Object.keys(errors).length > 0
-                            ? "bg-main"
-                            : "bg-border"
+                        loading ? "opacity-50" : "bg-main"
                     }`}
+                    disabled={loading}
                 />
             </form>
             <p className="text-center text-[14px] p-[10px]">
