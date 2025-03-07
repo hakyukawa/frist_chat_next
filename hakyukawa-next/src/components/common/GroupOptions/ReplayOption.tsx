@@ -2,6 +2,8 @@
 import Select, { SelectChangeEvent } from "@mui/material/Select"; // SelectChangeEventをインポート
 import MenuItem from "@mui/material/MenuItem";
 import ReplayTimeHeadline from "./ReplayOptionHeadline";
+import TimePicker from "./TimePickerOption";
+import { FaArrowRightLong } from "react-icons/fa6";
 import { useState } from "react";
 
 export default function ReplayOption() {
@@ -45,6 +47,14 @@ export default function ReplayOption() {
                         <MenuItem value={120}>2時間</MenuItem>
                         <MenuItem value={180}>3時間</MenuItem>
                     </Select>
+                </div>
+            </div>
+            <div className="bg-gradient-to-b from-[#FDBB71] to-[#8E8E8E] rounded-[10px] py-3 my-6">
+                <ReplayTimeHeadline label="コアタイム" />
+                <div className="p-[16px] text-[1.6rem] text-background flex justify-between items-center">
+                    <TimePicker />
+                    <FaArrowRightLong />
+                    <TimePicker />
                 </div>
             </div>
         </div>
