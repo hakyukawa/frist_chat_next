@@ -1,7 +1,7 @@
 "use client";
 import Select, { SelectChangeEvent } from "@mui/material/Select"; // SelectChangeEventをインポート
 import MenuItem from "@mui/material/MenuItem";
-import ReplayTimeHeadline from "./ReplayTimeHeadline";
+import ReplayTimeHeadline from "./ReplayOptionHeadline";
 import { useState } from "react";
 
 export default function ReplayOption() {
