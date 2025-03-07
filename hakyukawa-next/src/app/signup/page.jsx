@@ -16,10 +16,11 @@ function InputField(props) {
       <input
         type={props.type}
         name={props.name}
+        pattern={props.pattern}
         placeholder={props.placeholder}
         value={props.value}
         onChange={props.onChange}
-        className={`p-[10px] text-[13px] text-subText font-light border ${props.error ? 'border-red-500' : 'border-main'} w-full rounded-lg`}
+        className={`p-[10px] text-[13px]  font-light border ${props.error ? 'border-red-500' : 'border-main'} w-full rounded-lg`}
       />
       
     </div>
@@ -28,19 +29,17 @@ function InputField(props) {
 
 function Signup() {
     //テスト用メールアドレス
-    const demoMailAddress = ["aiueo@exsample.com","sample@sample.com"];
+    const demoMailAddress = ["aiueo@exsample.com","sample@sample.com","test@test.com"];
     //テスト用ユーザーID
     const demoUserNames = ["user01", "user02","user03"];
-
-
-  // フォームの入力データとエラー状態の管理
-  const [formData, setFormData] = useState({
-    username: "",
-    userId: "",
-    mailaddress: "",
-    password: "",
-    password_confirmation: "",
-  });
+    // フォームの入力データとエラー状態の管理
+    const [formData, setFormData] = useState({
+        username: "",
+        userId: "",
+        mailaddress: "",
+        password: "",
+        password_confirmation: "",
+    });
 
   const [errors, setErrors] = useState({});
 
@@ -67,17 +66,24 @@ function Signup() {
         newErrors.userId = "記入してください";
     }else if(demoUserNames.includes(formData.userId)){
         newErrors.userId = "このIDは既に使用されています"
+    }else if(!/^[A-Za-z0-9]+$/.test(formData.userId)){
+        newErrors.userId = "半角英数字で入力してください"
     }
+
 
     // メールアドレスのチェック
-    if (!formData.mailaddress) {
-      newErrors.mailaddress = "記入してください";
-    } else if (!/\S+@\S+\.\S+/.test(formData.mailaddress)) {
-      newErrors.mailaddress = "有効なメールアドレスを入力してください";
-    }else if(demoMailAddress.includes(formData.mailaddress)){
-        newErrors.mailaddress = "このメールアドレスは既に登録されています"
-    }
+    const domain = formData.mailaddress.split('@')[1];
 
+    if (!formData.mailaddress) {
+        newErrors.mailaddress = "記入してください";
+    } else if (/[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A\u3000\uFF01-\uFF5E\u3040-\u309F]/.test(formData.mailaddress) || /[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A\u3000\uFF01-\uFF5E\u3040-\u309F]/.test(domain)) { // 全角文字をチェック
+        newErrors.mailaddress = "半角英数字で入力してください";
+    }else if (!/\S+@\S+\.\S+/.test(formData.mailaddress) || formData.mailaddress.includes(" ")) { // メールアドレスの形式チェック
+        newErrors.mailaddress = "メールアドレスを正しくご入力ください";
+    }else if(demoMailAddress.includes(formData.mailaddress)){
+        newErrors.mailaddress = "このメールアドレスは既に使用されています"
+    }
+    
     // パスワードのチェック
     if (!formData.password) {
       newErrors.password = "記入してください";
@@ -105,15 +111,15 @@ function Signup() {
     // バリデーションを実行
     if (validate()) {
         console.log("フォーム送信");
-
+        alert("登録が完了しました");
     }
   };
 
 
   return (
-    <div className="p-4">
+    <div className="p-[16px]">
       <Header backPage backPageLink="/" backPageText="戻る" />
-      <form onSubmit={handleSubmit} className="p-[30px] border-b border-subText">
+      <form onSubmit={handleSubmit} className="p-[14px] border-b border-subText">
         <p className="text-[18px] font-bold text-center font-semibold">新規アカウント登録</p>
         
         <InputField
@@ -139,7 +145,7 @@ function Signup() {
         <InputField
           label="メールアドレス"
           subtext=""
-          type="email"
+          type="text"
           name="mailaddress"
           placeholder="sample@email.com"
           value={formData.mailaddress}
@@ -151,7 +157,6 @@ function Signup() {
           subtext="8文字以上の半角英数記号"
           type="password"
           name="password"
-          placeholder=""
           value={formData.password}
           onChange={handleChange}
           error={errors.password}
@@ -161,7 +166,6 @@ function Signup() {
           subtext=""
           type="password"
           name="password_confirmation"
-          placeholder=""
           value={formData.password_confirmation}
           onChange={handleChange}
           error={errors.password_confirmation}
