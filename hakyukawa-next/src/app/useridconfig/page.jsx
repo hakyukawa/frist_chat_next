@@ -1,6 +1,7 @@
 "use client"; 
 import React, {useState} from "react";
 import Header from "@/components/common/Header";
+import Setting from "@/components/common/setting";
 
 function UserIdConfig () {
     //テスト用ユーザーID
@@ -50,30 +51,18 @@ function UserIdConfig () {
     return(
         <div>  
             <Header backPage backPageLink ="/" backPageText="ユーザーIDを変更" />
-            <div className="p-[16px]">
-                <form onSubmit={handleSubmit} action="" method="POST">
-                    <div className="py-[10px]">
-                        <p className="text-[14px] text-subText font-semibold">現在</p>
-                        <p className="text-[18px] text-subText font-light">{`${nowuserid}`}</p>
-                    </div>
-                    <div className="py-[10px]">
-                        <p className="text-[14px] text-subText font-semibold">新しいユーザーID</p>
-                        <input type="text" name="newUserId" value={formData.newUserId} onChange={handleChange} error={errors.newUserId} className={`w-full text-[20px] font-light border-b-2 ${errors.newUserId ? 'border-red-500' : 'border-main'} `}/>
-                        {errors.newUserId &&<p className="text-red-500 text-xs text-[11px] py-[10px]">{errors.newUserId}</p>}
-                    </div>
-                    <div className="p-[15px]">
-                        <input 
-                            type="submit"
-                            value="変更"
-                            className={`bg-border border-none rounded-[40px] w-full p-[10px] text-[15px] ${
-                                Object.values(formData).every(value =>  value.trim() !== "") && Object.keys(errors).length === 0 ? "bg-main" :
-                                Object.values(formData).every(value =>  value.trim() !== "") && Object.keys(errors).length > 0 
-                                ? "bg-main" : "bg-border"
-                            }`}
-                        />
-                    </div>
-                </form>
-            </div>
+            <Setting 
+                nowuserid = {nowuserid}
+                title = "ユーザーID"
+                name = "newUserId"
+                value = {formData.newUserId}
+                onchange = {handleChange}
+                error={errors.newUserId}
+                submitvalue = "変更"
+                formdata = {formData}
+                errors = {errors}
+                onsubmit={handleSubmit}
+            />
         </div>
     );
 }
