@@ -4,8 +4,6 @@ import { useState } from "react";
 
 export default function TimePickerOption() {
     const [open, setOpen] = useState(false);
-    const [hour, setHour] = useState<number>(0);
-    const [minute, setMinute] = useState<number>(0);
 
     const toggleDrawer = () => {
         setOpen(!open);
