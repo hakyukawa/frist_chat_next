@@ -7,12 +7,13 @@ interface InputFieldProps {
     pattern?: string;
     placeholder?: string;
     value: string;
+    forgetPassword?: boolean;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputField(props: InputFieldProps) {
     return (
-        <div className="mt-[20px]">
+        <div className="mb-[20px] flex flex-col">
             <div className="flex items-center">
                 <label className="text-[14px] font-semibold">{props.label}</label>
                 {props.error && (
@@ -32,6 +33,13 @@ export default function InputField(props: InputFieldProps) {
                     props.error ? "border-red-500" : "border-main"
                 } w-full rounded-lg`}
             />
+            {props.forgetPassword && (
+                <small className="w-full text-main text-[1.2rem] text-right underline mt-2">
+                    <a href="" className="w-full text-right">
+                        パスワードをお忘れの方
+                    </a>
+                </small>
+            )}
         </div>
     );
 }
