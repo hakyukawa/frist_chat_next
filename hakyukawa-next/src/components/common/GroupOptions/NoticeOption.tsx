@@ -3,62 +3,78 @@
 import { useState } from "react";
 import NoticeSwitchButton from "./NoticeSwitchButton";
 
-export default function NoticeOption() {
-    const [switches, setSwitches] = useState({
-        notification: true,
-        message: true,
-        coreTime: true,
-        noReplyTime: true,
-        noReplyDay: true,
-    });
+interface SwitchItem {
+    name: string;
+    label: string;
+    checked: boolean;
+}
 
-    const handleSwitchChange = (key: keyof typeof switches, checked: boolean) => {
-        if (key === "notification" && !checked) {
-            setSwitches({
-                notification: false,
-                message: false,
-                coreTime: false,
-                noReplyTime: false,
-                noReplyDay: false,
-            });
-        } else {
-            setSwitches((prev) => ({ ...prev, [key]: checked }));
+export default function NoticeOption() {
+    const [switches, setSwitches] = useState<SwitchItem[]>([
+        { name: "notification", label: "通知", checked: true },
+        { name: "message", label: "メッセージ通知", checked: true },
+        { name: "coreTime", label: "コアタイム通知", checked: true },
+        { name: "noReplyTime", label: "返信不要時間帯のメッセージ通知", checked: true },
+        { name: "noReplyDay", label: "返信不要曜日のメッセージ通知", checked: true },
+    ]);
+
+    const handleSwitchChange = (name: string, checked: boolean) => {
+        // 通知がオフになった時、全ての通知をオフにする
+        if (name === "notification" && !checked) {
+            setSwitches(
+                switches.map((item) => ({
+                    ...item,
+                    checked: false,
+                }))
+            );
         }
-        if (key !== "notification" && checked) {
-            setSwitches((prev) => ({ ...prev, notification: true }));
+        // 通知スイッチがオンになった場合、すべてのスイッチをオンにする
+        else if (name === "notification" && checked) {
+            setSwitches(
+                switches.map((item) => ({
+                    ...item,
+                    checked: true,
+                }))
+            );
+        }
+        // いずれかの通知がオンになった時、通知をオンにする
+        else if (name !== "notification" && checked) {
+            setSwitches(
+                switches.map((item) =>
+                    item.name === name
+                        ? { ...item, checked }
+                        : item.name === "notification"
+                        ? { ...item, checked: true }
+                        : item
+                )
+            );
+        } else {
+            setSwitches(switches.map((item) => (item.name === name ? { ...item, checked } : item)));
         }
     };
 
     return (
         <>
             <h2 className="text-subText font-semibold text-[14px] ">通知設定</h2>
-            <h3 className="border-b border-border ">
-                <NoticeSwitchButton
-                    label="通知"
-                    checked={switches.notification}
-                    onChange={(checked) => handleSwitchChange("notification", checked)}
-                />
-            </h3>
-            <NoticeSwitchButton
-                label="メッセージ通知"
-                checked={switches.message}
-                onChange={(checked) => handleSwitchChange("message", checked)}
-            />
-            <NoticeSwitchButton
-                label="コアタイム通知"
-                checked={switches.coreTime}
-                onChange={(checked) => handleSwitchChange("coreTime", checked)}
-            />
-            <NoticeSwitchButton
-                label="返信不要時間帯のメッセージ通知"
-                checked={switches.noReplyTime}
-                onChange={(checked) => handleSwitchChange("noReplyTime", checked)}
-            />
-            <NoticeSwitchButton
-                label="返信不要曜日のメッセージ通知"
-                checked={switches.noReplyDay}
-                onChange={(checked) => handleSwitchChange("noReplyDay", checked)}
-            />
+
+            {switches.map((switchItem, index) =>
+                index === 0 ? (
+                    <h3 key={switchItem.name} className="border-b border-border ">
+                        <NoticeSwitchButton
+                            label={switchItem.label}
+                            checked={switchItem.checked}
+                            onChange={(checked) => handleSwitchChange(switchItem.name, checked)}
+                        />
+                    </h3>
+                ) : (
+                    <NoticeSwitchButton
+                        key={switchItem.name}
+                        label={switchItem.label}
+                        checked={switchItem.checked}
+                        onChange={(checked) => handleSwitchChange(switchItem.name, checked)}
+                    />
+                )
+            )}
         </>
     );
 }
