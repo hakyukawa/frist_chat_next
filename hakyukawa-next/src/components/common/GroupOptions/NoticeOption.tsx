@@ -24,6 +24,9 @@ export default function NoticeOption() {
         } else {
             setSwitches((prev) => ({ ...prev, [key]: checked }));
         }
+        if (key !== "notification" && checked) {
+            setSwitches((prev) => ({ ...prev, notification: true }));
+        }
     };
 
     return (
