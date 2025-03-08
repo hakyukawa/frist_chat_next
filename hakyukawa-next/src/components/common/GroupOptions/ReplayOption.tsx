@@ -3,18 +3,45 @@ import Select, { SelectChangeEvent } from "@mui/material/Select"; // SelectChang
 import MenuItem from "@mui/material/MenuItem";
 import ReplayTimeHeadline from "./ReplayOptionHeadline";
 import TimePicker from "./TimePickerOption";
+import SelectDate from "@/components/common/GroupOptions/SelectDate";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useState } from "react";
 
+interface dayOfWeekOption {
+    date: string;
+    isSelected: boolean;
+}
+
 export default function ReplayOption() {
-    const [dayOfWeekOption, setDayOfWeekOption] = useState<boolean[]>([
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
+    const [dayOfWeekOption, setDayOfWeekOption] = useState<dayOfWeekOption[]>([
+        {
+            date: "日",
+            isSelected: false,
+        },
+        {
+            date: "月",
+            isSelected: false,
+        },
+        {
+            date: "火",
+            isSelected: false,
+        },
+        {
+            date: "水",
+            isSelected: false,
+        },
+        {
+            date: "木",
+            isSelected: false,
+        },
+        {
+            date: "金",
+            isSelected: false,
+        },
+        {
+            date: "土",
+            isSelected: false,
+        },
     ]);
 
     const [selectedTime, setSelectedTime] = useState<string>("");
@@ -22,6 +49,12 @@ export default function ReplayOption() {
     // handleChangeの引数をSelectChangeEvent<string>に修正
     const handleChange = (event: SelectChangeEvent<string>) => {
         setSelectedTime(event.target.value);
+    };
+
+    const toggleDaySelection = (date: string) => {
+        setDayOfWeekOption((prev) =>
+            prev.map((day) => (day.date === date ? { ...day, isSelected: !day.isSelected } : day))
+        );
     };
 
     return (
@@ -77,7 +110,37 @@ export default function ReplayOption() {
             </div>
             <div className="bg-[#8E8E8E] px-[16px] py-[14px] rounded-[10px]">
                 <h2 className="text-background font-semibold text-[14px]">返信不要の曜日</h2>
-                <div className="bg-background rounded-[12px] py-[15px] px-[8px]"></div>
+                <div className="bg-background rounded-[12px] py-[15px] px-[8px]">
+                    <p className="border-b border-border px-[7px] pb-1 text-[1.2rem]">
+                        {dayOfWeekOption.some((day) => day.isSelected) ? (
+                            <>
+                                毎週
+                                {dayOfWeekOption.map((day, index) =>
+                                    day.isSelected ? (
+                                        <span key={index} className="ml-1">
+                                            {day.date}
+                                        </span>
+                                    ) : null
+                                )}
+                            </>
+                        ) : (
+                            "なし"
+                        )}
+                    </p>
+
+                    <div className="flex items-center justify-between text-center mt-[11px] px-[15px] w-full">
+                        {dayOfWeekOption.map((day, index) => {
+                            return (
+                                <SelectDate
+                                    key={index}
+                                    value={day.date}
+                                    isSelected={day.isSelected}
+                                    onClick={() => toggleDaySelection(day.date)}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     );
