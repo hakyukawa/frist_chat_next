@@ -6,9 +6,9 @@ interface InputFieldProps {
     name: string;
     pattern?: string;
     placeholder?: string;
-    value: string;
+    value?: string;
     forgetPassword?: boolean;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputField(props: InputFieldProps) {
