@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import InputField from "@/components/common/InputField";
 import axios from "axios";
 
@@ -38,6 +39,7 @@ function isAxiosError(error: unknown): error is AxiosErrorType {
 }
 
 function Login() {
+    const router = useRouter();
     const [user_id, setUser_id] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -54,8 +56,9 @@ function Login() {
             // ログイン成功後、アクセストークンをlocalStorageに保存
             if (response.data.access_token) {
                 localStorage.setItem("accessToken", response.data.access_token);
-                alert("ログイン成功");
+                alert(response.data.message);
             }
+            router.push("/home"); // ログイン後のページにリダイレクト
         } catch (error: unknown) {
             // カスタム型ガードを使用したエラーチェック
             if (isAxiosError(error) && error.response?.data) {
