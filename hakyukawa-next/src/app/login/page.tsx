@@ -12,7 +12,6 @@ function Login() {
                     name="userId"
                     placeholder="ユーザIDを入力"
                 />
-
                 <InputField
                     label="パスワード"
                     type="password"
@@ -20,7 +19,6 @@ function Login() {
                     placeholder=""
                     forgetPassword
                 />
-
                 <input
                     type="submit"
                     value="ログイン"
@@ -30,7 +28,7 @@ function Login() {
             <small className="text-[1.4rem] flex items-center justify-center mt-4">
                 アカウントをお持ちでない方は
                 <span className="text-main underline">
-                    <a href="">登録</a>
+                    <a href="/signup">登録</a>
                 </span>
             </small>
         </div>
