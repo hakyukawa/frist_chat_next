@@ -12,7 +12,7 @@ interface InputFieldProps {
 
 export default function InputField(props: InputFieldProps) {
     return (
-        <div className="p-[10px]">
+        <div className="mt-[20px]">
             <div className="flex items-center">
                 <label className="text-[14px] font-semibold">{props.label}</label>
                 {props.error && (
