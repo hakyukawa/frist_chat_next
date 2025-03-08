@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-// APIリクエスト用カスタムフック
-const useApi = <T,>(
+// カスタムフックの型定義
+const useApi = <T, D = unknown>(
     url: string,
     method: "GET" | "POST" | "PUT" | "DELETE",
-    requestData?: unknown,
+    requestData?: D,
     headers?: Record<string, string>
 ) => {
     const [data, setData] = useState<T | null>(null);
@@ -14,6 +14,10 @@ const useApi = <T,>(
 
     const fetchData = useCallback(async () => {
         setLoading(true);
+
+        // localStorage からトークンを取得
+        const token = localStorage.getItem("accessToken");
+
         try {
             const response = await axios({
                 url,
@@ -21,23 +25,38 @@ const useApi = <T,>(
                 data: requestData,
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: token ? `Bearer ${token}` : "", // トークンをヘッダーに追加
                     ...headers,
                 },
             });
-            setData(response.data as T);
+
+            // 型変換をより安全に行う
+            setData(response.data as unknown as T);
             setError(null);
         } catch (err: unknown) {
-            if (err && typeof err === "object" && "response" in err) {
-                const errorResponse = err as { response?: { data?: { message?: string } } };
-                setError(errorResponse.response?.data?.message || "エラーが発生しました");
-            } else {
-                setError("エラーが発生しました");
-            }
+            // 型安全なエラーハンドリング
+            const errorMessage = getErrorMessage(err);
+            setError(errorMessage);
             setData(null);
         } finally {
             setLoading(false);
         }
     }, [url, method, requestData, headers]);
+
+    // エラーメッセージを取得するヘルパー関数
+    const getErrorMessage = (err: unknown): string => {
+        if (err instanceof Error) return err.message;
+
+        if (typeof err === "object" && err !== null && "response" in err) {
+            const response = (err as Record<string, unknown>).response;
+            if (typeof response === "object" && response !== null && "data" in response) {
+                const data = response.data as Record<string, unknown>;
+                if (typeof data.message === "string") return data.message;
+            }
+        }
+
+        return "エラーが発生しました";
+    };
 
     useEffect(() => {
         if (method === "GET") {
