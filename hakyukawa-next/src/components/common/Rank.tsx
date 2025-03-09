@@ -11,11 +11,11 @@ export default function Rank(props: RankProps) {
     console.log(rankBarWidth);
 
     return (
-        <div>
+        <div className="w-[223px]">
             <h2 style={{ fontSize: props.rankFontSize }}>
                 Rank.<span className="font-semibold">{props.rank}</span>
             </h2>
-            <div className="relative w-55 rouded-full">
+            <div className="relative rouded-full">
                 <div className="absolute -top-[5px] left-0 h-[7px] rounded-[8px] w-[220px] bg-[#d9d9d9]"></div>
                 <div
                     className="absolute -top-[5px] left-0 h-[7px] rounded-[8px] bg-main"

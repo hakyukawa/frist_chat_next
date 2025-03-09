@@ -3,6 +3,7 @@ import Group from "@/components/common/Group";
 import Header from "@/components/common/Header";
 import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
+import SeeAll from "@/components/common/SeeAll";
 
 interface Demo {
     user_id: number;
@@ -91,15 +92,12 @@ export default function Home() {
                 </Link>
 
                 <div>
-                    <div className="flex justify-between my-5">
-                        <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
-                        <button>
-                            <p className="text-subText flex items-center text-[1.3rem]">
-                                すべて見る
-                                <IoIosArrowForward />
-                            </p>
-                        </button>
+                    <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
+                    <div className="flex justify-between mt-4">
+                        <h3 className="text-subText text-[1.6rem] font-semibold">フレンド</h3>
+                        <SeeAll url="/friendList" />
                     </div>
+
                     {friendArray.slice(0, 2).map((friend) => (
                         <Group
                             key={friend.id}
@@ -109,14 +107,9 @@ export default function Home() {
                         />
                     ))}
 
-                    <div className="flex justify-between my-5">
-                        <h2 className="text-subText text-[1.6rem] font-semibold">グループ</h2>
-                        <Link href="/groupList">
-                            <p className="text-subText flex items-center text-[1.3rem]">
-                                すべて見る
-                                <IoIosArrowForward />
-                            </p>
-                        </Link>
+                    <div className="flex justify-between mt-4">
+                        <h3 className="text-subText text-[1.6rem] font-semibold">グループ</h3>
+                        <SeeAll url="/groupList" />
                     </div>
                     {GroupArray.slice(0, 3).map((group) => (
                         <Group
