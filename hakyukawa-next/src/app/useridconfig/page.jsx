@@ -1,16 +1,18 @@
 "use client"; 
 import React, {useState} from "react";
 import Header from "@/components/common/Header";
-import Setting from "@/components/common/setting";
+import Setting from "@/components/common/Form"
 
 function UserIdConfig () {
     //テスト用ユーザーID
     const nowuserid = "hakyukawa-test";
     const demouserid = ["user01","user02","user03"];
+    const demoMailAddress = ["aiueo@exsample.com","sample@sample.com","test@test.com"];
     
     //入力・エラー状態管理
     const [formData,setFormData] = useState({
-        newUserId: ""
+        newUserId: "",
+        mailaddress:""
     });
     const [errors,setErrors] = useState({});
 
@@ -36,6 +38,7 @@ function UserIdConfig () {
         }else if(!/^[0-9A-Za-z._-]+$/.test(formData.newUserId)){
             newErrors.newUserId ="半角英数字、アンダーバー（_）、ピリオド（.）、ハイフン（-）のみ使用できます"
         }
+        
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -45,24 +48,28 @@ function UserIdConfig () {
         if (validate()) {
             console.log("フォーム送信");
             alert("登録が完了しました");
+        }else{
+            console.log("変更に失敗しました");
         }
     };
     
     return(
         <div>  
             <Header backPage backPageLink ="/" backPageText="ユーザーIDを変更" />
-            <Setting 
-                nowuserid = {nowuserid}
-                title = "ユーザーID"
-                name = "newUserId"
-                value = {formData.newUserId}
-                onchange = {handleChange}
-                error={errors.newUserId}
-                submitvalue = "変更"
-                formdata = {formData}
-                errors = {errors}
-                onsubmit={handleSubmit}
-            />
+            <form onSubmit={handleSubmit} action="" method="POST" className="p-[16px]" >
+                <Setting 
+                    status 
+                    nowState={nowuserid}
+                    form
+                    inputName ="newUserId"
+                    label={"新しいユーザーID"}
+                    formData =  {formData.newUserId}
+                    error = {errors.newUserId}
+                    onChange = {handleChange}
+                    submitButton
+                    buttonValue="送信"
+                />
+            </form>
         </div>
     );
 }
