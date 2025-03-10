@@ -1,21 +1,34 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-// カスタムフックの型定義
+// Define the AxiosError type with more specific types instead of any
+type AxiosError = {
+    response?: {
+        data: unknown;
+        status: number;
+        statusText: string;
+    };
+    request?: unknown;
+    message: string;
+};
+
+// Modify the hook to ensure proper type handling without using any
 const useApi = <T, D = unknown>(
     url: string,
     method: "GET" | "POST" | "PUT" | "DELETE",
     requestData?: D,
-    headers?: Record<string, string>
+    extraHeaders?: Record<string, string>
 ) => {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [errorDetails, setErrorDetails] = useState<unknown | null>(null);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
+        setError(null);
+        setErrorDetails(null);
 
-        // localStorage からトークンを取得
         const token = localStorage.getItem("accessToken");
 
         try {
@@ -25,37 +38,34 @@ const useApi = <T, D = unknown>(
                 data: requestData,
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: token ? `Bearer ${token}` : "", // トークンをヘッダーに追加
-                    ...headers,
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    ...extraHeaders,
                 },
             });
 
-            // 型変換をより安全に行う
+            // Fixed the type conversion issue here
             setData(response.data as unknown as T);
-            setError(null);
         } catch (err: unknown) {
-            // 型安全なエラーハンドリング
-            const errorMessage = getErrorMessage(err);
+            console.error("APIエラー:", err);
+
+            // Cast error to our defined AxiosError type
+            const errorMessage = getErrorMessage(err as AxiosError);
             setError(errorMessage);
-            setData(null);
+            setErrorDetails(err);
         } finally {
             setLoading(false);
         }
-    }, [url, method, requestData, headers]);
+    }, [url, method, requestData, extraHeaders]);
 
-    // エラーメッセージを取得するヘルパー関数
-    const getErrorMessage = (err: unknown): string => {
-        if (err instanceof Error) return err.message;
-
-        if (typeof err === "object" && err !== null && "response" in err) {
-            const response = (err as Record<string, unknown>).response;
-            if (typeof response === "object" && response !== null && "data" in response) {
-                const data = response.data as Record<string, unknown>;
-                if (typeof data.message === "string") return data.message;
-            }
+    const getErrorMessage = (err: AxiosError): string => {
+        if (err.response) {
+            console.error("サーバーレスポンス:", err.response.data);
+            return `サーバーエラー: ${err.response.status} - ${err.response.statusText}`;
+        } else if (err.request) {
+            return "リクエストは送信されたが、応答がありません";
+        } else {
+            return `リクエストエラー: ${err.message}`;
         }
-
-        return "エラーが発生しました";
     };
 
     useEffect(() => {
@@ -64,7 +74,7 @@ const useApi = <T, D = unknown>(
         }
     }, [method, fetchData]);
 
-    return { data, error, loading, fetchData };
+    return { data, error, loading, fetchData, errorDetails };
 };
 
 export default useApi;
