@@ -6,9 +6,6 @@ interface Statusprops{
     error?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-
-
-
 function InputForm ({label,subText,inputName,formData,onChange,error}:Statusprops){
     return(
         <div className="py-[10px]">
