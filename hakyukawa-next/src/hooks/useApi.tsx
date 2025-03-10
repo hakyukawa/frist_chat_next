@@ -1,70 +1,92 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-// カスタムフックの型定義
+// Axios のエラーハンドリングのための型定義
+type AxiosError = {
+    response?: {
+        data: unknown; // レスポンスのデータ（型は不明）
+        status: number; // HTTP ステータスコード
+        statusText: string; // HTTP ステータスのテキスト
+    };
+    request?: unknown; // リクエストオブジェクト（未定義の場合もある）
+    message: string; // エラーメッセージ
+};
+
+// API を呼び出すためのカスタムフック
+// `T` は取得するデータの型
+// `D` はリクエストデータの型（デフォルトは `unknown`）
 const useApi = <T, D = unknown>(
-    url: string,
-    method: "GET" | "POST" | "PUT" | "DELETE",
-    requestData?: D,
-    headers?: Record<string, string>
+    url: string, // API のエンドポイント
+    method: "GET" | "POST" | "PUT" | "DELETE", // HTTP メソッド
+    requestData?: D, // リクエスト時に送るデータ（省略可）
+    extraHeaders?: Record<string, string> // 追加の HTTP ヘッダー（省略可）
 ) => {
+    // API から取得したデータ
     const [data, setData] = useState<T | null>(null);
+    // エラーメッセージ
     const [error, setError] = useState<string | null>(null);
+    // ローディング状態
     const [loading, setLoading] = useState<boolean>(false);
+    // 詳細なエラー情報
+    const [errorDetails, setErrorDetails] = useState<unknown | null>(null);
 
+    // API を非同期で呼び出す関数
     const fetchData = useCallback(async () => {
-        setLoading(true);
+        setLoading(true); // ローディング開始
+        setError(null); // エラー状態をクリア
+        setErrorDetails(null); // エラー詳細もクリア
 
-        // localStorage からトークンを取得
+        // ローカルストレージからアクセストークンを取得
         const token = localStorage.getItem("accessToken");
 
         try {
+            // API リクエストを送信
             const response = await axios({
                 url,
                 method,
                 data: requestData,
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: token ? `Bearer ${token}` : "", // トークンをヘッダーに追加
-                    ...headers,
+                    "Content-Type": "application/json", // JSON 形式を指定
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}), // 認証トークンがあれば追加
+                    ...extraHeaders, // 追加のヘッダーを適用
                 },
             });
 
-            // 型変換をより安全に行う
+            // 取得したデータを状態に保存
             setData(response.data as unknown as T);
-            setError(null);
         } catch (err: unknown) {
-            // 型安全なエラーハンドリング
-            const errorMessage = getErrorMessage(err);
+            console.error("APIエラー:", err);
+
+            // エラーメッセージを取得し、状態に保存
+            const errorMessage = getErrorMessage(err as AxiosError);
             setError(errorMessage);
-            setData(null);
+            setErrorDetails(err);
         } finally {
-            setLoading(false);
+            setLoading(false); // ローディング終了
         }
-    }, [url, method, requestData, headers]);
+    }, [url, method, requestData, extraHeaders]);
 
-    // エラーメッセージを取得するヘルパー関数
-    const getErrorMessage = (err: unknown): string => {
-        if (err instanceof Error) return err.message;
-
-        if (typeof err === "object" && err !== null && "response" in err) {
-            const response = (err as Record<string, unknown>).response;
-            if (typeof response === "object" && response !== null && "data" in response) {
-                const data = response.data as Record<string, unknown>;
-                if (typeof data.message === "string") return data.message;
-            }
+    // エラーメッセージを生成する関数
+    const getErrorMessage = (err: AxiosError): string => {
+        if (err.response) {
+            console.error("サーバーレスポンス:", err.response.data);
+            return `サーバーエラー: ${err.response.status} - ${err.response.statusText}`;
+        } else if (err.request) {
+            return "リクエストは送信されたが、応答がありません";
+        } else {
+            return `リクエストエラー: ${err.message}`;
         }
-
-        return "エラーが発生しました";
     };
 
+    // コンポーネントがマウントされたときに `GET` リクエストを自動で実行
     useEffect(() => {
         if (method === "GET") {
             fetchData();
         }
     }, [method, fetchData]);
 
-    return { data, error, loading, fetchData };
+    // フックの返り値（API の結果やエラー情報など）
+    return { data, error, loading, fetchData, errorDetails };
 };
 
 export default useApi;

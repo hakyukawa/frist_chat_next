@@ -1,10 +1,12 @@
+"use client";
+
 import Rank from "@/components/common/Rank";
 import Group from "@/components/common/Group";
 import Header from "@/components/common/Header";
 import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
 import SeeAll from "@/components/common/SeeAll";
-
+import useApi from "@/hooks/useApi";
 interface Demo {
     user_id: number;
     user_name: string;
@@ -14,7 +16,29 @@ interface Demo {
     points: number;
 }
 
+// interface UserProfile {
+//     status: string;
+//     message: string;
+//     user_id: string;
+//     user_name: string;
+//     icon_url: string | null;
+//     user_rank: number;
+//     user_point: number;
+//     error: string | null;
+// }
+
 export default function Home() {
+    // const {
+    //     data: user,
+    //     error,
+    //     loading,
+    // } = useApi<UserProfile>("http://localhost:3001/api/v1/auth/user/profile", "GET");
+
+    // if (loading) return <p>読み込み中...</p>;
+    // if (error) return <p className="text-red-500">{error}</p>;
+
+    // console.log(user);
+
     const demo: Demo = {
         user_id: 12345,
         user_name: "example_user",
