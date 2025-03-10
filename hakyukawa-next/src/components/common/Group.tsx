@@ -1,14 +1,25 @@
 "use client";
 import { BsChatTextFill } from "react-icons/bs";
+import { useGroupMembers } from "@/hooks/useGroupMembers";
+import { useEffect, useState } from "react";
 
 interface GroupProps {
     Name: string;
     LastMessageTime?: number;
     type: string;
-    // NumberOfPerson?: number;
+    serverId?: string;
 }
 
 export default function Group(props: GroupProps) {
+    const [memberCount, setMemberCount] = useState<number>(0);
+    const { data, loading, error } = useGroupMembers(props.serverId || "");
+
+    useEffect(() => {
+        if (data && data.members) {
+            setMemberCount(data.members.length);
+        }
+    }, [data]);
+
     function handleGroupClick() {
         console.log(`${props.Name}をクリックしました`);
     }
@@ -19,14 +30,16 @@ export default function Group(props: GroupProps) {
             <div>
                 <h2 className="text-[1.8rem] flex items-center">
                     {props.Name}
-                    {/* {props.type == "group" && `(${props.NumberOfPerson})`} */}
+                    {props.type === "group" && memberCount > 0 && `(${memberCount})`}
                 </h2>
                 <p className="text-[1.5rem] text-main flex items-center">
                     <BsChatTextFill style={{ marginRight: "5px" }} />
                     <span style={{ marginRight: "5px" }}>受信</span>
-                    {/* {props.LastMessageTime < 60
+                    {props.LastMessageTime && props.LastMessageTime < 60
                         ? `${props.LastMessageTime}分前`
-                        : `${Math.floor(props.LastMessageTime / 60)}時間前`} */}
+                        : props.LastMessageTime
+                        ? `${Math.floor(props.LastMessageTime / 60)}時間前`
+                        : ""}
                 </p>
             </div>
         </button>
