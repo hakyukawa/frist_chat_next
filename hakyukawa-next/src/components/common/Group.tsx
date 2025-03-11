@@ -2,6 +2,8 @@
 import { BsChatTextFill } from "react-icons/bs";
 import { useServerMembers } from "@/hooks/useServerMembers";
 import { useEffect, useState } from "react";
+import { useServerInfo } from "@/hooks/useServerInfo";
+import { BsFire } from "react-icons/bs";
 
 interface GroupProps {
     Name: string;
@@ -12,17 +14,32 @@ interface GroupProps {
 
 export default function Group(props: GroupProps) {
     const [memberCount, setMemberCount] = useState<number>(0);
-    const { data } = useServerMembers(props.server_id || "");
-
-    if (data) {
-        console.log(data);
-    }
+    const { data: member } = useServerMembers(props.server_id || "");
+    const { data: info } = useServerInfo(props.server_id || "");
+    const [isCoreTime, setIsCoreTime] = useState(false);
 
     useEffect(() => {
-        if (data && data.members) {
-            setMemberCount(data.members.length);
+        if (member && member.members) {
+            setMemberCount(member.members.length);
         }
-    }, [data]);
+    }, [member]);
+
+    useEffect(() => {
+        if (!info || !info.start_core_time || !info.end_core_time) return;
+
+        // 現在時刻を取得（24時間表記）
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes(); // 分単位で比較
+
+        // "start_core_time" と "end_core_time" を分単位に変換
+        const [startHours, startMinutes] = info.start_core_time.split(":").map(Number);
+        const [endHours, endMinutes] = info.end_core_time.split(":").map(Number);
+        const startTime = startHours * 60 + startMinutes;
+        const endTime = endHours * 60 + endMinutes;
+
+        // 現在時刻が core time の範囲内かどうか判定
+        setIsCoreTime(currentTime >= startTime && currentTime <= endTime);
+    }, [info]);
 
     function handleGroupClick() {
         console.log(`${props.Name}をクリックしました`);
@@ -30,19 +47,36 @@ export default function Group(props: GroupProps) {
 
     return (
         <button onClick={handleGroupClick} className="my-6 flex items-center">
-            <div className="bg-main w-[46px] h-[46px] rounded-full mr-4"></div>
+            <div
+                className={`bg-main w-[50px] h-[50px] rounded-full mr-4 ${
+                    isCoreTime && "border-[1.5px] border-background outline-[3px] outline-main"
+                }`}
+            ></div>
             <div>
                 <h2 className="text-[1.8rem] flex items-center">
                     {props.Name}
                     {props.type === "group" && memberCount > 0 && `(${memberCount})`}
+                    {isCoreTime && (
+                        <span className="text-[2.3rem] text-main ml-2">
+                            <BsFire />
+                        </span>
+                    )}
                 </h2>
-                <p className="text-[1.5rem] text-main flex items-center">
+                <p
+                    className={`text-[1.5rem] flex items-center ${
+                        props.LastMessageTime && props.LastMessageTime < 1440
+                            ? "text-main"
+                            : "text-[#FF2F2F]"
+                    }`}
+                >
                     <BsChatTextFill style={{ marginRight: "5px" }} />
                     <span style={{ marginRight: "5px" }}>受信</span>
-                    {props.LastMessageTime && props.LastMessageTime < 60
-                        ? `${props.LastMessageTime}分前`
-                        : props.LastMessageTime && props.LastMessageTime >= 60
-                        ? `${Math.floor(props.LastMessageTime / 60)}時間前`
+                    {props.LastMessageTime
+                        ? props.LastMessageTime < 60
+                            ? `${props.LastMessageTime}分前`
+                            : props.LastMessageTime < 1440
+                            ? `${Math.floor(props.LastMessageTime / 60)}時間前`
+                            : `${Math.floor(props.LastMessageTime / 1440)}日前`
                         : ""}
                 </p>
             </div>
