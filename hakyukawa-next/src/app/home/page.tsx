@@ -15,13 +15,15 @@ export default function Home() {
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
     const { data: group, error: groupError, loading: groupLoading } = useGroups();
 
-    // if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
-    // if (groupError || friendError || userError)
-    //     return <p className="text-red-500">{groupError || friendError || userError}</p>;
+    if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
+    if (groupError || friendError || userError)
+        return <p className="text-red-500">{groupError || friendError || userError}</p>;
 
-    // console.log(user);
-    // console.log(friend);
-    // console.log(group);
+    if (user && friend && group) {
+        console.log(user);
+        console.log(friend);
+        console.log(group);
+    }
 
     const friendIcons = (key: number) => {
         return (
@@ -79,7 +81,7 @@ export default function Home() {
                         <h3 className="text-subText text-[1.6rem] font-semibold">グループ</h3>
                         <SeeAll url="/groupList" />
                     </div>
-                    {/* {group
+                    {group
                         ? group.data
                               .slice(0, 3)
                               .map((group) => (
@@ -87,9 +89,10 @@ export default function Home() {
                                       key={group.server_id}
                                       type="group"
                                       Name={group.server_name}
+                                      server_id={group.server_id}
                                   />
                               ))
-                        : null} */}
+                        : null}
                 </div>
             </div>
         </>

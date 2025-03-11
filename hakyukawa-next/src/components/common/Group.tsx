@@ -7,12 +7,16 @@ interface GroupProps {
     Name: string;
     LastMessageTime?: number;
     type: string;
-    serverId?: string;
+    server_id?: string;
 }
 
 export default function Group(props: GroupProps) {
     const [memberCount, setMemberCount] = useState<number>(0);
-    const { data, loading, error } = useGroupMembers(props.serverId || "");
+    const { data } = useGroupMembers(props.server_id || "");
+
+    if (data) {
+        console.log(data);
+    }
 
     useEffect(() => {
         if (data && data.members) {
