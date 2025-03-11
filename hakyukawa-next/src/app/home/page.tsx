@@ -10,19 +10,6 @@ import { useProfile } from "@/hooks/useProfile";
 import { useFriends } from "@/hooks/useFriends";
 import { useGroups } from "@/hooks/useGroups";
 
-// interface GroupMemberResponse {
-//     status: number;
-//     message: string;
-//     owner: string;
-//     members: GroupMember[];
-// }
-
-// interface GroupMember {
-//     user_id: string;
-//     user_name: string;
-//     icon_url: string | null;
-// }
-
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
@@ -31,9 +18,12 @@ export default function Home() {
     if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
     if (groupError || friendError || userError)
         return <p className="text-red-500">{groupError || friendError || userError}</p>;
-    // console.log(user);
-    // console.log(friend?.users);
-    // console.log(group?.data);
+
+    if (user && friend && group) {
+        console.log(user);
+        console.log(friend);
+        console.log(group);
+    }
 
     const friendIcons = (key: number) => {
         return (
@@ -84,12 +74,7 @@ export default function Home() {
                     </div>
 
                     {friend?.users.slice(0, 2).map((user) => (
-                        <Group
-                            key={user.user_id}
-                            type="friend"
-                            Name={user.user_name}
-                            // LastMessageTime={friend.LastMessageTime}
-                        />
+                        <Group key={user.user_id} type="friend" Name={user.user_name} />
                     ))}
 
                     <div className="flex justify-between mt-4">
@@ -97,14 +82,16 @@ export default function Home() {
                         <SeeAll url="/groupList" />
                     </div>
                     {group
-                        ? group.data.slice(0, 3).map((group) => (
-                              <Group
-                                  key={group.server_id}
-                                  type="group"
-                                  Name={group.server_name}
-                                  //NumberOfPerson={groupMember.members.length}
-                              />
-                          ))
+                        ? group.data
+                              .slice(0, 3)
+                              .map((group) => (
+                                  <Group
+                                      key={group.server_id}
+                                      type="group"
+                                      Name={group.server_name}
+                                      server_id={group.server_id}
+                                  />
+                              ))
                         : null}
                 </div>
             </div>
