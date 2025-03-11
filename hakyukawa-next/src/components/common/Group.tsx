@@ -4,7 +4,7 @@ import { useServerMembers } from "@/hooks/useServerMembers";
 import { useEffect, useState } from "react";
 import { useServerInfo } from "@/hooks/useServerInfo";
 import { BsFire } from "react-icons/bs";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface GroupProps {
     Name: string;
@@ -18,6 +18,7 @@ export default function Group(props: GroupProps) {
     const { data: info } = useServerInfo(props.server_id || "");
     const [isCoreTime, setIsCoreTime] = useState(false);
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
         if (member && member.members) {
@@ -43,6 +44,7 @@ export default function Group(props: GroupProps) {
     }, [info]);
 
     const handleClick = () => {
+        localStorage.setItem("previousPath", pathname);
         router.push(`/${props.server_id}`);
     };
 
