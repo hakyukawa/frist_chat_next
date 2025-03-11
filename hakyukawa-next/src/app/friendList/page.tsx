@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "@/components/common/Header";
-import Group from "@/components/common/Group";
+import Friend from "@/components/common/Friend";
 import Search from "@/components/common/Search";
 import { useFriends } from "@/hooks/useFriends";
 import { useState } from "react";
@@ -25,7 +25,7 @@ export default function FriendList() {
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 {filteredFriends && filteredFriends.length > 0 ? (
                     filteredFriends.map((user) => (
-                        <Group key={user.user_id} type="friend" Name={user.user_name} />
+                        <Friend key={user.user_id} Name={user.user_name} />
                     ))
                 ) : (
                     <p className="text-gray-500 mt-4">該当するフレンドが見つかりません</p>

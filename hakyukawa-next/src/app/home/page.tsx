@@ -2,6 +2,7 @@
 
 import Rank from "@/components/common/Rank";
 import Group from "@/components/common/Group";
+import Friend from "@/components/common/Friend";
 import Header from "@/components/common/Header";
 import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
@@ -74,7 +75,7 @@ export default function Home() {
                     </div>
 
                     {friend?.users.slice(0, 2).map((user) => (
-                        <Group key={user.user_id} type="friend" Name={user.user_name} />
+                        <Friend key={user.user_id} Name={user.user_name} />
                     ))}
 
                     <div className="flex justify-between mt-4">
@@ -87,7 +88,6 @@ export default function Home() {
                               .map((group) => (
                                   <Group
                                       key={group.server_id}
-                                      type="group"
                                       Name={group.server_name}
                                       server_id={group.server_id}
                                   />

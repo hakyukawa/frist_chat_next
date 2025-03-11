@@ -8,7 +8,6 @@ import { BsFire } from "react-icons/bs";
 interface GroupProps {
     Name: string;
     LastMessageTime?: number;
-    type: string;
     server_id?: string;
 }
 
@@ -41,12 +40,8 @@ export default function Group(props: GroupProps) {
         setIsCoreTime(currentTime >= startTime && currentTime <= endTime);
     }, [info]);
 
-    function handleGroupClick() {
-        console.log(`${props.Name}をクリックしました`);
-    }
-
     return (
-        <button onClick={handleGroupClick} className="my-6 flex items-center">
+        <button className="my-6 flex items-center">
             <div
                 className={`bg-main w-[50px] h-[50px] rounded-full mr-4 ${
                     isCoreTime && "border-[1.5px] border-background outline-[3px] outline-main"
@@ -55,7 +50,7 @@ export default function Group(props: GroupProps) {
             <div>
                 <h2 className="text-[1.8rem] flex items-center">
                     {props.Name}
-                    {props.type === "group" && memberCount > 0 && `(${memberCount})`}
+                    {memberCount > 0 && `(${memberCount})`}
                     {isCoreTime && (
                         <span className="text-[2.3rem] text-main ml-2">
                             <BsFire />
