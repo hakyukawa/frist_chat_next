@@ -1,3 +1,5 @@
+"use client";
+
 import useApi from "@/hooks/useApi";
 
 interface Friend {

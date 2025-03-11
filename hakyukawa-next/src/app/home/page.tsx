@@ -54,7 +54,7 @@ export default function Home() {
                 ) : null}
                 {friend ? (
                     <Link
-                        href="/friendList"
+                        href="/FriendList"
                         passHref
                         className="w-full my-5 rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
                     >
@@ -70,7 +70,7 @@ export default function Home() {
                     <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
                     <div className="flex justify-between mt-4">
                         <h3 className="text-subText text-[1.6rem] font-semibold">フレンド</h3>
-                        <SeeAll url="/friendList" />
+                        <SeeAll url="/FriendList" />
                     </div>
 
                     {friend?.users.slice(0, 2).map((user) => (
@@ -79,7 +79,7 @@ export default function Home() {
 
                     <div className="flex justify-between mt-4">
                         <h3 className="text-subText text-[1.6rem] font-semibold">グループ</h3>
-                        <SeeAll url="/groupList" />
+                        <SeeAll url="/GroupList" />
                     </div>
                     {group
                         ? group.data

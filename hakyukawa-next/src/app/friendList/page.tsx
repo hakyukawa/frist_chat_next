@@ -1,28 +1,27 @@
+"use client";
+
 import Header from "@/components/common/Header";
 import Group from "@/components/common/Group";
 import Search from "@/components/common/Search";
+import { useFriends } from "@/hooks/useFriends";
 
-const friendArray = [
-    { id: 1, friendName: "friend1", LastMessageTime: 30 },
-    { id: 2, friendName: "friend2", LastMessageTime: 60 },
-    { id: 3, friendName: "friend3", LastMessageTime: 90 },
-    { id: 4, friendName: "friend4", LastMessageTime: 300 },
-];
+export default function FriendList() {
+    const { data: friend, error: friendError, loading: friendLoading } = useFriends();
 
-export default function friendList() {
+    if (friendLoading) return <p>読み込み中...</p>;
+    if (friendError) return <p className="text-red-500">{friendError}</p>;
+
+    console.log(friend);
     return (
         <>
             <Header backPage backPageLink="/home" backPageText="フレンド" addFriend setting />
             <div className="p-4">
                 <Search />
-                {friendArray.map((friend) => (
-                    <Group
-                        key={friend.id}
-                        type="friend"
-                        Name={friend.friendName}
-                        LastMessageTime={friend.LastMessageTime}
-                    />
-                ))}
+                {friend
+                    ? friend.users.map((friend) => (
+                          <Group key={friend.user_id} type="friend" Name={friend.user_name} />
+                      ))
+                    : null}
             </div>
         </>
     );
