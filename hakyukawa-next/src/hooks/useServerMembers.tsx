@@ -1,20 +1,20 @@
 // hooks/useGroupMembers.ts
 import useApi from "@/hooks/useApi";
 
-interface GroupMember {
+interface ServerMember {
     user_id: string;
     user_name: string;
 }
 
-interface GroupMemberResponse {
+interface ServerMemberResponse {
     status: number;
     message: string;
     owner: string;
-    members: GroupMember[];
+    members: ServerMember[];
 }
 
-export function useGroupMembers(server_id: string) {
-    return useApi<GroupMemberResponse>(
+export function useServerMembers(server_id: string) {
+    return useApi<ServerMemberResponse>(
         `http://localhost:3001/api/v1/auth/server/members/${server_id}`,
         "GET"
     );

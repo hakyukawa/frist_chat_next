@@ -3,11 +3,11 @@
 import Header from "@/components/common/Header";
 import Group from "@/components/common/Group";
 import Search from "@/components/common/Search";
-import { useGroups } from "@/hooks/useGroups";
+import { useServers } from "@/hooks/useServers";
 import { useState } from "react";
 
 export default function GroupList() {
-    const { data: group, error: groupError, loading: groupLoading } = useGroups();
+    const { data: group, error: groupError, loading: groupLoading } = useServers();
     const [searchQuery, setSearchQuery] = useState("");
 
     if (groupLoading) return <p>読み込み中...</p>;

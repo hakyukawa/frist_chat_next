@@ -8,12 +8,12 @@ import Link from "next/link";
 import SeeAll from "@/components/common/SeeAll";
 import { useProfile } from "@/hooks/useProfile";
 import { useFriends } from "@/hooks/useFriends";
-import { useGroups } from "@/hooks/useGroups";
+import { useServers } from "@/hooks/useServers";
 
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
-    const { data: group, error: groupError, loading: groupLoading } = useGroups();
+    const { data: group, error: groupError, loading: groupLoading } = useServers();
 
     if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
     if (groupError || friendError || userError)

@@ -1,6 +1,6 @@
 "use client";
 import { BsChatTextFill } from "react-icons/bs";
-import { useGroupMembers } from "@/hooks/useGroupMembers";
+import { useServerMembers } from "@/hooks/useServerMembers";
 import { useEffect, useState } from "react";
 
 interface GroupProps {
@@ -12,7 +12,7 @@ interface GroupProps {
 
 export default function Group(props: GroupProps) {
     const [memberCount, setMemberCount] = useState<number>(0);
-    const { data } = useGroupMembers(props.server_id || "");
+    const { data } = useServerMembers(props.server_id || "");
 
     if (data) {
         console.log(data);
@@ -41,7 +41,7 @@ export default function Group(props: GroupProps) {
                     <span style={{ marginRight: "5px" }}>受信</span>
                     {props.LastMessageTime && props.LastMessageTime < 60
                         ? `${props.LastMessageTime}分前`
-                        : props.LastMessageTime
+                        : props.LastMessageTime && props.LastMessageTime >= 60
                         ? `${Math.floor(props.LastMessageTime / 60)}時間前`
                         : ""}
                 </p>
