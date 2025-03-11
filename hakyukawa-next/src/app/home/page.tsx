@@ -2,18 +2,19 @@
 
 import Rank from "@/components/common/Rank";
 import Group from "@/components/common/Group";
+import Friend from "@/components/common/Friend";
 import Header from "@/components/common/Header";
 import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
 import SeeAll from "@/components/common/SeeAll";
 import { useProfile } from "@/hooks/useProfile";
 import { useFriends } from "@/hooks/useFriends";
-import { useGroups } from "@/hooks/useGroups";
+import { useServers } from "@/hooks/useServers";
 
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
-    const { data: group, error: groupError, loading: groupLoading } = useGroups();
+    const { data: group, error: groupError, loading: groupLoading } = useServers();
 
     if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
     if (groupError || friendError || userError)
@@ -54,7 +55,7 @@ export default function Home() {
                 ) : null}
                 {friend ? (
                     <Link
-                        href="/friendList"
+                        href="/FriendList"
                         passHref
                         className="w-full my-5 rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
                     >
@@ -70,16 +71,16 @@ export default function Home() {
                     <h2 className="text-[1.8rem] font-semibold">メッセージ</h2>
                     <div className="flex justify-between mt-4">
                         <h3 className="text-subText text-[1.6rem] font-semibold">フレンド</h3>
-                        <SeeAll url="/friendList" />
+                        <SeeAll url="/FriendList" />
                     </div>
 
                     {friend?.users.slice(0, 2).map((user) => (
-                        <Group key={user.user_id} type="friend" Name={user.user_name} />
+                        <Friend key={user.user_id} Name={user.user_name} />
                     ))}
 
                     <div className="flex justify-between mt-4">
                         <h3 className="text-subText text-[1.6rem] font-semibold">グループ</h3>
-                        <SeeAll url="/groupList" />
+                        <SeeAll url="/GroupList" />
                     </div>
                     {group
                         ? group.data
@@ -87,7 +88,6 @@ export default function Home() {
                               .map((group) => (
                                   <Group
                                       key={group.server_id}
-                                      type="group"
                                       Name={group.server_name}
                                       server_id={group.server_id}
                                   />
