@@ -4,6 +4,7 @@ import { useServerMembers } from "@/hooks/useServerMembers";
 import { useEffect, useState } from "react";
 import { useServerInfo } from "@/hooks/useServerInfo";
 import { BsFire } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 interface GroupProps {
     Name: string;
@@ -16,6 +17,7 @@ export default function Group(props: GroupProps) {
     const { data: member } = useServerMembers(props.server_id || "");
     const { data: info } = useServerInfo(props.server_id || "");
     const [isCoreTime, setIsCoreTime] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (member && member.members) {
@@ -40,8 +42,12 @@ export default function Group(props: GroupProps) {
         setIsCoreTime(currentTime >= startTime && currentTime <= endTime);
     }, [info]);
 
+    const handleClick = () => {
+        router.push(`/${props.server_id}`);
+    };
+
     return (
-        <button className="my-6 flex items-center">
+        <button onClick={handleClick} className="my-6 flex items-center">
             <div
                 className={`bg-main w-[50px] h-[50px] rounded-full mr-4 ${
                     isCoreTime && "border-[1.5px] border-background outline-[3px] outline-main"
