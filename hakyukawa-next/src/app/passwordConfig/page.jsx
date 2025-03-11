@@ -1,34 +1,8 @@
 "use client"; 
 import React, {useState} from "react";
 import Header from "@/components/common/Header";
+import PasswordForm from "@/components/common/option/passwordForm";
 import SubmitButton from "@/components/common/SubmitButton";
-import { IoEyeOff,IoEye } from "react-icons/io5";
-
-function PasswordForm ({label,inputName,formData,onChange,error}){
-    const [showPassword,setShowPassword] = useState(false);
-    return(
-        <div className="py-[10px] relative">
-            <label className="text-[14px] text-subText font-semibold">{label}</label>
-            <input 
-                type={showPassword ? "text" : "password"} 
-                name={inputName} 
-                value={formData?? ""}  // formData.newUserId が undefined でない場合のみ取得
-                onChange={onChange} 
-                pattern ="^[a-zA-Z0-9]+$"
-                className={`w-full text-[20px] font-light border-b-2 ${error ? 'border-red-500' : 'border-main'} pr-10 `}
-            />
-            <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-[65%] transform -translate-y-[50%] text-gray-500"
-            >
-                    {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-            </button>
-            {error &&<p className="text-red-500 text-xs text-[11px] py-[10px]">{error}</p>}
-            
-        </div>
-    )
-}
 
 function PasswordConfig (){
      //入力・エラー状態管理
