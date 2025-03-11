@@ -4,18 +4,25 @@ import { useParams } from "next/navigation";
 import { useServerMembers } from "@/hooks/useServerMembers";
 import { useServers } from "@/hooks/useServers";
 import { useChannels } from "@/hooks/useChannels";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import Header from "@/components/common/Header";
 
 export default function ServerPage() {
     const params = useParams();
     const server_id = params.server_id;
-
+    const [previousPath, setPreviousPath] = useState<string | null>(null);
     const [memberCount, setMemberCount] = useState<number>(0);
     const { data: group } = useServers();
     const { data: member } = useServerMembers(`${server_id}`);
     const { data: channel } = useChannels(`${server_id}`);
+
+    useEffect(() => {
+        const prevPath = localStorage.getItem("previousPath");
+        if (prevPath) {
+            setPreviousPath(prevPath);
+        }
+    }, []);
 
     useEffect(() => {
         if (member && member.members) {
@@ -25,14 +32,14 @@ export default function ServerPage() {
 
     const filteredGroup = group?.data.find((item) => item.server_id === server_id);
 
-    console.log(memberCount, filteredGroup, member, channel);
+    // console.log(memberCount, filteredGroup, member, channel, previousPath);
 
     return (
         <>
             <Header
                 backPage
-                backPageLink="/home"
-                backPageText={`${filteredGroup?.server_name}(${member?.members.length})`}
+                backPageLink={`${previousPath}`}
+                backPageText={`${filteredGroup?.server_name}(${memberCount})`}
                 setting
             />
 
