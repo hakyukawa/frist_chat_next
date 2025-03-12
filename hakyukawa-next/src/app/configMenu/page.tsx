@@ -35,7 +35,7 @@ function SettingMenu() {
                 /> 
                 <div className="py-[30px]">
                 <div className="border-t border-border">
-                    <p className="text-[14px] text-center text-red-500 p-[15px]">ログアウト</p>
+                    <p className="text-[14px] text-center text-red-500 p-[15px]"><a href="/signup">ログアウト</a></p>
                 </div>
                 </div>
                 
