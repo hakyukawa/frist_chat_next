@@ -19,10 +19,12 @@ function Deleteuser () {
                 <span className="text-red-500">削除されたアカウントは復旧できません。</span></p>   
             </div>
             <div className="px-[86px] py-[15px]">
-                <DeleteButton 
-                    buttonValue="アカウントを削除"
-                    className="p-[10px] border border-red-500 rounded-[40px] w-full text-red-500 font-semibold"
-                />
+                <form action="" method="POST">
+                    <DeleteButton 
+                        buttonValue="アカウントを削除"
+                        className="p-[10px] border border-red-500 rounded-[40px] w-full text-red-500 font-semibold"
+                    />
+                </form>
             </div>
             
         </div>
