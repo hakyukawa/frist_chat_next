@@ -45,7 +45,7 @@ export default function Group(props: GroupProps) {
 
     const handleClick = () => {
         localStorage.setItem("previousPath", pathname);
-        router.push(`/${props.server_id}`);
+        router.push(`/server/${props.server_id}`);
     };
 
     return (
