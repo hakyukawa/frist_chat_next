@@ -21,7 +21,11 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
     return (
-        <header className="flex p-4 justify-between items-center text-[20px]">
+        <header
+            className={`flex p-4 justify-between items-center text-[20px] ${
+                props.core && "bg-gradient-to-r from-[#F8644A] to-[#FE950F]"
+            }`}
+        >
             <div className="flex items-center font-semibold">
                 {props.backPage && props.backPageLink && (
                     <Link href={props.backPageLink}>

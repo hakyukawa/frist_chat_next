@@ -48,6 +48,7 @@ export default function Message() {
                 backPageLink={`/server/${server_id}`}
                 backPageText={currentChannel ? currentChannel.channel_name : "Server"}
                 search
+                core
             />
             {currentChannel ? (
                 <div>
