@@ -55,7 +55,7 @@ function UserIdConfig () {
     
     return(
         <div>  
-            <Header backPage backPageLink ="/" backPageText="ユーザーIDを変更" />
+            <Header backPage backPageLink ="/config" backPageText="ユーザーIDを変更" />
             <form onSubmit={handleSubmit} action="" method="POST" className="p-[16px]" >
                 <Status
                     nowState={nowuserid}
