@@ -10,6 +10,7 @@ import { BsFire } from "react-icons/bs";
 import { BsX } from "react-icons/bs";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Search from "@/components/common/Search";
 
 interface HeaderProps {
@@ -27,6 +28,11 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
     const [serch, setSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const router = useRouter();
+
+    const addGroupClick = () => {
+        router.push("/newGroupSettings");
+    };
 
     return (
         <header
@@ -48,7 +54,11 @@ export default function Header(props: HeaderProps) {
                 </div>
                 <div className="flex text-[26px]">
                     {props.addFriend && <GoPersonAdd />}
-                    {props.addGroup && <AiOutlineUsergroupAdd style={{ marginLeft: "8px" }} />}
+                    {props.addGroup && (
+                        <button onClick={addGroupClick}>
+                            <AiOutlineUsergroupAdd style={{ marginLeft: "8px" }} />
+                        </button>
+                    )}
                     {props.notice && <GoBell style={{ marginLeft: "8px" }} />}
                     {props.search && (
                         <button className="ml-[8px]" onClick={() => setSearch((prev) => !prev)}>
