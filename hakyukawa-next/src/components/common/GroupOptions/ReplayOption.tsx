@@ -86,7 +86,6 @@ export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
 
     const handleChange = (event: SelectChangeEvent<string>) => {
         setUntilReplay(event.target.value);
-        console.log(start_at, end_at, start_core_time, end_core_time);
     };
 
     const toggleDaySelection = (date: string) => {
@@ -125,9 +124,9 @@ export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
                         displayEmpty
                     >
                         <MenuItem value="">なし</MenuItem>
-                        <MenuItem value="60">1時間</MenuItem>
-                        <MenuItem value="120">2時間</MenuItem>
-                        <MenuItem value="180">3時間</MenuItem>
+                        <MenuItem value="01:00:00">1時間</MenuItem>
+                        <MenuItem value="02:00:00">2時間</MenuItem>
+                        <MenuItem value="03:00:00">3時間</MenuItem>
                     </CompatibleSelect>
                 </div>
             </div>
