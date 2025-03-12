@@ -26,7 +26,6 @@ export default function GroupList() {
                     filteredGroups.map((group) => (
                         <Group
                             key={group.server_id}
-                            type="group"
                             Name={group.server_name}
                             server_id={group.server_id}
                         />
