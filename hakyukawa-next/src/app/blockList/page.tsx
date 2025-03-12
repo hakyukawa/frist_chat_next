@@ -27,8 +27,8 @@ function Blocklist () {
                                 />
                                 <div className="flex justify-center items-center">
                                     <DeleteButton
-                                        buttonValue="ブロック中"
-                                        className="p-[5px] border border-red-500 rounded-[40px] text-[14px] text-red-500 font-light"
+                                        buttonValue="ブロック済"
+                                        className="px-[7px] py-[2px] border border-red-500 rounded-[40px] text-[14px] text-red-500 font-light"
                                     />
                                 </div>
                             </div>
