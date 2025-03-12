@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
 import { useServerMembers } from "@/hooks/useServerMembers";
 import { useServers } from "@/hooks/useServers";
 import { useChannels } from "@/hooks/useChannels";
@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import Header from "@/components/common/Header";
 
-export default function ServerPage() {
+export default function ServerSelect() {
     const params = useParams();
+    const router = useRouter();
+    const pathname = usePathname();
     const server_id = params.server_id;
     const [previousPath, setPreviousPath] = useState<string | null>(null);
     const [memberCount, setMemberCount] = useState<number>(0);
@@ -34,6 +36,13 @@ export default function ServerPage() {
 
     // console.log(memberCount, filteredGroup, member, channel, previousPath);
 
+    const handleClick = (channelId: string) => {
+        return () => {
+            localStorage.setItem("previousPath", pathname);
+            router.push(`/server/${server_id}/${channelId}`);
+        };
+    };
+
     return (
         <>
             <Header
@@ -51,7 +60,9 @@ export default function ServerPage() {
                                 key={channel.channel_id}
                                 className="px-[16px] py-[13px] text-[1.8rem] border-b border-border"
                             >
-                                <p>{channel.channel_name}</p>
+                                <button onClick={handleClick(channel.channel_id)}>
+                                    {channel.channel_name}
+                                </button>
                             </div>
                         );
                     })}
