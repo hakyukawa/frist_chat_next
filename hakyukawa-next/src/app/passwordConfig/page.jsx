@@ -53,7 +53,7 @@ function PasswordConfig (){
 
     return(
         <div>
-            <Header backPage backPageLink ="/" backPageText="パスワードを変更"  />
+            <Header backPage backPageLink ="/configMenu" backPageText="パスワードを変更"  />
             <form onSubmit={handleSubmit} action="" method="POST" className="p-[16px]">
                 <PasswordForm
                     label="パスワード"
