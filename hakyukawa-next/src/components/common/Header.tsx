@@ -50,9 +50,11 @@ export default function Header(props: HeaderProps) {
                     {props.addFriend && <GoPersonAdd />}
                     {props.addGroup && <AiOutlineUsergroupAdd style={{ marginLeft: "8px" }} />}
                     {props.notice && <GoBell style={{ marginLeft: "8px" }} />}
-                    <button className="ml-[8px]" onClick={() => setSearch((prev) => !prev)}>
-                        {props.search && !serch ? <IoIosSearch /> : <BsX />}
-                    </button>
+                    {props.search && (
+                        <button className="ml-[8px]" onClick={() => setSearch((prev) => !prev)}>
+                            {!serch ? <IoIosSearch /> : <BsX />}
+                        </button>
+                    )}
                     {props.setting && (
                         <button>
                             <IoSettingsOutline style={{ marginLeft: "8px" }} />
