@@ -60,7 +60,7 @@ function MailaddressConfig () {
 
     return  (
         <div>
-            <Header backPage backPageLink ="/" backPageText="メールアドレスを変更" />
+            <Header backPage backPageLink ="/configMenu" backPageText="メールアドレスを変更" />
             <form onSubmit={handleSubmit} action="" method="POST" className="p-[16px]" >
                 <Status
                     nowState={now_mail}
