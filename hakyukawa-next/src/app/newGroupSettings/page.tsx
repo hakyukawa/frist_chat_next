@@ -1,9 +1,25 @@
+"use client";
+
 import Header from "@/components/common/Header";
 import GroupInfo from "@/components/common/GroupInfo";
 import Link from "next/link";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import { IoIosArrowForward } from "react-icons/io";
+import SubmitButton from "@/components/common/SubmitButton";
+import { useState, useCallback } from "react";
+
+interface ReplayOptionData {
+    start_at: string;
+    end_at: string;
+    start_core_time: string;
+    end_core_time: string;
+    weeks: {
+        date: string;
+        isSelected: boolean;
+    }[];
+    until_replay: string;
+}
 
 const friendArray = [
     { id: 1, friendName: "friend1", LastMessageTime: 30 },
@@ -21,12 +37,24 @@ const friendIcons = (key: number) => {
     );
 };
 
-export default function newGroupList() {
+export default function NewGroupList() {
+    const [groupName, setGroupName] = useState<string>("");
+    const [replayOptionData, setReplayOptionData] = useState<ReplayOptionData | null>(null);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+    };
+
+    const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
+        setReplayOptionData(data);
+    }, []);
+
     return (
         <>
             <Header backPage backPageLink="/groupList" backPageText="グループ新規作成" />
             <div className="p-[16px]">
-                <GroupInfo />
+                {/* groupNameとsetGroupNameを渡す */}
+                <GroupInfo groupName={groupName} setGroupName={setGroupName} />
                 <Link
                     href="/friendList"
                     passHref
@@ -39,7 +67,10 @@ export default function newGroupList() {
                     </div>
                 </Link>
                 <NoticeOption />
-                <ReplayOption />
+                <ReplayOption onDataChange={handleReplayOptionChange} />
+                <form onSubmit={handleSubmit}>
+                    <SubmitButton buttonValue="グループを作成" />
+                </form>
             </div>
         </>
     );

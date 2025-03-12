@@ -45,7 +45,7 @@ function Login() {
     const [error, setError] = useState<string | null>(null);
 
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault(); // フォームのデフォルト送信を防止
+        e.preventDefault();
 
         try {
             const response = await axios.post<LoginResponse>("http://localhost:3001/api/v1/login", {

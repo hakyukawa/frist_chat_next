@@ -1,19 +1,40 @@
 "use client";
-import Select, { SelectChangeEvent } from "@mui/material/Select"; // SelectChangeEventをインポート
+import Select, { SelectChangeEvent, SelectProps } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import ReplayTimeHeadline from "./ReplayOptionHeadline";
 import TimePicker from "./TimePickerOption";
 import SelectDate from "@/components/common/GroupOptions/SelectDate";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { useState } from "react";
+import { useState, forwardRef, useEffect, useRef } from "react";
 
-interface dayOfWeekOption {
+interface weeks {
     date: string;
     isSelected: boolean;
 }
 
-export default function ReplayOption() {
-    const [dayOfWeekOption, setDayOfWeekOption] = useState<dayOfWeekOption[]>([
+interface ReplayOptionProps {
+    onDataChange?: (data: {
+        start_at: string;
+        end_at: string;
+        start_core_time: string;
+        end_core_time: string;
+        weeks: weeks[];
+        until_replay: string;
+    }) => void;
+}
+
+const CompatibleSelect = forwardRef<HTMLDivElement, SelectProps<string>>((props, ref) => {
+    return <Select {...props} ref={ref} />;
+});
+CompatibleSelect.displayName = "CompatibleSelect";
+
+export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
+    const [start_at, setStartAt] = useState<string>("00:00");
+    const [end_at, setEndAt] = useState<string>("00:00");
+    const [start_core_time, setStartCoreTime] = useState<string>("00:00");
+    const [end_core_time, setEndCoreTime] = useState<string>("00:00");
+    const onDataChangeRef = useRef(onDataChange);
+    const [weeks, setWeeks] = useState<weeks[]>([
         {
             date: "日",
             isSelected: false,
@@ -44,15 +65,32 @@ export default function ReplayOption() {
         },
     ]);
 
-    const [selectedTime, setSelectedTime] = useState<string>("");
+    useEffect(() => {
+        onDataChangeRef.current = onDataChange;
+    }, [onDataChange]);
 
-    // handleChangeの引数をSelectChangeEvent<string>に修正
+    const [until_replay, setUntilReplay] = useState<string>("");
+
+    useEffect(() => {
+        if (onDataChangeRef.current) {
+            onDataChangeRef.current({
+                start_at,
+                end_at,
+                start_core_time,
+                end_core_time,
+                weeks,
+                until_replay,
+            });
+        }
+    }, [start_at, end_at, start_core_time, end_core_time, weeks, until_replay]);
+
     const handleChange = (event: SelectChangeEvent<string>) => {
-        setSelectedTime(event.target.value);
+        setUntilReplay(event.target.value);
+        console.log(start_at, end_at, start_core_time, end_core_time);
     };
 
     const toggleDaySelection = (date: string) => {
-        setDayOfWeekOption((prev) =>
+        setWeeks((prev) =>
             prev.map((day) => (day.date === date ? { ...day, isSelected: !day.isSelected } : day))
         );
     };
@@ -63,48 +101,49 @@ export default function ReplayOption() {
             <div className="bg-[#FDBB71] h-[90px] rounded-[10px] py-3 my-3">
                 <ReplayTimeHeadline label="目標返信時間" />
                 <div className="px-[14px] py-3">
-                    <Select
-                        value={selectedTime} // stateから値を取得
-                        onChange={handleChange} // 値が変更されたときに更新
+                    <CompatibleSelect
+                        value={until_replay}
+                        onChange={handleChange}
+                        variant="outlined" // variant プロパティを追加
                         sx={{
                             width: "100%",
                             height: "35px",
                             borderRadius: "12px",
                             fontSize: "1.3rem",
-                            backgroundColor: "#2E2F34", // 背景色を#2E2F34に設定
-                            color: "#ffffff", // 文字色を白に
+                            backgroundColor: "#2E2F34",
+                            color: "#ffffff",
                             "& .MuiSelect-icon": {
-                                color: "#ffffff", // ドロップダウンアイコンの色を白に
+                                color: "#ffffff",
                             },
                             "& .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#2E2F34", // ボーダーの色を統一
+                                borderColor: "#2E2F34",
                             },
                             "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#ffffff", // ホバー時のボーダー色
+                                borderColor: "#ffffff",
                             },
                         }}
                         displayEmpty
                     >
                         <MenuItem value="">なし</MenuItem>
-                        <MenuItem value={60}>1時間</MenuItem>
-                        <MenuItem value={120}>2時間</MenuItem>
-                        <MenuItem value={180}>3時間</MenuItem>
-                    </Select>
+                        <MenuItem value="60">1時間</MenuItem>
+                        <MenuItem value="120">2時間</MenuItem>
+                        <MenuItem value="180">3時間</MenuItem>
+                    </CompatibleSelect>
                 </div>
             </div>
             <div className=" bg-[linear-gradient(to_bottom,#FDBB71_0%,#8E8E8E_78%)] rounded-[10px] py-3 my-6">
                 <ReplayTimeHeadline label="コアタイム" />
                 <div className="px-[16px] my-[8px] text-[1.6rem] text-background flex justify-between items-center">
-                    <TimePicker />
+                    <TimePicker setQuery={start_core_time} setSetQuery={setStartCoreTime} />
                     <FaArrowRightLong />
-                    <TimePicker />
+                    <TimePicker setQuery={end_core_time} setSetQuery={setEndCoreTime} />
                 </div>
                 <div className="px-[16px] my-[8px] text-[1.6rem] text-background ">
                     <p className="text-[14px] font-semibold p-[4px]">返信不要の時間帯</p>
                     <div className="flex justify-between items-center">
-                        <TimePicker />
+                        <TimePicker setQuery={start_at} setSetQuery={setStartAt} />
                         <FaArrowRightLong />
-                        <TimePicker />
+                        <TimePicker setQuery={end_at} setSetQuery={setEndAt} />
                     </div>
                 </div>
             </div>
@@ -112,10 +151,10 @@ export default function ReplayOption() {
                 <h2 className="text-background font-semibold text-[14px]">返信不要の曜日</h2>
                 <div className="bg-background rounded-[12px] py-[15px] px-[8px]">
                     <p className="border-b border-border px-[7px] pb-1 text-[1.2rem]">
-                        {dayOfWeekOption.some((day) => day.isSelected) ? (
+                        {weeks.some((day) => day.isSelected) ? (
                             <>
                                 毎週
-                                {dayOfWeekOption.map((day, index) =>
+                                {weeks.map((day, index) =>
                                     day.isSelected ? (
                                         <span key={index} className="ml-1">
                                             {day.date}
@@ -129,7 +168,7 @@ export default function ReplayOption() {
                     </p>
 
                     <div className="flex items-center justify-between text-center mt-[11px] px-[15px] w-full">
-                        {dayOfWeekOption.map((day, index) => {
+                        {weeks.map((day, index) => {
                             return (
                                 <SelectDate
                                     key={index}
