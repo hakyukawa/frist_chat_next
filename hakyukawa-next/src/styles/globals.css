@@ -57,6 +57,31 @@ html {
     box-sizing: border-box;
 }
 
+.time-input-container {
+    display: flex;
+    justify-content: center;
+}
+
+input[type="time"] {
+    text-align: center;
+    padding-right: 0;
+    letter-spacing: 1px;
+    margin: auto;
+    padding-left: 52px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+input[type="time"]::-moz-calendar-picker-indicator {
+    display: none;
+}
+
+input[type="time"]::-ms-clear {
+    display: none;
+}
+
 *,
 *::before,
 *::after {
