@@ -64,10 +64,11 @@ html {
 
 input[type="time"] {
     text-align: center;
-    padding-right: 0;
     letter-spacing: 1px;
     margin: auto;
-    padding-left: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {
