@@ -3,13 +3,14 @@
 import Header from "@/components/common/Header";
 import GroupInfo from "@/components/common/GroupInfo";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import { IoIosArrowForward } from "react-icons/io";
 import SubmitButton from "@/components/common/SubmitButton";
-import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import useApi from "@/hooks/useApi";
+import { Dialog } from "@mui/material";
 
 interface ReplayOptionData {
     start_at: string;
@@ -31,23 +32,12 @@ interface ServerData {
     end_core_time: string;
 }
 
-// interface ChannelData {
-//     channel_name: string;
-// }
-
-const friendArray = [
-    { id: 1, friendName: "friend1", LastMessageTime: 30 },
-    { id: 2, friendName: "friend2", LastMessageTime: 60 },
-    { id: 3, friendName: "friend3", LastMessageTime: 90 },
-    { id: 4, friendName: "friend4", LastMessageTime: 300 },
-];
-
-const friendIcons = (key: number) => (
-    <div
-        key={key}
-        className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
-    ></div>
-);
+// const friendIcons = (key: number) => (
+//     <div
+//         key={key}
+//         className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
+//     ></div>
+// );
 
 // デフォルトのReplayOptionData
 const defaultReplayOptionData: ReplayOptionData = {
@@ -60,20 +50,94 @@ const defaultReplayOptionData: ReplayOptionData = {
 };
 
 export default function NewGroupList() {
+    const params = useParams();
+    const server_id = params.server_id;
     const [groupName, setGroupName] = useState<string>("");
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
     const [serverData, setServerData] = useState<ServerData | undefined>(undefined);
-    // const [channelData, setChannelData] = useState<ChannelData | undefined>(undefined);
+    const [validationError, setValidationError] = useState<string | null>(null);
+    const [valodationErroeDialogOpen, setValidationErrorDialogOpen] = useState(false);
 
-    const router = useRouter();
     const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
         setReplayOptionData(data);
-        console.log("ReplayOptionData updated", data);
     }, []);
+
+    // 時間を分に変換するヘルパー関数
+    const timeToMinutes = useCallback((timeString: string): number => {
+        const [hours, minutes] = timeString.split(":").map(Number);
+        return hours * 60 + minutes;
+    }, []);
+
+    // 時間の検証を行う関数
+    const validateTimes = useCallback(
+        (data: ReplayOptionData): string | null => {
+            // コアタイムが3時間（180分）を超えているかをチェック
+            const coreTimeStart = timeToMinutes(data.start_core_time);
+            const coreTimeEnd = timeToMinutes(data.end_core_time);
+
+            let coreTimeDuration: number;
+            if (coreTimeEnd >= coreTimeStart) {
+                coreTimeDuration = coreTimeEnd - coreTimeStart;
+            } else {
+                // 日をまたぐ場合（例: 22:00～01:00）
+                coreTimeDuration = 24 * 60 - coreTimeStart + coreTimeEnd;
+            }
+
+            if (coreTimeDuration > 180) {
+                return "コアタイムは3時間を超えることができません。";
+            }
+
+            // 返信不要時間帯とコアタイムの重複チェック
+            const noReplyStart = timeToMinutes(data.start_at);
+            const noReplyEnd = timeToMinutes(data.end_at);
+
+            // 返信不要時間帯が日をまたぐかどうかを考慮
+            let noReplyRangeOverlapsCore = false;
+
+            if (noReplyStart <= noReplyEnd) {
+                // 返信不要時間帯が同じ日の場合
+                if (
+                    coreTimeStart <= coreTimeEnd &&
+                    !(noReplyEnd < coreTimeStart || noReplyStart > coreTimeEnd)
+                ) {
+                    noReplyRangeOverlapsCore = true;
+                } else if (
+                    coreTimeStart > coreTimeEnd &&
+                    !(
+                        (noReplyEnd < coreTimeStart && noReplyEnd < coreTimeEnd) ||
+                        (noReplyStart > coreTimeStart && noReplyStart > coreTimeEnd)
+                    )
+                ) {
+                    noReplyRangeOverlapsCore = true;
+                }
+            } else {
+                // 返信不要時間帯が日をまたぐ場合
+                if (coreTimeStart <= coreTimeEnd) {
+                    if (!(coreTimeEnd < noReplyStart && coreTimeStart > noReplyEnd)) {
+                        noReplyRangeOverlapsCore = true;
+                    }
+                } else {
+                    // 両方とも日をまたぐ場合は、必ず重複がある
+                    noReplyRangeOverlapsCore = true;
+                }
+            }
+
+            if (noReplyRangeOverlapsCore) {
+                return "返信不要の時間帯とコアタイムが重複しています。";
+            }
+
+            return null;
+        },
+        [timeToMinutes]
+    );
 
     // API データを更新
     useEffect(() => {
+        // 時間の検証
+        const error = validateTimes(replayOptionData);
+        setValidationError(error);
+
         // サーバーデータを構築
         const newServerData: ServerData = {
             server_name: groupName || "default_name",
@@ -87,36 +151,62 @@ export default function NewGroupList() {
         };
 
         setServerData(newServerData);
-        // setChannelData({ channel_name: "general" });
-    }, [groupName, replayOptionData]);
+    }, [groupName, replayOptionData, validateTimes]);
 
     const { loading: serverLoading, fetchData: fetchServerData } = useApi<
         { status: number; message: string },
         ServerData
-    >("http://localhost:3001/api/v1/auth/server/", "POST", serverData);
-
-    // const { fetchData: fetchChannelData } = useApi<
-    //     { message: string; channel_id: string; channelName: string; error: string | null },
-    //     ChannelData
-    // >("http://localhost:3001/api/v1/auth/server/", "POST", channelData);
+    >(`http://localhost:3001/api/v1/auth/server/`, "POST", serverData);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // 検証エラーがある場合は送信しない
+        if (validationError) {
+            console.log("エラー:", validationError);
+            setValidationErrorDialogOpen(true);
+            return;
+        }
+
         try {
-            // データをすでにuseApiフックに渡しているので、引数なしで呼び出す
             await fetchServerData();
-            // await fetchChannelData();
-            router.push("/GroupList");
         } catch (error) {
-            console.error("サーバー作成エラー:", error);
-            // エラー処理（必要に応じてUI表示など）
+            console.error("サーバー更新エラー:", error);
         }
     };
 
     return (
         <>
-            <Header backPage backPageLink="/GroupList" backPageText="グループ新規作成" />
+            <Dialog
+                open={valodationErroeDialogOpen}
+                onClose={() => setValidationErrorDialogOpen(false)}
+                sx={{
+                    "& .MuiPaper-root": {
+                        backgroundColor: "#2e2f34",
+                    },
+                }}
+            >
+                <div className="bg-background text-white p-[16px] rounded-[20px]">
+                    <div className="text-center border-b border-border">
+                        <p className="text-[1.5rem] font-bold ">エラー</p>
+                    </div>
+                    <div className="flex flex-col items-center mt-5">
+                        <p className="text-[1.2rem] text-warning">{validationError}</p>
+                        <button
+                            onClick={() => setValidationErrorDialogOpen(false)}
+                            className="w-[200px] h-[40px] border border-main text-[1.5rem] font-semibold rounded-[40px] mt-5"
+                        >
+                            <p className="text-main">閉じる</p>
+                        </button>
+                    </div>
+                </div>
+            </Dialog>
+
+            <Header
+                backPage
+                backPageLink={`/server/${server_id}`}
+                backPageText="グループ新規作成"
+            />
             <div className="p-[16px]">
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
                 <Link
@@ -126,14 +216,19 @@ export default function NewGroupList() {
                 >
                     メンバー
                     <div className="text-subText text-[2rem] flex items-center">
-                        {friendArray.slice(0, 4).map((friend, index) => friendIcons(index))}
+                        {/* {member?.members.slice(0, 4).map((member, index) => friendIcons(index))} */}
                         <IoIosArrowForward />
                     </div>
                 </Link>
                 <NoticeOption />
                 <ReplayOption onDataChange={handleReplayOptionChange} />
+
                 <form onSubmit={handleSubmit}>
-                    <SubmitButton buttonValue={serverLoading ? "作成中..." : "グループを作成"} />
+                    <div>
+                        <SubmitButton
+                            buttonValue={serverLoading ? "作成中..." : "グループを作成"}
+                        />
+                    </div>
                 </form>
             </div>
         </>
