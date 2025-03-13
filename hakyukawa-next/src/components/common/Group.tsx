@@ -69,7 +69,7 @@ export default function Group(props: GroupProps) {
                     className={`text-[1.5rem] flex items-center ${
                         props.LastMessageTime && props.LastMessageTime < 1440
                             ? "text-main"
-                            : "text-[#ff2f2f]"
+                            : "text-warning"
                     }`}
                 >
                     <BsChatTextFill style={{ marginRight: "5px" }} />

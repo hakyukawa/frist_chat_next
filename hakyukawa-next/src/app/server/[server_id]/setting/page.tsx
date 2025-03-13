@@ -12,6 +12,7 @@ import { useState, useCallback, useEffect } from "react";
 import useApi from "@/hooks/useApi";
 import { useServerMembers } from "@/hooks/useServerMembers";
 import { useServerInfo } from "@/hooks/useServerInfo";
+import { Dialog } from "@mui/material";
 
 interface ReplayOptionData {
     start_at: string;
@@ -57,6 +58,7 @@ export default function NewGroupList() {
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
     const [serverData, setServerData] = useState<ServerData | undefined>(undefined);
+    const [open, setOpen] = useState(false);
 
     const { data: member } = useServerMembers(`${server_id}`);
     const { data: info } = useServerInfo(`${server_id}`);
@@ -98,12 +100,46 @@ export default function NewGroupList() {
         }
     };
 
-    const deleteClick = () => {
-        console.log("削除");
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
     };
 
     return (
         <>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                sx={{
+                    "& .MuiPaper-root": {
+                        backgroundColor: "#2e2f34",
+                    },
+                }}
+            >
+                <div className="bg-background text-white p-[16px] rounded-[20px]">
+                    <div className="text-center border-b border-border">
+                        <p className="text-[1.5rem] font-bold ">本当に削除しますか？</p>
+                    </div>
+                    <div className="flex flex-col items-center mt-5">
+                        <div className="text-[1.2rem] text-subText">
+                            「グループを削除」をタップするとグループデータ、メッセージ内容が全て削除されます。
+                            <br />
+                            <span className="text-warning">
+                                削除されたグループは復旧できません。
+                            </span>
+                        </div>
+                        <button
+                            onClick={handleClose}
+                            className="w-[200px] h-[40px] border border-warning text-[1.5rem] font-semibold rounded-[40px] mt-5"
+                        >
+                            <p className="text-warning">グループを削除する</p>
+                        </button>
+                    </div>
+                </div>
+            </Dialog>
             <Header
                 backPage
                 backPageLink={`/server/${server_id}`}
@@ -132,8 +168,8 @@ export default function NewGroupList() {
                     <SubmitButton buttonValue={serverLoading ? "保存中..." : "保存"} />
                 </form>
                 <div className="border-t border-border mt-5 flex justify-center">
-                    <button onClick={deleteClick} className="py-[14px] w-full">
-                        <p className="text-[#ff2f2f] text-[1.4rem]">グループを削除する</p>
+                    <button onClick={handleClickOpen} className="py-[14px] w-full">
+                        <p className="text-warning text-[1.4rem]">グループを削除する</p>
                     </button>
                 </div>
             </div>
