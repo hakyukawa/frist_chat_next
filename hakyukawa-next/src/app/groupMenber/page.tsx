@@ -31,7 +31,7 @@ function Groupmenber () {
     //ユーザー削除関数
     const deleteUser = (userId:string) => {
         setUsers(preUsers => preUsers.filter(user => user.userId !== userId));
-        console.log("メンバーを削除しました")
+        console.log("ユーザーを削除しました")
     }
 
     return(
