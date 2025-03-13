@@ -2,7 +2,12 @@
 
 import Header from "@/components/common/Header";
 import GroupInfo from "@/components/common/GroupInfo";
+<<<<<<< HEAD
 import { useRouter } from "next/navigation";
+=======
+import Link from "next/link";
+import { useParams } from "next/navigation";
+>>>>>>> 5abef5c ([update]バリデーションを実装)
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import SubmitButton from "@/components/common/SubmitButton";
@@ -30,6 +35,16 @@ interface ServerData {
     end_core_time: string;
 }
 
+<<<<<<< HEAD
+=======
+// const friendIcons = (key: number) => (
+//     <div
+//         key={key}
+//         className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
+//     ></div>
+// );
+
+>>>>>>> 5abef5c ([update]バリデーションを実装)
 // デフォルトのReplayOptionData
 const defaultReplayOptionData: ReplayOptionData = {
     start_at: "00:00:00",
@@ -41,7 +56,12 @@ const defaultReplayOptionData: ReplayOptionData = {
 };
 
 export default function NewGroupList() {
+<<<<<<< HEAD
     const router = useRouter();
+=======
+    const params = useParams();
+    const server_id = params.server_id;
+>>>>>>> 5abef5c ([update]バリデーションを実装)
     const [groupName, setGroupName] = useState<string>("");
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
@@ -160,7 +180,10 @@ export default function NewGroupList() {
 
         try {
             await fetchServerData();
+<<<<<<< HEAD
             router.push(`/server/GroupList`);
+=======
+>>>>>>> 5abef5c ([update]バリデーションを実装)
         } catch (error) {
             console.error("サーバー更新エラー:", error);
         }
@@ -193,9 +216,30 @@ export default function NewGroupList() {
                 </div>
             </Dialog>
 
+<<<<<<< HEAD
             <Header backPage backPageLink={`/server/GroupList`} backPageText="グループ新規作成" />
             <div className="p-[16px]">
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
+=======
+            <Header
+                backPage
+                backPageLink={`/server/${server_id}`}
+                backPageText="グループ新規作成"
+            />
+            <div className="p-[16px]">
+                <GroupInfo groupName={groupName} setGroupName={setGroupName} />
+                <Link
+                    href="/friendList"
+                    passHref
+                    className="w-full my-5 rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
+                >
+                    メンバー
+                    <div className="text-subText text-[2rem] flex items-center">
+                        {/* {member?.members.slice(0, 4).map((member, index) => friendIcons(index))} */}
+                        <IoIosArrowForward />
+                    </div>
+                </Link>
+>>>>>>> 5abef5c ([update]バリデーションを実装)
                 <NoticeOption />
                 <ReplayOption onDataChange={handleReplayOptionChange} />
 
