@@ -16,6 +16,7 @@ interface HeaderProps {
     backPage?: boolean;
     backPageText?: string;
     backPageLink?: string;
+    addFriendLink?: string;
     core?: boolean;
     addFriend?: boolean;
     addGroup?: boolean;
@@ -47,7 +48,11 @@ export default function Header(props: HeaderProps) {
                     {props.core && <BsFire />}
                 </div>
                 <div className="flex text-[26px]">
-                    {props.addFriend && <GoPersonAdd />}
+                    {props.addFriend && props.addFriendLink && (
+                        <Link href={props.addFriendLink}>
+                            <GoPersonAdd />
+                        </Link>
+                    )}
                     {props.addGroup && <AiOutlineUsergroupAdd style={{ marginLeft: "8px" }} />}
                     {props.notice && <GoBell style={{ marginLeft: "8px" }} />}
                     {props.search && (
