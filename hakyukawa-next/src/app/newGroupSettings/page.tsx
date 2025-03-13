@@ -8,7 +8,7 @@ import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import { IoIosArrowForward } from "react-icons/io";
 import SubmitButton from "@/components/common/SubmitButton";
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import useApi from "@/hooks/useApi";
 
 interface ReplayOptionData {
@@ -16,10 +16,7 @@ interface ReplayOptionData {
     end_at: string;
     start_core_time: string;
     end_core_time: string;
-    weeks: {
-        date: string;
-        isSelected: boolean;
-    }[];
+    weeks: string[];
     until_replay: string;
 }
 
@@ -33,6 +30,10 @@ interface ServerData {
     start_core_time: string;
     end_core_time: string;
 }
+
+// interface ChannelData {
+//     channel_name: string;
+// }
 
 const friendArray = [
     { id: 1, friendName: "friend1", LastMessageTime: 30 },
@@ -48,67 +49,69 @@ const friendIcons = (key: number) => (
     ></div>
 );
 
+// デフォルトのReplayOptionData
+const defaultReplayOptionData: ReplayOptionData = {
+    start_at: "00:00:00",
+    end_at: "00:00:00",
+    start_core_time: "00:00:00",
+    end_core_time: "00:00:00",
+    weeks: [],
+    until_replay: "00:00:00",
+};
+
 export default function NewGroupList() {
     const [groupName, setGroupName] = useState<string>("");
-    const [replayOptionData, setReplayOptionData] = useState<ReplayOptionData | null>(null);
-    const router = useRouter();
+    const [replayOptionData, setReplayOptionData] =
+        useState<ReplayOptionData>(defaultReplayOptionData);
+    const [serverData, setServerData] = useState<ServerData | undefined>(undefined);
+    // const [channelData, setChannelData] = useState<ChannelData | undefined>(undefined);
 
+    const router = useRouter();
     const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
         setReplayOptionData(data);
-        console.log("ReplayOptionData updated", data); // データ更新時に確認
+        console.log("ReplayOptionData updated", data);
     }, []);
 
-    const formatTime = (time: string): string => {
-        // すでに HH:MM:SS 形式の場合は、そのまま返す
-        if (time && /^\d{1,2}:\d{1,2}:\d{1,2}$/.test(time)) {
-            return time;
-        }
-
-        // HH:MM 形式の場合は、秒を追加
-        if (time && /^\d{1,2}:\d{1,2}$/.test(time)) {
-            const [hours, minutes] = time.split(":").map(Number);
-            return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`;
-        }
-
-        // デフォルトケース
-        return "00:00:00";
-    };
-
-    // API に送るデータを作成
-    const buildRequestData = (): ServerData => {
-        const defaultData: ReplayOptionData = {
-            start_at: "00:00",
-            end_at: "00:00",
-            start_core_time: "00:00",
-            end_core_time: "00:00",
-            weeks: [],
-            until_replay: "",
-        };
-
-        const options = replayOptionData || defaultData;
-
-        return {
+    // API データを更新
+    useEffect(() => {
+        // サーバーデータを構築
+        const newServerData: ServerData = {
             server_name: groupName || "default_name",
             icon_url: "https://example.com/icon.png",
-            until_reply: formatTime(options.until_replay),
-            start_at: formatTime(options.start_at),
-            end_at: formatTime(options.end_at),
-            start_core_time: formatTime(options.start_core_time),
-            end_core_time: formatTime(options.end_core_time),
-            weeks: options.weeks.filter((week) => week.isSelected).map((week) => week.date),
+            until_reply: replayOptionData.until_replay,
+            start_at: replayOptionData.start_at,
+            end_at: replayOptionData.end_at,
+            start_core_time: replayOptionData.start_core_time,
+            end_core_time: replayOptionData.end_core_time,
+            weeks: replayOptionData.weeks,
         };
-    };
 
-    const { loading, fetchData } = useApi<{ status: number; message: string }, ServerData>(
-        "http://localhost:3001/api/v1/auth/server/",
-        "POST",
-        buildRequestData()
-    );
+        setServerData(newServerData);
+        // setChannelData({ channel_name: "general" });
+    }, [groupName, replayOptionData]);
+
+    const { loading: serverLoading, fetchData: fetchServerData } = useApi<
+        { status: number; message: string },
+        ServerData
+    >("http://localhost:3001/api/v1/auth/server/", "POST", serverData);
+
+    // const { fetchData: fetchChannelData } = useApi<
+    //     { message: string; channel_id: string; channelName: string; error: string | null },
+    //     ChannelData
+    // >("http://localhost:3001/api/v1/auth/server/", "POST", channelData);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await fetchData();
-        router.push("/GroupList");
+
+        try {
+            // データをすでにuseApiフックに渡しているので、引数なしで呼び出す
+            await fetchServerData();
+            // await fetchChannelData();
+            router.push("/GroupList");
+        } catch (error) {
+            console.error("サーバー作成エラー:", error);
+            // エラー処理（必要に応じてUI表示など）
+        }
     };
 
     return (
@@ -130,7 +133,7 @@ export default function NewGroupList() {
                 <NoticeOption />
                 <ReplayOption onDataChange={handleReplayOptionChange} />
                 <form onSubmit={handleSubmit}>
-                    <SubmitButton buttonValue={loading ? "作成中..." : "グループを作成"} />
+                    <SubmitButton buttonValue={serverLoading ? "作成中..." : "グループを作成"} />
                 </form>
             </div>
         </>
