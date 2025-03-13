@@ -50,6 +50,7 @@ export default function ServerSelect() {
                 backPageLink={`${previousPath}`}
                 backPageText={`${filteredGroup?.server_name}(${memberCount})`}
                 setting
+                settingLink={`/server/${server_id}/setting`}
             />
 
             <div className="flex flex-col">
