@@ -25,7 +25,7 @@ function Addmenber () {
 
     const addUser = (userId:string) =>{
         setUsers((preUsers) => preUsers.filter(user => user.userId !== userId));
-        console.log("メンバーを追加しました！");
+        console.log("ユーザーを追加しました");
     }
 
     return(
