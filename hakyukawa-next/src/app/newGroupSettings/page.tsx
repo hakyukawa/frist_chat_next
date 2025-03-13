@@ -102,10 +102,7 @@ export default function NewGroupList() {
     const { loading, fetchData } = useApi<{ status: number; message: string }, ServerData>(
         "http://localhost:3001/api/v1/auth/server/",
         "POST",
-        buildRequestData(),
-        {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        }
+        buildRequestData()
     );
 
     const handleSubmit = async (e: React.FormEvent) => {
