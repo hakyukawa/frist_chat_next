@@ -97,12 +97,14 @@ export default function NewGroupList() {
         };
     };
 
-    const { data, error, loading, fetchData } = useApi<
-        { status: number; message: string },
-        ServerData
-    >("http://localhost:3001/api/v1/auth/server/", "POST", buildRequestData(), {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    });
+    const { loading, fetchData } = useApi<{ status: number; message: string }, ServerData>(
+        "http://localhost:3001/api/v1/auth/server/",
+        "POST",
+        buildRequestData(),
+        {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        }
+    );
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -130,9 +132,6 @@ export default function NewGroupList() {
                 <form onSubmit={handleSubmit}>
                     <SubmitButton buttonValue={loading ? "作成中..." : "グループを作成"} />
                 </form>
-
-                {data && <p>✅ 成功: {data.message}</p>}
-                {error && <p style={{ color: "red" }}>❌ エラー: {error}</p>}
             </div>
         </>
     );
