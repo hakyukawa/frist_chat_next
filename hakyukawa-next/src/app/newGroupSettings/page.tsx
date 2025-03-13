@@ -111,12 +111,12 @@ export default function NewGroupList() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await fetchData();
-        router.push("/groupList");
+        router.push("/GroupList");
     };
 
     return (
         <>
-            <Header backPage backPageLink="/groupList" backPageText="グループ新規作成" />
+            <Header backPage backPageLink="/GroupList" backPageText="グループ新規作成" />
             <div className="p-[16px]">
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
                 <Link
