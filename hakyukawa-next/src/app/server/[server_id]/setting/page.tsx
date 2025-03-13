@@ -201,6 +201,10 @@ export default function NewGroupList() {
         setDeleteDialogOpen(false);
     };
 
+    const deleteClick = () => {
+        console.log("削除");
+    };
+
     return (
         <>
             <Dialog
