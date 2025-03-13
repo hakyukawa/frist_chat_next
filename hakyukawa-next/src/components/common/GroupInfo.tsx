@@ -1,11 +1,19 @@
+import { useEffect } from "react";
 import { MdOutlineCameraAlt } from "react-icons/md";
 
 interface GroupInfoProps {
     groupName: string;
     setGroupName: (name: string) => void;
+    name?: string;
 }
 
-export default function GroupInfo({ groupName, setGroupName }: GroupInfoProps) {
+export default function GroupInfo({ name, groupName, setGroupName }: GroupInfoProps) {
+    useEffect(() => {
+        if (name) {
+            setGroupName(name);
+        }
+    }, [name, setGroupName]);
+
     return (
         <div className="border border-main rounded-[10px] p-[17px] flex items-center ">
             <div className="rounded-full bg-main w-[70px] h-[70px] shrink-0 relative">

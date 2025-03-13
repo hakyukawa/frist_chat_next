@@ -3,13 +3,15 @@
 import Header from "@/components/common/Header";
 import GroupInfo from "@/components/common/GroupInfo";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import { IoIosArrowForward } from "react-icons/io";
 import SubmitButton from "@/components/common/SubmitButton";
-import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import useApi from "@/hooks/useApi";
+import { useServerMembers } from "@/hooks/useServerMembers";
+import { useServerInfo } from "@/hooks/useServerInfo";
 
 interface ReplayOptionData {
     start_at: string;
@@ -31,17 +33,6 @@ interface ServerData {
     end_core_time: string;
 }
 
-// interface ChannelData {
-//     channel_name: string;
-// }
-
-const friendArray = [
-    { id: 1, friendName: "friend1", LastMessageTime: 30 },
-    { id: 2, friendName: "friend2", LastMessageTime: 60 },
-    { id: 3, friendName: "friend3", LastMessageTime: 90 },
-    { id: 4, friendName: "friend4", LastMessageTime: 300 },
-];
-
 const friendIcons = (key: number) => (
     <div
         key={key}
@@ -60,16 +51,18 @@ const defaultReplayOptionData: ReplayOptionData = {
 };
 
 export default function NewGroupList() {
+    const params = useParams();
+    const server_id = params.server_id;
     const [groupName, setGroupName] = useState<string>("");
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
     const [serverData, setServerData] = useState<ServerData | undefined>(undefined);
-    // const [channelData, setChannelData] = useState<ChannelData | undefined>(undefined);
 
-    const router = useRouter();
+    const { data: member } = useServerMembers(`${server_id}`);
+    const { data: info } = useServerInfo(`${server_id}`);
+
     const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
         setReplayOptionData(data);
-        console.log("ReplayOptionData updated", data);
     }, []);
 
     // API データを更新
@@ -87,33 +80,41 @@ export default function NewGroupList() {
         };
 
         setServerData(newServerData);
-        // setChannelData({ channel_name: "general" });
     }, [groupName, replayOptionData]);
 
     const { loading: serverLoading, fetchData: fetchServerData } = useApi<
         { status: number; message: string },
         ServerData
-    >("http://localhost:3001/api/v1/auth/server/", "POST", serverData);
+    >(`http://localhost:3001/api/v1/auth/server/${server_id}`, "PUT", serverData);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            // データをすでにuseApiフックに渡しているので、引数なしで呼び出す
+            // console.log(serverData);
             await fetchServerData();
-            // await fetchChannelData();
-            router.push("/GroupList");
         } catch (error) {
-            console.error("サーバー作成エラー:", error);
-            // エラー処理（必要に応じてUI表示など）
+            console.error("サーバー更新エラー:", error);
         }
+    };
+
+    const deleteClick = () => {
+        console.log("削除");
     };
 
     return (
         <>
-            <Header backPage backPageLink="/GroupList" backPageText="グループ新規作成" />
+            <Header
+                backPage
+                backPageLink={`/server/${server_id}`}
+                backPageText="グループ新規作成"
+            />
             <div className="p-[16px]">
-                <GroupInfo groupName={groupName} setGroupName={setGroupName} />
+                <GroupInfo
+                    name={info?.server_name}
+                    groupName={groupName}
+                    setGroupName={setGroupName}
+                />
                 <Link
                     href="/friendList"
                     passHref
@@ -121,15 +122,20 @@ export default function NewGroupList() {
                 >
                     メンバー
                     <div className="text-subText text-[2rem] flex items-center">
-                        {friendArray.slice(0, 4).map((friend, index) => friendIcons(index))}
+                        {member?.members.slice(0, 4).map((friend, index) => friendIcons(index))}
                         <IoIosArrowForward />
                     </div>
                 </Link>
                 <NoticeOption />
-                <ReplayOption onDataChange={handleReplayOptionChange} />
+                <ReplayOption data={info ?? undefined} onDataChange={handleReplayOptionChange} />
                 <form onSubmit={handleSubmit}>
-                    <SubmitButton buttonValue={serverLoading ? "作成中..." : "グループを作成"} />
+                    <SubmitButton buttonValue={serverLoading ? "保存中..." : "保存"} />
                 </form>
+                <div className="border-t border-border mt-5 flex justify-center">
+                    <button onClick={deleteClick} className="py-[14px] w-full">
+                        <p className="text-[#ff2f2f] text-[1.4rem]">グループを削除する</p>
+                    </button>
+                </div>
             </div>
         </>
     );

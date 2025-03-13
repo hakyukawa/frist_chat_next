@@ -23,6 +23,16 @@ interface WeekDay {
 
 interface ReplayOptionProps {
     onDataChange?: (data: ReplayOptionData) => void;
+    data?: InfoData;
+}
+
+interface InfoData {
+    start_at: string;
+    end_at: string;
+    start_core_time: string;
+    end_core_time: string;
+    weeks: string[];
+    until_replay: string;
 }
 
 const CompatibleSelect = forwardRef<HTMLDivElement, SelectProps<string>>((props, ref) => {
@@ -48,12 +58,13 @@ const formatTimeToHHMMSS = (time: string): string => {
     return "00:00:00";
 };
 
-export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
+export default function ReplayOption({ onDataChange, data }: ReplayOptionProps) {
+    const onDataChangeRef = useRef(onDataChange);
     const [startAt, setStartAt] = useState<string>("00:00");
     const [endAt, setEndAt] = useState<string>("00:00");
     const [startCoreTime, setStartCoreTime] = useState<string>("00:00");
     const [endCoreTime, setEndCoreTime] = useState<string>("00:00");
-    const onDataChangeRef = useRef(onDataChange);
+    const [untilReplay, setUntilReplay] = useState<string>("");
     const [weekDays, setWeekDays] = useState<WeekDay[]>([
         { date: "日", isSelected: false },
         { date: "月", isSelected: false },
@@ -63,8 +74,6 @@ export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
         { date: "金", isSelected: false },
         { date: "土", isSelected: false },
     ]);
-
-    const [untilReplay, setUntilReplay] = useState<string>("");
 
     useEffect(() => {
         onDataChangeRef.current = onDataChange;
@@ -86,6 +95,22 @@ export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
         }
     }, [startAt, endAt, startCoreTime, endCoreTime, weekDays, untilReplay]);
 
+    useEffect(() => {
+        if (data) {
+            setStartAt(data.start_at);
+            setEndAt(data.end_at);
+            setStartCoreTime(data.start_core_time);
+            setEndCoreTime(data.end_core_time);
+            setUntilReplay(data.until_replay);
+            setWeekDays((prev) =>
+                prev.map((day) => ({
+                    ...day,
+                    isSelected: data.weeks.includes(day.date),
+                }))
+            );
+        }
+    }, [data]);
+
     const handleChange = (event: SelectChangeEvent<string>) => {
         setUntilReplay(event.target.value);
     };
@@ -103,7 +128,7 @@ export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
                 <ReplayTimeHeadline label="目標返信時間" />
                 <div className="px-[14px] py-3">
                     <CompatibleSelect
-                        value={untilReplay}
+                        value={untilReplay || "00:00:00"}
                         onChange={handleChange}
                         variant="outlined"
                         sx={{
@@ -125,7 +150,7 @@ export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
                         }}
                         displayEmpty
                     >
-                        <MenuItem value="">なし</MenuItem>
+                        <MenuItem value="00:00:00">なし</MenuItem>
                         <MenuItem value="01:00:00">1時間</MenuItem>
                         <MenuItem value="02:00:00">2時間</MenuItem>
                     </CompatibleSelect>
