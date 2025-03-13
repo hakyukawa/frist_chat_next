@@ -5,7 +5,7 @@ import User from "@/components/common/option/User";
 import Search from "@/components/common/Search";
 import { FiMinusCircle } from "react-icons/fi";
 
-function Groupmenber () {
+function Groupmember () {
     const [searchQuery, setSearchQuery] = useState("");
 
     const owner_Name ="hakyukawa"
@@ -36,7 +36,7 @@ function Groupmenber () {
 
     return(
         <div>
-            <Header backPage backPageLink="/newGroupSettings" backPageText={`${groupName} (${users.length})`} addFriend addFriendLink="/groupMenber/addMenber"/>
+            <Header backPage backPageLink="/newGroupSettings" backPageText={`${groupName} (${users.length})`} addFriend addFriendLink="/groupMember/addMember"/>
             <div className="p-4">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} /> 
                 {filterUsers.map((users) => (
@@ -61,4 +61,4 @@ function Groupmenber () {
     );
 }
 
-export default Groupmenber;
+export default Groupmember;
