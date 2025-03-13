@@ -126,7 +126,6 @@ export default function ReplayOption({ onDataChange }: ReplayOptionProps) {
                         <MenuItem value="">なし</MenuItem>
                         <MenuItem value="01:00:00">1時間</MenuItem>
                         <MenuItem value="02:00:00">2時間</MenuItem>
-                        <MenuItem value="03:00:00">3時間</MenuItem>
                     </CompatibleSelect>
                 </div>
             </div>

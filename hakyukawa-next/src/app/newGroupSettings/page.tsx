@@ -106,7 +106,7 @@ export default function NewGroupList() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // await fetchData();
+        await fetchData();
     };
 
     return (
