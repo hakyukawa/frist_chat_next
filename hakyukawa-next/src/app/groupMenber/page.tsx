@@ -10,6 +10,8 @@ function Groupmenber () {
 
     const owner_Name ="hakyukawa"
     const owner_id = "hakyukawa-test"
+    
+    //テスト用グループメンバー
     const [users,setUsers] = useState([
             {id:1, userName: "hakyukawa", userId:"hakyukawa-test"},
             {id:2, userName: "ユーザー2", userId:"user02"},
@@ -20,12 +22,13 @@ function Groupmenber () {
     ]);
     const groupName = `はきゅかわメンバー`
 
-    //バリデート
+    //検索フィルタリング
     const filterUsers = users.filter((user) => {
         return user.userName.toLowerCase().includes(searchQuery.toLowerCase()) || 
                user.userId.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
+    //ユーザー削除関数
     const deleteUser = (userId:string) => {
         setUsers(preUsers => preUsers.filter(user => user.userId !== userId));
         console.log("メンバーを削除しました")
@@ -36,8 +39,6 @@ function Groupmenber () {
             <Header backPage backPageLink="/newGroupSettings" backPageText={`${groupName} (${users.length})`} addFriend addFriendLink="/groupMenber/addMenber"/>
             <div className="p-4">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} /> 
-                
-                
                 {filterUsers.map((users) => (
                     <div key={users.id} className="flex justify-between">
                         <User 
