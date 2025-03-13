@@ -5,7 +5,7 @@ import User from "@/components/common/option/User";
 import Search from "@/components/common/Search";
 import { FiPlusCircle } from "react-icons/fi";
 
-function Addmenber () {
+function Addmember () {
     const [searchQuery, setSearchQuery] = useState("");
 
     //テスト用ユーザー
@@ -30,7 +30,7 @@ function Addmenber () {
 
     return(
         <div>
-            <Header backPage backPageLink="/groupMenber" backPageText="メンバーを追加"/>
+            <Header backPage backPageLink="/groupMember" backPageText="メンバーを追加"/>
             <div className="p-4">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} /> 
                 {filterSearch.map((users) => (
@@ -49,4 +49,4 @@ function Addmenber () {
     );
 }
 
-export default Addmenber;
+export default Addmember;
