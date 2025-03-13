@@ -7,6 +7,7 @@ import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import { IoIosArrowForward } from "react-icons/io";
 import SubmitButton from "@/components/common/SubmitButton";
+import { useRouter } from "next/navigation";
 import { useState, useCallback } from "react";
 import useApi from "@/hooks/useApi";
 
@@ -50,6 +51,7 @@ const friendIcons = (key: number) => (
 export default function NewGroupList() {
     const [groupName, setGroupName] = useState<string>("");
     const [replayOptionData, setReplayOptionData] = useState<ReplayOptionData | null>(null);
+    const router = useRouter();
 
     const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
         setReplayOptionData(data);
@@ -109,6 +111,7 @@ export default function NewGroupList() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await fetchData();
+        router.push("/groupList");
     };
 
     return (
