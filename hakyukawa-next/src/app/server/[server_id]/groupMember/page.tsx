@@ -55,7 +55,7 @@ function Groupmember() {
         <div>
             <Header
                 backPage
-                backPageLink="/newGroupSettings"
+                backPageLink={`/server/${server_id}/setting`}
                 backPageText={`${serverInfo?.server_name || "グループ"} (${
                     member?.members.length || 0
                 })`}
