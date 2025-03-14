@@ -44,7 +44,9 @@ export default function Header(props: HeaderProps) {
                         </Link>
                     )}
                     {props.backPageText && (
-                        <p style={{ marginRight: "5px" }}>{props.backPageText}</p>
+                        <p className="text-[1.8rem]" style={{ marginRight: "5px" }}>
+                            {props.backPageText}
+                        </p>
                     )}
                     {props.core && <BsFire />}
                 </div>
