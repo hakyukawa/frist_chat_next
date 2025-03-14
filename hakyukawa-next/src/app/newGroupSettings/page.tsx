@@ -2,11 +2,9 @@
 
 import Header from "@/components/common/Header";
 import GroupInfo from "@/components/common/GroupInfo";
-// import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
-// import { IoIosArrowForward } from "react-icons/io";
 import SubmitButton from "@/components/common/SubmitButton";
 import { useState, useCallback, useEffect } from "react";
 import useApi from "@/hooks/useApi";
@@ -31,13 +29,6 @@ interface ServerData {
     start_core_time: string;
     end_core_time: string;
 }
-
-// const friendIcons = (key: number) => (
-//     <div
-//         key={key}
-//         className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
-//     ></div>
-// );
 
 // デフォルトのReplayOptionData
 const defaultReplayOptionData: ReplayOptionData = {
@@ -205,17 +196,6 @@ export default function NewGroupList() {
             <Header backPage backPageLink={`/server/GroupList`} backPageText="グループ新規作成" />
             <div className="p-[16px]">
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
-                {/* <Link
-                    href="/friendList"
-                    passHref
-                    className="w-full my-5 rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
-                >
-                    メンバー
-                    <div className="text-subText text-[2rem] flex items-center">
-                        {member?.members.slice(0, 4).map((member, index) => friendIcons(index))} 
-                        <IoIosArrowForward />
-                    </div>
-                </Link> */}
                 <NoticeOption />
                 <ReplayOption onDataChange={handleReplayOptionChange} />
 
