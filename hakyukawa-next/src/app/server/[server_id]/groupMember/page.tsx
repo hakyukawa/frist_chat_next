@@ -35,12 +35,12 @@ function Groupmember() {
         <div>
             <Header
                 backPage
-                backPageLink="/newGroupSettings"
+                backPageLink={`/server/${server_id}/setting`}
                 backPageText={`${serverInfo?.server_name || "グループ"} (${
                     member?.members.length || 0
                 })`}
                 addFriend
-                addFriendLink="/groupMember/addMember"
+                addFriendLink={`/server/${server_id}/groupMember/addMember`}
             />
             <div className="p-4">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
