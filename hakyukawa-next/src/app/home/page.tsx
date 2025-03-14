@@ -47,10 +47,6 @@ export default function Home() {
         );
     };
 
-    if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
-    if (groupError || friendError || userError)
-        return <p className="text-red-500">{groupError || friendError || userError}</p>;
-
     return (
         <>
             <Header setting settingLink="/config" addFriend addFriendLink="/addFriend" notice />
