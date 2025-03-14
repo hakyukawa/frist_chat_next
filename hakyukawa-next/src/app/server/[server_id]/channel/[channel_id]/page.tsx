@@ -151,7 +151,7 @@ export default function Message() {
                     {message.map((msg) =>
                         msg.sender_id === myId ? (
                             <div key={msg.id} className="flex items-end justify-end mt-8">
-                                <p className="text-[1rem] text-subText">
+                                <p className="text-[1rem] text-subText pr-2">
                                     {new Date(msg.created_at).toLocaleTimeString("ja-JP", {
                                         hour: "2-digit",
                                         minute: "2-digit",
@@ -160,26 +160,26 @@ export default function Message() {
                                 </p>
                                 <div
                                     className="py-2 px-6 bg-main max-w-[250px]"
-                                    style={{ borderRadius: "70px 90px 30px 70px" }}
+                                    style={{ borderRadius: "30px 30px 10px 30px" }}
                                 >
-                                    <div className="text-white text-[1.6rem]">{msg.content}</div>
+                                    <div className="text-white text-[1.4rem]">{msg.content}</div>
                                 </div>
                             </div>
                         ) : (
                             <div key={msg.id} className="flex flex-col justify-center mt-4">
                                 <div className="text-[1rem]">{msg.sender_id}</div>
-                                <div className="flex items-start">
-                                    <div className="w-[36px] h-[36px] mt-[5px] bg-main rounded-full" />
+                                <div className="flex items-start mt-[5px]">
+                                    <div className="w-[36px] h-[36px] bg-main rounded-full" />
                                     <div className="flex items-end">
                                         <div
-                                            className="ml-4 py-2 px-6 bg-[#FDBB71] max-w-[250px] flex items-center"
-                                            style={{ borderRadius: "70px 70px 70px 30px" }}
+                                            className="ml-4 py-2 px-7 bg-[#FDBB71] max-w-[250px] flex items-center"
+                                            style={{ borderRadius: "10px 30px 30px 30px" }}
                                         >
-                                            <div className="text-background text-[1.6rem]">
+                                            <div className="text-background text-[1.4rem]">
                                                 {msg.content}
                                             </div>
                                         </div>
-                                        <p className="text-[1rem] text-subText">
+                                        <p className="text-[1rem] text-subText pl-2">
                                             {new Date(msg.created_at).toLocaleTimeString("ja-JP", {
                                                 hour: "2-digit",
                                                 minute: "2-digit",
