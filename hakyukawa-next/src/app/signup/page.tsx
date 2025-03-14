@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import Header from "@/components/common/Header";
 import useApi from "@/hooks/useApi";
 import InputField from "@/components/common/InputField";
+import SubmitButton from "@/components/common/SubmitButton";
+import Image from "next/image";
 
 interface FormData {
     user_id: string;
@@ -108,6 +110,9 @@ function Signup() {
     return (
         <div className="p-[16px]">
             <Header backPage backPageLink="/login" backPageText="戻る" />
+            <div className="flex items-center justify-center m-6">
+                <Image src="/img/logo.svg" alt="ロゴ画像" width={300} height={200} />
+            </div>
             <form onSubmit={handleSubmit} className="p-[14px] border-b border-subText">
                 <p className="text-[18px] font-bold text-center font-semibold">
                     新規アカウント登録
@@ -161,14 +166,7 @@ function Signup() {
                     </span>
                     に同意の上
                 </p>
-                <input
-                    type="submit"
-                    value={loading ? "送信中..." : "アカウントを作成"}
-                    className={`bg-border border-none rounded-[40px] w-full p-[10px] text-[15px] ${
-                        loading ? "opacity-50" : "bg-main"
-                    }`}
-                    disabled={loading}
-                />
+                <SubmitButton buttonValue={loading ? "送信中..." : "アカウントを作成"} />
             </form>
             <p className="text-center text-[14px] p-[10px]">
                 アカウントをお持ちの方は
