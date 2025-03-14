@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import InputField from "@/components/common/InputField";
 import axios from "axios";
+import SubmitButton from "@/components/common/SubmitButton";
+import Image from "next/image";
 
 // レスポンスの型を定義
 interface LoginResponse {
@@ -73,7 +75,10 @@ function Login() {
 
     return (
         <div className="p-4">
-            <h2 className="text-center my-2 text-base font-semibold">ログイン</h2>
+            <div className="flex items-center justify-center m-6">
+                <Image src="/img/logo.svg" alt="ロゴ画像" width={300} height={200} />
+            </div>
+            <h2 className="text-center text-[1.8rem] my-2 text-base font-semibold">ログイン</h2>
             <form onSubmit={handleLogin} className="border-b border-border p-4">
                 <InputField
                     label="ユーザーID"
@@ -90,13 +95,9 @@ function Login() {
                     forgetPassword
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <input
-                    type="submit"
-                    value="ログイン"
-                    className="w-full h-12 p-4 my-4 bg-main text-background font-semibold rounded-full"
-                />
+                <SubmitButton buttonValue="ログイン" />
             </form>
-            <small className="text-sm flex items-center justify-center mt-4">
+            <small className="text-sm text-[1.4rem] flex items-center justify-center mt-4">
                 アカウントをお持ちでない方は
                 <span className="text-main underline">
                     <a href="/signup">登録</a>
