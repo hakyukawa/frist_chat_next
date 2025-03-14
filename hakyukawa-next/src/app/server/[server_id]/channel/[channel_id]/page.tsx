@@ -24,7 +24,7 @@ export default function Message() {
     const pathSegments = pathname ? pathname.split("/").filter(Boolean) : [];
     //サーバーIDとチャンネルIDを取得
     const manualServerId = pathSegments.length > 1 ? pathSegments[1] : "";
-    const manualChannelId = pathSegments.length > 2 ? pathSegments[2] : "";
+    const manualChannelId = pathSegments.length > 3 ? pathSegments[3] : "";
     const params = useParams();
     const server_id = (params.server_id as string) || manualServerId || "";
     const channel_id = manualChannelId;
@@ -305,6 +305,12 @@ export default function Message() {
                         className="w-full px-4 mr-4 border border-border h-[40px] rounded-[40px] text-[14px] text-white"
                         value={sendText}
                         onChange={(e) => setSendText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            send();
+                          }
+                        }}
                     />
                     <VscSend onClick={send} />
                 </div>
