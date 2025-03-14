@@ -33,40 +33,39 @@ const useApi = <T, D = unknown>(
     const [errorDetails, setErrorDetails] = useState<unknown | null>(null);
 
     // API を非同期で呼び出す関数
-    const fetchData = useCallback(async () => {
-        setLoading(true); // ローディング開始
-        setError(null); // エラー状態をクリア
-        setErrorDetails(null); // エラー詳細もクリア
+    const fetchData = useCallback(
+        async (requestData?: D) => {
+            // requestData を引数として受け取る
+            setLoading(true);
+            setError(null);
+            setErrorDetails(null);
 
-        // ローカルストレージからアクセストークンを取得
-        const token = localStorage.getItem("accessToken");
+            const token = localStorage.getItem("accessToken");
 
-        try {
-            // API リクエストを送信
-            const response = await axios({
-                url,
-                method,
-                data: requestData,
-                headers: {
-                    "Content-Type": "application/json", // JSON 形式を指定
-                    ...(token ? { Authorization: `Bearer ${token}` } : {}), // 認証トークンがあれば追加
-                    ...extraHeaders, // 追加のヘッダーを適用
-                },
-            });
+            try {
+                const response = await axios({
+                    url,
+                    method,
+                    data: requestData, // requestData を送信する
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                        ...extraHeaders,
+                    },
+                });
 
-            // 取得したデータを状態に保存
-            setData(response.data as unknown as T);
-        } catch (err: unknown) {
-            console.error("APIエラー:", err);
-
-            // エラーメッセージを取得し、状態に保存
-            const errorMessage = getErrorMessage(err as AxiosError);
-            setError(errorMessage);
-            setErrorDetails(err);
-        } finally {
-            setLoading(false); // ローディング終了
-        }
-    }, [url, method, requestData, extraHeaders]);
+                setData(response.data as unknown as T);
+            } catch (err: unknown) {
+                console.error("APIエラー:", err);
+                const errorMessage = getErrorMessage(err as AxiosError);
+                setError(errorMessage);
+                setErrorDetails(err);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [url, method, extraHeaders]
+    );
 
     // エラーメッセージを生成する関数
     const getErrorMessage = (err: AxiosError): string => {

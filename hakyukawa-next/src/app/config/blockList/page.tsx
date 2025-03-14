@@ -4,23 +4,24 @@ import Search from "@/components/common/Search";
 import User from "@/components/common/option/User";
 import DeleteButton from "@/components/common/option/DeleteButton";
 
-function Blocklist () {
+function Blocklist() {
+    const [searchQuery, setSearchQuery] = React.useState("");
     const blickUsersArray = [
-        {id:1, userName: "ユーザー1", userId:"user01"},
-        {id:2, userName: "ユーザー2", userId:"user02"},
-        {id:3, userName: "ユーザー3", userId:"user03"},
+        { id: 1, userName: "ユーザー1", userId: "user01" },
+        { id: 2, userName: "ユーザー2", userId: "user02" },
+        { id: 3, userName: "ユーザー3", userId: "user03" },
     ];
 
-    return(
+    return (
         <div>
-            <Header  backPage backPageLink="/config" backPageText="ブロックリスト"/>
+            <Header backPage backPageLink="/config" backPageText="ブロックリスト" />
             <div className="p-4">
-                <Search />
+                <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 <div className="pt-[20px]">
                     <form action="" method="POST">
                         {blickUsersArray.map((users) => (
                             <div key={users.id} className="flex justify-between">
-                                <User 
+                                <User
                                     key={users.id}
                                     userName={users.userName}
                                     userId={users.userId}
@@ -32,11 +33,9 @@ function Blocklist () {
                                     />
                                 </div>
                             </div>
-                        ))} 
+                        ))}
                     </form>
-                    
                 </div>
-                   
             </div>
         </div>
     );
