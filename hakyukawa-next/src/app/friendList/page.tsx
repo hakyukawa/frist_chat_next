@@ -23,7 +23,6 @@ export default function FriendList() {
         user.user_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    console.log(friend);
     return (
         <>
             <Header
