@@ -15,13 +15,13 @@ export default function Item({ name, selected, onClick, image }: Item) {
             }`}
             onClick={onClick}
         >
-            <div className="relative w-[90px] h-[90px] rounded-full">
+            <div className="flex items-center justify-center relative w-[85px] h-[85px] rounded-full">
                 <div className="bg-border w-[70px] h-[70px] mx-[11px] my-[10px] rounded-full absolute"></div>
                 <Image
                     src={image}
                     alt={name}
-                    width={100}
-                    height={100}
+                    width={85}
+                    height={85}
                     className="absolute top-0 left-0"
                 />
             </div>
