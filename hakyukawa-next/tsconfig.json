@@ -27,7 +27,8 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "src/app/server/[server_id]/[channel_id]"
+        "src/app/server/[server_id]/channel/[channel_id]",
+        "src/app/server/[server_id]/create-channel"
     ],
     "exclude": ["node_modules"]
 }

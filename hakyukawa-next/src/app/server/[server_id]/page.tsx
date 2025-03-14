@@ -6,6 +6,7 @@ import { useServers } from "@/hooks/useServers";
 import { useChannels } from "@/hooks/useChannels";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
+import Link from "next/link";
 import Header from "@/components/common/Header";
 
 export default function ServerSelect() {
@@ -39,7 +40,7 @@ export default function ServerSelect() {
     const handleClick = (channelId: string) => {
         return () => {
             localStorage.setItem("previousPath", pathname);
-            router.push(`/server/${server_id}/${channelId}`);
+            router.push(`/server/${server_id}/channel/${channelId}`);
         };
     };
 
@@ -57,20 +58,24 @@ export default function ServerSelect() {
                 {channel &&
                     channel.data.map((channel) => {
                         return (
-                            <div
+                            <button
+                                onClick={handleClick(channel.channel_id)}
                                 key={channel.channel_id}
-                                className="px-[16px] py-[13px] text-[1.8rem] border-b border-border"
+                                className="px-[16px] py-[13px] text-[1.8rem] border-b border-border flex justify-start"
                             >
-                                <button onClick={handleClick(channel.channel_id)}>
-                                    {channel.channel_name}
-                                </button>
-                            </div>
+                                <div>{channel.channel_name}</div>
+                            </button>
                         );
                     })}
-                <p className="flex items-center justify-end text-main text-[14px] text-right px-[16px] py-[13px] font-semibold">
-                    トークルームを作成
-                    <FaPlus style={{ marginLeft: "5px" }} />
-                </p>
+                <div className="flex items-center justify-end text-right text-main text-[14px] px-[16px] py-[13px] font-semibold">
+                    <Link
+                        href={`/server/${server_id}/create-channel`}
+                        className="flex items-center block"
+                    >
+                        トークルームを作成
+                        <FaPlus style={{ marginLeft: "5px" }} />
+                    </Link>
+                </div>
             </div>
         </>
     );
