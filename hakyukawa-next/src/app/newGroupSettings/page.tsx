@@ -232,14 +232,14 @@ export default function NewGroupList() {
             <Header backPage backPageLink={`/server/GroupList`} backPageText="グループ新規作成" />
             <div className="p-[16px]">
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
-                <Link
+                {/* <Link
                     href="/friendList"
                     passHref
                     className="w-full my-5 rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
                 >
                     メンバー
                     <div className="text-subText text-[2rem] flex items-center">
-                        {/* {member?.members.slice(0, 4).map((member, index) => friendIcons(index))} */}
+                        {member?.members.slice(0, 4).map((member, index) => friendIcons(index))} 
                         <IoIosArrowForward />
                     </div>
                 </Link>
