@@ -5,21 +5,12 @@ import SeeAll from "@/components/common/SeeAll";
 import Item from "@/components/common/Item";
 import { useState, useEffect } from "react";
 import { useProfile } from "@/hooks/useProfile";
-
-interface ItemType {
-    name: string;
-    selected: boolean;
-}
+import { useItemContext } from "@/context/ItemContext";
 
 export default function Profile() {
     const { data: user } = useProfile();
+    const { itemList, setItemList } = useItemContext();
     const [name, setName] = useState<string>("");
-    const [itemList, setItemList] = useState<ItemType[]>([
-        { name: "アイテム1", selected: true },
-        { name: "アイテム2", selected: false },
-        { name: "アイテム3", selected: false },
-        { name: "アイテム4", selected: false },
-    ]);
 
     useEffect(() => {
         setName(user?.user_name || "");
@@ -27,7 +18,8 @@ export default function Profile() {
 
     useEffect(() => {}, [name]);
 
-    const handleItemClick = (index: number) => {
+    const handleItemClick = (index: number, image: string) => {
+        console.log(`クリックされた画像: ${image}`);
         setItemList(
             itemList.map((item, i) => ({
                 ...item,
@@ -35,7 +27,6 @@ export default function Profile() {
             }))
         );
     };
-    console.log(user);
 
     return (
         <>
@@ -85,9 +76,10 @@ export default function Profile() {
                     {itemList.slice(0, 3).map((item, index) => (
                         <Item
                             key={index}
+                            image={item.image}
                             name={item.name}
                             selected={item.selected}
-                            onClick={() => handleItemClick(index)}
+                            onClick={() => handleItemClick(index, item.image)}
                         />
                     ))}
                 </div>
