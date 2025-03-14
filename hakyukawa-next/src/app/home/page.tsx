@@ -10,21 +10,18 @@ import SeeAll from "@/components/common/SeeAll";
 import { useProfile } from "@/hooks/useProfile";
 import { useFriends } from "@/hooks/useFriends";
 import { useServers } from "@/hooks/useServers";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
     const { data: group, error: groupError, loading: groupLoading } = useServers();
+    const pathname = usePathname();
 
-    if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
-    if (groupError || friendError || userError)
-        return <p className="text-red-500">{groupError || friendError || userError}</p>;
-
-    if (user && friend && group) {
-        console.log(user);
-        console.log(friend);
-        console.log(group);
-    }
+    useEffect(() => {
+        localStorage.setItem("previousPath", pathname);
+    }, [pathname]);
 
     const friendIcons = (key: number) => {
         return (
@@ -35,9 +32,13 @@ export default function Home() {
         );
     };
 
+    if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
+    if (groupError || friendError || userError)
+        return <p className="text-red-500">{groupError || friendError || userError}</p>;
+
     return (
         <>
-            <Header setting addFriend notice />
+            <Header setting settingLink="/config" addFriend addFriendLink="/addFriend" notice />
             <div className="p-[16px]">
                 {user ? (
                     <div className="flex items-center justify-between">
