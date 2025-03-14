@@ -2,11 +2,11 @@
 
 import React from "react";
 import Header from "@/components/common/Header";
-import SeeAll from "@/components/common/SeeAll";
 import ChangeItem from "@/components/common/ChangeItem";
 
 export default function PointexChange() {
     const nowPoint = 1300;
+
     const normalItem = [
         {
             name: "アイテム名",
@@ -59,35 +59,6 @@ export default function PointexChange() {
             image: "/img/iconDecor015.svg",
         },
     ];
-
-    const foodItem = [
-        {
-            name: "ナポリタン",
-            point: 200,
-            image: "img/iconDecor003.svg",
-        },
-        {
-            name: "ラーメン",
-            point: 200,
-            image: "img/iconDecor004.svg",
-        },
-        {
-            name: "たこ焼き",
-            point: 200,
-            image: "img/iconDecor005.svg",
-        },
-        {
-            name: "寿司",
-            point: 200,
-            image: "img/iconDecor006.svg",
-        },
-        {
-            name: "天ぷら",
-            point: 200,
-            image: "img/iconDecor007.svg",
-        },
-    ];
-
     return (
         <div>
             <Header backPage backPageLink="/home" backPageText="ポイント引き換え" />
@@ -104,24 +75,9 @@ export default function PointexChange() {
                 <div>
                     <div className="flex items-center justify-between mt-6">
                         <p className="text-[1.4rem] font-semibold">通常</p>
-                        <SeeAll url="/pointexNormal" />
                     </div>
-                    <div className="flex justify-between">
-                        {normalItem.slice(0, 3).map((item, index) => (
-                            <ChangeItem
-                                key={index}
-                                name={item.name}
-                                point={item.point}
-                                image={item.image}
-                            />
-                        ))}
-                    </div>
-                    <div className="flex items-center justify-between mt-6">
-                        <p className="text-[1.4rem] font-semibold">食べ物</p>
-                        <SeeAll url="/pointexFood" />
-                    </div>
-                    <div className="flex justify-between">
-                        {foodItem.slice(0, 3).map((item, index) => (
+                    <div className="flex justify-between flex-wrap">
+                        {normalItem.map((item, index) => (
                             <ChangeItem
                                 key={index}
                                 name={item.name}
