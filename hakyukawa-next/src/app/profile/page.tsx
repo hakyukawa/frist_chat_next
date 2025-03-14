@@ -3,29 +3,29 @@ import Header from "@/components/common/Header";
 import Rank from "@/components/common/Rank";
 import SeeAll from "@/components/common/SeeAll";
 import Item from "@/components/common/Item";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useProfile } from "@/hooks/useProfile";
 
 interface ItemType {
     name: string;
     selected: boolean;
 }
 
-const InputField = (label: string) => {
-    return (
-        <div className="text-[1.3rem] mt-3">
-            <p className="text-subText">{label}</p>
-            <input type="text" className="rounded-[10px] py-3 px-5 w-full border border-border" />
-        </div>
-    );
-};
-
 export default function Profile() {
+    const { data: user } = useProfile();
+    const [name, setName] = useState<string>("");
     const [itemList, setItemList] = useState<ItemType[]>([
         { name: "アイテム1", selected: true },
         { name: "アイテム2", selected: false },
         { name: "アイテム3", selected: false },
         { name: "アイテム4", selected: false },
     ]);
+
+    useEffect(() => {
+        setName(user?.user_name || "");
+    }, [user?.user_name]);
+
+    useEffect(() => {}, [name]);
 
     const handleItemClick = (index: number) => {
         setItemList(
@@ -35,6 +35,7 @@ export default function Profile() {
             }))
         );
     };
+    console.log(user);
 
     return (
         <>
@@ -42,15 +43,38 @@ export default function Profile() {
             <div className="p-[16px]">
                 <div className="p-[18px] border border-main rounded-[10px] flex">
                     <div className="bg-main w-[70px] h-[70px] rounded-full"></div>
-                    <div className="m-auto">
-                        <Rank rank={2} points={3000} rankFontSize="2rem" />
-                        <div className="flex justify-between text-[1.5rem]">
-                            <p>所持ポイント</p>
-                            <p className="font-semibold">{3000}</p>
+                    {user && (
+                        <div className="m-auto">
+                            <Rank
+                                user_rank={user.user_rank}
+                                user_points={user.user_point}
+                                rankFontSize="2rem"
+                            />
+                            <div className="flex justify-between text-[1.5rem]">
+                                <p>所持ポイント</p>
+                                <p className="font-semibold">{3000}</p>
+                            </div>
+
+                            <div className="text-[1.3rem] mt-3">
+                                <p className="text-subText">ユーザー名</p>
+                                <input
+                                    type="text"
+                                    value={user.user_name}
+                                    readOnly
+                                    className="rounded-[10px] py-3 px-5 w-full border border-border"
+                                />
+                            </div>
+                            <div className="text-[1.3rem] mt-3">
+                                <p className="text-subText">ID</p>
+                                <input
+                                    type="text"
+                                    value={user.user_id}
+                                    readOnly
+                                    className="rounded-[10px] py-3 px-5 w-full border border-border"
+                                />
+                            </div>
                         </div>
-                        {InputField("ユーザー名")}
-                        {InputField("ID")}
-                    </div>
+                    )}
                 </div>
                 <div className="flex items-center justify-between mt-5">
                     <h2 className="text-[1.4rem] font-semibold">所持アイテム一覧</h2>

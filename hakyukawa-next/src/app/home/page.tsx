@@ -20,7 +20,6 @@ export default function Home() {
     const { data: group, error: groupError, loading: groupLoading } = useServers();
     const pathname = usePathname();
 
-    // useEffectを条件付きではなく、コンポーネント内で常に実行
     useEffect(() => {
         localStorage.setItem("previousPath", pathname);
     }, [pathname]);
