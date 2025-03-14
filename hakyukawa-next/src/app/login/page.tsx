@@ -58,6 +58,7 @@ function Login() {
             // ログイン成功後、アクセストークンをlocalStorageに保存
             if (response.data.access_token) {
                 localStorage.setItem("accessToken", response.data.access_token);
+                localStorage.setItem("user_id", response.data.user_id);
                 alert(response.data.message);
             }
             router.push("/home"); // ログイン後のページにリダイレクト
