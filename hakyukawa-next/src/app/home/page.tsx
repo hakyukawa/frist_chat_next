@@ -56,15 +56,17 @@ export default function Home() {
             <div className="p-[16px] pb-[80px]">
                 {user ? (
                     <div className="flex items-center justify-between">
-                        <div className="flex flex-col justify-between h-[100px]">
-                            <h1 className="text-[2rem] font-semibold">{user.user_name}</h1>
-                            <p className="text-[#757575] text-[1.4rem]">@{user.user_id}</p>
-                            <Rank
-                                user_rank={user.user_rank}
-                                user_points={user.user_point}
-                                rankFontSize="1.8rem"
-                            />
-                        </div>
+                        <Link href="/profile">
+                            <div className="flex flex-col justify-between h-[100px]">
+                                <h1 className="text-[2rem] font-semibold">{user.user_name}</h1>
+                                <p className="text-[#757575] text-[1.4rem]">@{user.user_id}</p>
+                                <Rank
+                                    user_rank={user.user_rank}
+                                    user_points={user.user_point}
+                                    rankFontSize="1.8rem"
+                                />
+                            </div>
+                        </Link>
                         <div className="w-[70px] h-[70px] bg-main rounded-full"></div>
                     </div>
                 ) : null}
