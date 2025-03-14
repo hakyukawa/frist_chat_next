@@ -31,7 +31,8 @@ export default function CreateChannel() {
     const router = useRouter();
     const params = useParams();
     const server_id = params.server_id;
-    const [channelName, setChannelName] = useState<string>("general");
+    const [validate, setValidate] = useState<boolean>(false);
+    const [channelName, setChannelName] = useState<string>("");
 
     const [apiParams, setApiParams] = useState({
         server_id: `${server_id}`,
@@ -53,11 +54,19 @@ export default function CreateChannel() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // バリデーションチェック
+        if (!channelName.trim()) {
+            setValidate(true);
+            return;
+        } else {
+            setValidate(false);
+        }
+
         try {
-            // fetchDataは値を返さないため、単に実行するだけ
             await fetchData();
 
-            // エラーがなければリダイレクト
+            // `createError` や `validate` の状態を再確認
             if (!createError) {
                 router.push(`/server/${server_id}`);
             }
@@ -82,6 +91,11 @@ export default function CreateChannel() {
                         onChange={(e) => setChannelName(e.target.value)}
                         className="border border-border w-full rounded-[10px] px-[10px] py-[5px] text-[1.3rem]"
                     />
+                    {validate && channelName === "" && (
+                        <p className="text-warning text-[1.3rem] mt-[10px]">
+                            トークルーム名を入力してください
+                        </p>
+                    )}
                 </div>
                 <div className="mt-8">
                     <NoticeOption />
