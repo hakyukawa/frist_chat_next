@@ -10,8 +10,10 @@ import SeeAll from "@/components/common/SeeAll";
 import { useProfile } from "@/hooks/useProfile";
 import { useFriends } from "@/hooks/useFriends";
 import { useServers } from "@/hooks/useServers";
+import { AvatarGroup, Avatar } from "@mui/material";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+
 
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
@@ -19,16 +21,28 @@ export default function Home() {
     const { data: group, error: groupError, loading: groupLoading } = useServers();
     const pathname = usePathname();
 
+    if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
+    if (groupError || friendError || userError)
+        return <p className="text-red-500">{groupError || friendError || userError}</p>;
+
     useEffect(() => {
         localStorage.setItem("previousPath", pathname);
     }, [pathname]);
 
+
     const friendIcons = (key: number) => {
         return (
-            <div
+            <Avatar
                 key={key}
-                className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
-            ></div>
+                sx={{
+                    width: 24,
+                    height: 24,
+                    bgcolor: "orange",
+                    border: "2px solid #2e2f34 !important",
+                }}
+            >
+                <div></div>
+            </Avatar>
         );
     };
 
@@ -62,7 +76,11 @@ export default function Home() {
                     >
                         フレンド
                         <div className="text-subText text-[2rem] flex items-center">
-                            {friend.users.slice(0, 4).map((friend, index) => friendIcons(index))}
+                            <AvatarGroup max={4}>
+                                {friend.users
+                                    .slice(0, 4)
+                                    .map((friend, index) => friendIcons(index))}
+                            </AvatarGroup>
                             <IoIosArrowForward />
                         </div>
                     </Link>
