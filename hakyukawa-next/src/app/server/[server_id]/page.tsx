@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter, usePathname } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useServerMembers } from "@/hooks/useServerMembers";
 import { useServers } from "@/hooks/useServers";
 import { useChannels } from "@/hooks/useChannels";
@@ -12,7 +12,6 @@ import Header from "@/components/common/Header";
 export default function ServerSelect() {
     const params = useParams();
     const router = useRouter();
-    const pathname = usePathname();
     const server_id = params.server_id;
     const [previousPath, setPreviousPath] = useState<string | null>(null);
     const [memberCount, setMemberCount] = useState<number>(0);
@@ -35,11 +34,8 @@ export default function ServerSelect() {
 
     const filteredGroup = group?.data.find((item) => item.server_id === server_id);
 
-    // console.log(memberCount, filteredGroup, member, channel, previousPath);
-
     const handleClick = (channelId: string) => {
         return () => {
-            localStorage.setItem("previousPath", pathname);
             router.push(`/server/${server_id}/channel/${channelId}`);
         };
     };
