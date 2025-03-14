@@ -11,11 +11,19 @@ import { useProfile } from "@/hooks/useProfile";
 import { useFriends } from "@/hooks/useFriends";
 import { useServers } from "@/hooks/useServers";
 import { AvatarGroup, Avatar } from "@mui/material";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
     const { data: group, error: groupError, loading: groupLoading } = useServers();
+    const pathname = usePathname();
+
+    // useEffectを条件付きではなく、コンポーネント内で常に実行
+    useEffect(() => {
+        localStorage.setItem("previousPath", pathname);
+    }, [pathname]);
 
     if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
     if (groupError || friendError || userError)
@@ -36,10 +44,6 @@ export default function Home() {
             </Avatar>
         );
     };
-
-    if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
-    if (groupError || friendError || userError)
-        return <p className="text-red-500">{groupError || friendError || userError}</p>;
 
     return (
         <>
