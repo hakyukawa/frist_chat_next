@@ -13,6 +13,7 @@ import useApi from "@/hooks/useApi";
 import { useServerMembers } from "@/hooks/useServerMembers";
 import { useServerInfo } from "@/hooks/useServerInfo";
 import { Dialog } from "@mui/material";
+import { Avatar, AvatarGroup } from "@mui/material";
 
 interface ReplayOptionData {
     start_at: string;
@@ -34,12 +35,21 @@ interface ServerData {
     end_core_time: string;
 }
 
-const friendIcons = (key: number) => (
-    <div
-        key={key}
-        className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
-    ></div>
-);
+const friendIcons = (key: number) => {
+    return (
+        <Avatar
+            key={key}
+            sx={{
+                width: 24,
+                height: 24,
+                bgcolor: "orange",
+                border: "2px solid #2e2f34 !important",
+            }}
+        >
+            <div></div>
+        </Avatar>
+    );
+};
 
 // デフォルトのReplayOptionData
 const defaultReplayOptionData: ReplayOptionData = {
@@ -266,7 +276,9 @@ export default function NewGroupList() {
                 >
                     メンバー
                     <div className="text-subText text-[2rem] flex items-center">
-                        {member?.members.slice(0, 4).map((friend, index) => friendIcons(index))}
+                        <AvatarGroup max={4}>
+                            {member?.members.slice(0, 4).map((member, index) => friendIcons(index))}
+                        </AvatarGroup>
                         <IoIosArrowForward />
                     </div>
                 </Link>
