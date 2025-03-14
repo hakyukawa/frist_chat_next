@@ -15,7 +15,6 @@ const API_BASE_URL = "http://localhost:3001";
 
 export default function Message() {
     const [currentChannel, setCurrentChannel] = useState<Channel | null>(null);
-    const [inputMessage, setInputMessage] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [connected, setConnected] = useState(false);
     const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -179,7 +178,6 @@ export default function Message() {
         };
     }, [channel_id, accessToken]);
 
-
     useEffect(() => {
         if (channel && channel.data && channel_id) {
             console.log("Searching for channel with ID:", channel_id);
@@ -257,7 +255,7 @@ export default function Message() {
                 <div className="w-[100vw] px-[16px] pt-[5px] pb-[5px]">
                     {messages.map((msg) =>
                         msg.sender_id === myId ? (
-                            <div key={msg.id} className="flex items-end justify-end mt-8">
+                            <div key={msg.message_id} className="flex items-end justify-end mt-8">
                                 <p className="text-[1rem] text-subText pr-2">
                                     {new Date(msg.created_at).toLocaleTimeString("ja-JP", {
                                         hour: "2-digit",
