@@ -4,11 +4,17 @@ import Header from "@/components/common/Header";
 import Friend from "@/components/common/Friend";
 import Search from "@/components/common/Search";
 import { useFriends } from "@/hooks/useFriends";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function FriendList() {
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
     const [searchQuery, setSearchQuery] = useState("");
+    const pathname = usePathname();
+
+    useEffect(() => {
+        localStorage.setItem("previousPath", pathname);
+    }, [pathname]);
 
     if (friendLoading) return <p>読み込み中...</p>;
     if (friendError) return <p className="text-red-500">{friendError}</p>;
@@ -17,10 +23,16 @@ export default function FriendList() {
         user.user_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    console.log(friend);
     return (
         <>
-            <Header backPage backPageLink="/home" backPageText="フレンド" addFriend setting />
+            <Header
+                backPage
+                backPageLink="/home"
+                backPageText="フレンド"
+                addFriend
+                addFriendLink="/addFriend"
+                setting
+            />
             <div className="p-4">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 {filteredFriends && filteredFriends.length > 0 ? (
