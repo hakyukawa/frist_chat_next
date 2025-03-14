@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useServerInfo } from "@/hooks/useServerInfo";
 import { BsFire } from "react-icons/bs";
 import { useRouter, usePathname } from "next/navigation";
-
+// import { useReadCount } from "@/hooks/useReadCount";
 interface GroupProps {
     Name: string;
     LastMessageTime?: number;
@@ -16,9 +16,12 @@ export default function Group(props: GroupProps) {
     const [memberCount, setMemberCount] = useState<number>(0);
     const { data: member } = useServerMembers(props.server_id || "");
     const { data: info } = useServerInfo(props.server_id || "");
+    // const { data: count } = useReadCount(props.server_id || "");
     const [isCoreTime, setIsCoreTime] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
+
+    // console.log(count);
 
     useEffect(() => {
         if (member && member.members) {
