@@ -270,7 +270,7 @@ export default function NewGroupList() {
                     setGroupName={setGroupName}
                 />
                 <Link
-                    href="/friendList"
+                    href={`/server/${server_id}/groupMember`}
                     passHref
                     className="w-full my-5 rounded-[8px] border border-main h-[50px] flex items-center !justify-between p-4 text-[1.6rem] font-semibold"
                 >
