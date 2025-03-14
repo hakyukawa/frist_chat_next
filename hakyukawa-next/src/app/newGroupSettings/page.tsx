@@ -3,7 +3,7 @@
 import Header from "@/components/common/Header";
 import GroupInfo from "@/components/common/GroupInfo";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import { IoIosArrowForward } from "react-icons/io";
@@ -50,8 +50,7 @@ const defaultReplayOptionData: ReplayOptionData = {
 };
 
 export default function NewGroupList() {
-    const params = useParams();
-    const server_id = params.server_id;
+    const router = useRouter();
     const [groupName, setGroupName] = useState<string>("");
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
@@ -170,6 +169,7 @@ export default function NewGroupList() {
 
         try {
             await fetchServerData();
+            router.push(`/server/GroupList`);
         } catch (error) {
             console.error("サーバー更新エラー:", error);
         }
@@ -202,11 +202,7 @@ export default function NewGroupList() {
                 </div>
             </Dialog>
 
-            <Header
-                backPage
-                backPageLink={`/server/${server_id}`}
-                backPageText="グループ新規作成"
-            />
+            <Header backPage backPageLink={`/server/GroupList`} backPageText="グループ新規作成" />
             <div className="p-[16px]">
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
                 <Link
