@@ -11,20 +11,28 @@ import { useProfile } from "@/hooks/useProfile";
 import { useFriends } from "@/hooks/useFriends";
 import { useServers } from "@/hooks/useServers";
 import { AvatarGroup, Avatar } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Footer from "@/components/common/footer";
+import Image from "next/image";
 
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
     const { data: friend, error: friendError, loading: friendLoading } = useFriends();
     const { data: group, error: groupError, loading: groupLoading } = useServers();
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const pathname = usePathname();
 
     // useEffectを条件付きではなく、コンポーネント内で常に実行
     useEffect(() => {
         localStorage.setItem("previousPath", pathname);
     }, [pathname]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setSelectedImage(localStorage.getItem("selectedItemImage") || null);
+        }
+    }, []);
 
     if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
     if (groupError || friendError || userError)
@@ -67,7 +75,18 @@ export default function Home() {
                                 />
                             </div>
                         </Link>
-                        <div className="w-[70px] h-[70px] bg-main rounded-full"></div>
+                        <div className="flex justify-center items-center relative w-[85px] h-[85px] rounded-full">
+                            <div className="bg-border w-[70px] h-[70px] mx-[11px] my-[10px] rounded-full absolute"></div>
+                            {selectedImage && (
+                                <Image
+                                    src={selectedImage}
+                                    alt="iconOrnament"
+                                    width={85}
+                                    height={85}
+                                    className="absolute top-0 left-0"
+                                />
+                            )}
+                        </div>
                     </div>
                 ) : null}
                 {friend ? (

@@ -1,10 +1,13 @@
+import Image from "next/image";
+
 interface Item {
-    name: string;
     selected: boolean;
     onClick?: () => void;
+    name: string;
+    image: string;
 }
 
-export default function Item({ name, selected, onClick }: Item) {
+export default function Item({ name, selected, onClick, image }: Item) {
     return (
         <button
             className={`border rounded-[10px] px-[9px] py-[7px] mt-6 text-left ${
@@ -12,7 +15,16 @@ export default function Item({ name, selected, onClick }: Item) {
             }`}
             onClick={onClick}
         >
-            <div className="bg-main w-[70px] h-[70px] mx-[11px] my-[10px] rounded-full"></div>
+            <div className="flex items-center justify-center relative w-[85px] h-[85px] rounded-full">
+                <div className="bg-border w-[70px] h-[70px] mx-[11px] my-[10px] rounded-full absolute"></div>
+                <Image
+                    src={image}
+                    alt={name}
+                    width={85}
+                    height={85}
+                    className="absolute top-0 left-0"
+                />
+            </div>
             <div className="text-[1.1rem]">
                 <p>{name}</p>
                 <p className={`font-bold ${selected ? "text-main" : "text-subText"}`}>

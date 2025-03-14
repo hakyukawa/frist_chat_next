@@ -1,33 +1,37 @@
 "use client";
+
 import Header from "@/components/common/Header";
 import Rank from "@/components/common/Rank";
 import SeeAll from "@/components/common/SeeAll";
 import Item from "@/components/common/Item";
 import { useState, useEffect } from "react";
 import { useProfile } from "@/hooks/useProfile";
-
-interface ItemType {
-    name: string;
-    selected: boolean;
-}
+import { useItemContext } from "@/context/ItemContext";
+import Image from "next/image";
 
 export default function Profile() {
     const { data: user } = useProfile();
-    const [name, setName] = useState<string>("");
-    const [itemList, setItemList] = useState<ItemType[]>([
-        { name: "アイテム1", selected: true },
-        { name: "アイテム2", selected: false },
-        { name: "アイテム3", selected: false },
-        { name: "アイテム4", selected: false },
-    ]);
+    const { itemList, setItemList } = useItemContext();
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+    // const [name, setName] = useState<string>("");
+    // useEffect(() => {
+    //     setName(user?.user_name || "");
+    // }, [user?.user_name]);
+
+    // localStorage の値を useEffect で取得する
     useEffect(() => {
-        setName(user?.user_name || "");
-    }, [user?.user_name]);
+        if (typeof window !== "undefined") {
+            setSelectedImage(localStorage.getItem("selectedItemImage") || null);
+        }
+    }, []);
 
-    useEffect(() => {}, [name]);
-
-    const handleItemClick = (index: number) => {
+    const handleItemClick = (index: number, image: string) => {
+        console.log(`クリックされた画像: ${image}`);
+        if (typeof window !== "undefined") {
+            localStorage.setItem("selectedItemImage", image);
+        }
+        setSelectedImage(image);
         setItemList(
             itemList.map((item, i) => ({
                 ...item,
@@ -35,14 +39,24 @@ export default function Profile() {
             }))
         );
     };
-    console.log(user);
 
     return (
         <>
             <Header backPage backPageLink="/home" backPageText="プロフィール" />
             <div className="p-[16px]">
                 <div className="p-[18px] border border-main rounded-[10px] flex">
-                    <div className="bg-main w-[70px] h-[70px] rounded-full"></div>
+                    <div className="flex justify-center items-center relative w-[85px] h-[85px] rounded-full">
+                        <div className="bg-border w-[70px] h-[70px] mx-[11px] my-[10px] rounded-full absolute"></div>
+                        {selectedImage && (
+                            <Image
+                                src={selectedImage}
+                                alt="iconOrnament"
+                                width={85}
+                                height={85}
+                                className="absolute top-0 left-0"
+                            />
+                        )}
+                    </div>
                     {user && (
                         <div className="m-auto">
                             <Rank
@@ -85,9 +99,10 @@ export default function Profile() {
                     {itemList.slice(0, 3).map((item, index) => (
                         <Item
                             key={index}
+                            image={item.image}
                             name={item.name}
                             selected={item.selected}
-                            onClick={() => handleItemClick(index)}
+                            onClick={() => handleItemClick(index, item.image)}
                         />
                     ))}
                 </div>
