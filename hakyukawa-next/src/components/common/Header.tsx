@@ -10,30 +10,25 @@ import { BsFire } from "react-icons/bs";
 import { BsX } from "react-icons/bs";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Search from "@/components/common/Search";
 
 interface HeaderProps {
     backPage?: boolean;
     backPageText?: string;
     backPageLink?: string;
-    addFriendLink?: string;
     core?: boolean;
     addFriend?: boolean;
+    addFriendLink?: string;
     addGroup?: boolean;
     notice?: boolean;
     search?: boolean;
     setting?: boolean;
+    settingLink?: string;
 }
 
 export default function Header(props: HeaderProps) {
     const [serch, setSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const router = useRouter();
-
-    const addGroupClick = () => {
-        router.push("/newGroupSettings");
-    };
 
     return (
         <header
@@ -59,17 +54,21 @@ export default function Header(props: HeaderProps) {
                             <GoPersonAdd />
                         </Link>
                     )}
-                    {props.addGroup && <AiOutlineUsergroupAdd style={{ marginLeft: "8px" }} />}
+                    {props.addGroup && (
+                        <Link href="/newGroupSettings">
+                            <AiOutlineUsergroupAdd style={{ marginLeft: "8px" }} />
+                        </Link>
+                    )}
                     {props.notice && <GoBell style={{ marginLeft: "8px" }} />}
                     {props.search && (
                         <button className="ml-[8px]" onClick={() => setSearch((prev) => !prev)}>
                             {!serch ? <IoIosSearch /> : <BsX />}
                         </button>
                     )}
-                    {props.setting && (
-                        <button>
+                    {props.setting && props.settingLink && (
+                        <Link href={props.settingLink}>
                             <IoSettingsOutline style={{ marginLeft: "8px" }} />
-                        </button>
+                        </Link>
                     )}
                 </div>
             </div>

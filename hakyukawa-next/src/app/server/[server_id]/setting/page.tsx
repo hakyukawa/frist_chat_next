@@ -10,6 +10,8 @@ import { IoIosArrowForward } from "react-icons/io";
 import SubmitButton from "@/components/common/SubmitButton";
 import { useState, useCallback, useEffect } from "react";
 import useApi from "@/hooks/useApi";
+import { useServerMembers } from "@/hooks/useServerMembers";
+import { useServerInfo } from "@/hooks/useServerInfo";
 import { Dialog } from "@mui/material";
 
 interface ReplayOptionData {
@@ -32,12 +34,12 @@ interface ServerData {
     end_core_time: string;
 }
 
-// const friendIcons = (key: number) => (
-//     <div
-//         key={key}
-//         className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
-//     ></div>
-// );
+const friendIcons = (key: number) => (
+    <div
+        key={key}
+        className="w-[24px] h-[24px] bg-main border-[3px] border-background rounded-full"
+    ></div>
+);
 
 // デフォルトのReplayOptionData
 const defaultReplayOptionData: ReplayOptionData = {
@@ -56,8 +58,12 @@ export default function NewGroupList() {
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
     const [serverData, setServerData] = useState<ServerData | undefined>(undefined);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [validationError, setValidationError] = useState<string | null>(null);
     const [valodationErroeDialogOpen, setValidationErrorDialogOpen] = useState(false);
+
+    const { data: member } = useServerMembers(`${server_id}`);
+    const { data: info } = useServerInfo(`${server_id}`);
 
     const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
         setReplayOptionData(data);
@@ -156,7 +162,7 @@ export default function NewGroupList() {
     const { loading: serverLoading, fetchData: fetchServerData } = useApi<
         { status: number; message: string },
         ServerData
-    >(`http://localhost:3001/api/v1/auth/server/`, "POST", serverData);
+    >(`http://localhost:3001/api/v1/auth/server/${server_id}`, "PUT", serverData);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -173,6 +179,14 @@ export default function NewGroupList() {
         } catch (error) {
             console.error("サーバー更新エラー:", error);
         }
+    };
+
+    const handleDeleteDialogOpen = () => {
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteDialogClose = () => {
+        setDeleteDialogOpen(false);
     };
 
     return (
@@ -202,13 +216,47 @@ export default function NewGroupList() {
                 </div>
             </Dialog>
 
+            <Dialog
+                open={deleteDialogOpen}
+                onClose={handleDeleteDialogClose}
+                sx={{
+                    "& .MuiPaper-root": {
+                        backgroundColor: "#2e2f34",
+                    },
+                }}
+            >
+                <div className="bg-background text-white p-[16px] rounded-[20px]">
+                    <div className="text-center border-b border-border">
+                        <p className="text-[1.5rem] font-bold ">本当に削除しますか？</p>
+                    </div>
+                    <div className="flex flex-col items-center mt-5">
+                        <div className="text-[1.2rem] text-subText">
+                            「グループを削除」をタップするとグループデータ、メッセージ内容が全て削除されます。
+                            <br />
+                            <span className="text-warning">
+                                削除されたグループは復旧できません。
+                            </span>
+                        </div>
+                        <button
+                            onClick={handleDeleteDialogClose}
+                            className="w-[200px] h-[40px] border border-warning text-[1.5rem] font-semibold rounded-[40px] mt-5"
+                        >
+                            <p className="text-warning">グループを削除する</p>
+                        </button>
+                    </div>
+                </div>
+            </Dialog>
             <Header
                 backPage
                 backPageLink={`/server/${server_id}`}
                 backPageText="グループ新規作成"
             />
             <div className="p-[16px]">
-                <GroupInfo groupName={groupName} setGroupName={setGroupName} />
+                <GroupInfo
+                    name={info?.server_name}
+                    groupName={groupName}
+                    setGroupName={setGroupName}
+                />
                 <Link
                     href="/friendList"
                     passHref
@@ -216,20 +264,23 @@ export default function NewGroupList() {
                 >
                     メンバー
                     <div className="text-subText text-[2rem] flex items-center">
-                        {/* {member?.members.slice(0, 4).map((member, index) => friendIcons(index))} */}
+                        {member?.members.slice(0, 4).map((friend, index) => friendIcons(index))}
                         <IoIosArrowForward />
                     </div>
                 </Link>
                 <NoticeOption />
-                <ReplayOption onDataChange={handleReplayOptionChange} />
+                <ReplayOption data={info ?? undefined} onDataChange={handleReplayOptionChange} />
 
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <SubmitButton
-                            buttonValue={serverLoading ? "作成中..." : "グループを作成"}
-                        />
+                        <SubmitButton buttonValue={serverLoading ? "保存中..." : "保存"} />
                     </div>
                 </form>
+                <div className="border-t border-border mt-5 flex justify-center">
+                    <button onClick={handleDeleteDialogOpen} className="py-[14px] w-full">
+                        <p className="text-warning text-[1.4rem]">グループを削除する</p>
+                    </button>
+                </div>
             </div>
         </>
     );
