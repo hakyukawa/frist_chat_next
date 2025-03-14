@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 >>>>>>> 5abef5c ([update]バリデーションを実装)
+import { useRouter } from "next/navigation";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import SubmitButton from "@/components/common/SubmitButton";
@@ -62,6 +63,7 @@ export default function NewGroupList() {
     const params = useParams();
     const server_id = params.server_id;
 >>>>>>> 5abef5c ([update]バリデーションを実装)
+    const router = useRouter();
     const [groupName, setGroupName] = useState<string>("");
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
@@ -184,6 +186,7 @@ export default function NewGroupList() {
             router.push(`/server/GroupList`);
 =======
 >>>>>>> 5abef5c ([update]バリデーションを実装)
+            router.push(`/server/GroupList`);
         } catch (error) {
             console.error("サーバー更新エラー:", error);
         }
@@ -226,6 +229,7 @@ export default function NewGroupList() {
                 backPageLink={`/server/${server_id}`}
                 backPageText="グループ新規作成"
             />
+            <Header backPage backPageLink={`/server/GroupList`} backPageText="グループ新規作成" />
             <div className="p-[16px]">
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
                 <Link
