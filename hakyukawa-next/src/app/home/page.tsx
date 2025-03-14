@@ -20,6 +20,7 @@ export default function Home() {
     const { data: group, error: groupError, loading: groupLoading } = useServers();
     const pathname = usePathname();
 
+    // useEffectを条件付きではなく、コンポーネント内で常に実行
     useEffect(() => {
         localStorage.setItem("previousPath", pathname);
     }, [pathname]);
@@ -43,6 +44,10 @@ export default function Home() {
             </Avatar>
         );
     };
+
+    if (groupLoading || friendLoading || userLoading) return <p>読み込み中...</p>;
+    if (groupError || friendError || userError)
+        return <p className="text-red-500">{groupError || friendError || userError}</p>;
 
     return (
         <>

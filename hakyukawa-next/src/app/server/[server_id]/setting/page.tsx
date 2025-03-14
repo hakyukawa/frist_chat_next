@@ -10,10 +10,10 @@ import { IoIosArrowForward } from "react-icons/io";
 import SubmitButton from "@/components/common/SubmitButton";
 import { useState, useCallback, useEffect } from "react";
 import useApi from "@/hooks/useApi";
-import { useServerMembers } from "@/hooks/useServerMembers";
-import { useServerInfo } from "@/hooks/useServerInfo";
 import { Dialog } from "@mui/material";
 import { Avatar, AvatarGroup } from "@mui/material";
+import { useServerMembers } from "@/hooks/useServerMembers";
+import { useServerInfo } from "@/hooks/useServerInfo";
 
 interface ReplayOptionData {
     start_at: string;
@@ -27,7 +27,7 @@ interface ReplayOptionData {
 interface ServerData {
     server_name: string;
     icon_url: string;
-    until_reply: string;
+    until_replay: string;
     start_at: string;
     end_at: string;
     weeks: string[];
@@ -73,7 +73,9 @@ export default function NewGroupList() {
     const [validationError, setValidationError] = useState<string | null>(null);
     const [valodationErroeDialogOpen, setValidationErrorDialogOpen] = useState(false);
 
+    // useApiを使用してデータを取得
     const { data: member } = useServerMembers(`${server_id}`);
+
     const { data: info } = useServerInfo(`${server_id}`);
 
     const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
@@ -159,7 +161,7 @@ export default function NewGroupList() {
         const newServerData: ServerData = {
             server_name: groupName || "default_name",
             icon_url: "https://example.com/icon.png",
-            until_reply: replayOptionData.until_replay,
+            until_replay: replayOptionData.until_replay,
             start_at: replayOptionData.start_at,
             end_at: replayOptionData.end_at,
             start_core_time: replayOptionData.start_core_time,
@@ -170,10 +172,11 @@ export default function NewGroupList() {
         setServerData(newServerData);
     }, [groupName, replayOptionData, validateTimes]);
 
+    // useApiを使用してサーバーデータを更新
     const { loading: serverLoading, fetchData: fetchServerData } = useApi<
         { status: number; message: string },
         ServerData
-    >(`http://localhost:3001/api/v1/auth/server/${server_id}`, "PUT", serverData);
+    >(`http://localhost:3001/api/v1/auth/server/${server_id}`, "PUT");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -186,7 +189,8 @@ export default function NewGroupList() {
         }
 
         try {
-            await fetchServerData();
+            // serverDataを引数として渡す
+            await fetchServerData(serverData);
             router.push(`/server/${server_id}`);
         } catch (error) {
             console.error("サーバー更新エラー:", error);

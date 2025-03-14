@@ -5,6 +5,7 @@ import useApi from "@/hooks/useApi";
 import InputField from "@/components/common/InputField";
 import SubmitButton from "@/components/common/SubmitButton";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface FormData {
     user_id: string;
@@ -15,16 +16,17 @@ interface FormData {
 }
 
 interface Error {
-    user_name?: string | undefined;
-    user_id?: string | undefined;
-    mail?: string | undefined;
-    password?: string | undefined;
-    password_confirmation?: string | undefined;
+    user_name?: string;
+    user_id?: string;
+    mail?: string;
+    password?: string;
+    password_confirmation?: string;
 }
 
 function Signup() {
     const demomail = ["aiueo@exsample.com", "sample@sample.com", "test@test.com"];
     const demouser_names = ["user01", "user02", "user03"];
+    const router = useRouter();
 
     const [formData, setFormData] = useState<FormData>({
         user_id: "",
@@ -39,8 +41,7 @@ function Signup() {
     // useApiフックの利用
     const { data, error, loading, fetchData } = useApi<{ message: string }>(
         "http://localhost:3001/api/v1/signup",
-        "POST",
-        formData
+        "POST"
     );
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +95,10 @@ function Signup() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validate()) {
-            await fetchData(); // useApi の fetchData を実行
+            await fetchData(formData); // useApi の fetchData にデータを渡す
+            if (data) {
+                router.push("/login");
+            }
         }
     };
 

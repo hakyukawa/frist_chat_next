@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
 import ReplayOption from "@/components/common/GroupOptions/ReplayOption";
 import SubmitButton from "@/components/common/SubmitButton";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import useApi from "@/hooks/useApi";
 import { Dialog } from "@mui/material";
 
@@ -30,7 +30,6 @@ interface ServerData {
     end_core_time: string;
 }
 
-// デフォルトのReplayOptionData
 const defaultReplayOptionData: ReplayOptionData = {
     start_at: "00:00:00",
     end_at: "00:00:00",
@@ -45,90 +44,21 @@ export default function NewGroupList() {
     const [groupName, setGroupName] = useState<string>("");
     const [replayOptionData, setReplayOptionData] =
         useState<ReplayOptionData>(defaultReplayOptionData);
-    const [serverData, setServerData] = useState<ServerData | undefined>(undefined);
     const [validationError, setValidationError] = useState<string | null>(null);
-    const [valodationErroeDialogOpen, setValidationErrorDialogOpen] = useState(false);
+    const [validationErrorDialogOpen, setValidationErrorDialogOpen] = useState(false);
 
     const handleReplayOptionChange = useCallback((data: ReplayOptionData) => {
         setReplayOptionData(data);
     }, []);
 
-    // 時間を分に変換するヘルパー関数
-    const timeToMinutes = useCallback((timeString: string): number => {
-        const [hours, minutes] = timeString.split(":").map(Number);
-        return hours * 60 + minutes;
-    }, []);
+    const { loading: serverLoading, fetchData: fetchServerData } = useApi<
+        { status: number; message: string },
+        ServerData
+    >("http://localhost:3001/api/v1/auth/server/", "POST");
 
-    // 時間の検証を行う関数
-    const validateTimes = useCallback(
-        (data: ReplayOptionData): string | null => {
-            // コアタイムが3時間（180分）を超えているかをチェック
-            const coreTimeStart = timeToMinutes(data.start_core_time);
-            const coreTimeEnd = timeToMinutes(data.end_core_time);
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-            let coreTimeDuration: number;
-            if (coreTimeEnd >= coreTimeStart) {
-                coreTimeDuration = coreTimeEnd - coreTimeStart;
-            } else {
-                // 日をまたぐ場合（例: 22:00～01:00）
-                coreTimeDuration = 24 * 60 - coreTimeStart + coreTimeEnd;
-            }
-
-            if (coreTimeDuration > 180) {
-                return "コアタイムは3時間を超えることができません。";
-            }
-
-            // 返信不要時間帯とコアタイムの重複チェック
-            const noReplyStart = timeToMinutes(data.start_at);
-            const noReplyEnd = timeToMinutes(data.end_at);
-
-            // 返信不要時間帯が日をまたぐかどうかを考慮
-            let noReplyRangeOverlapsCore = false;
-
-            if (noReplyStart <= noReplyEnd) {
-                // 返信不要時間帯が同じ日の場合
-                if (
-                    coreTimeStart <= coreTimeEnd &&
-                    !(noReplyEnd < coreTimeStart || noReplyStart > coreTimeEnd)
-                ) {
-                    noReplyRangeOverlapsCore = true;
-                } else if (
-                    coreTimeStart > coreTimeEnd &&
-                    !(
-                        (noReplyEnd < coreTimeStart && noReplyEnd < coreTimeEnd) ||
-                        (noReplyStart > coreTimeStart && noReplyStart > coreTimeEnd)
-                    )
-                ) {
-                    noReplyRangeOverlapsCore = true;
-                }
-            } else {
-                // 返信不要時間帯が日をまたぐ場合
-                if (coreTimeStart <= coreTimeEnd) {
-                    if (!(coreTimeEnd < noReplyStart && coreTimeStart > noReplyEnd)) {
-                        noReplyRangeOverlapsCore = true;
-                    }
-                } else {
-                    // 両方とも日をまたぐ場合は、必ず重複がある
-                    noReplyRangeOverlapsCore = true;
-                }
-            }
-
-            if (noReplyRangeOverlapsCore) {
-                return "返信不要の時間帯とコアタイムが重複しています。";
-            }
-
-            return null;
-        },
-        [timeToMinutes]
-    );
-
-    // API データを更新
-    useEffect(() => {
-        // 時間の検証
-        const error = validateTimes(replayOptionData);
-        setValidationError(error);
-
-        // サーバーデータを構築
         const newServerData: ServerData = {
             server_name: groupName || "default_name",
             icon_url: "https://example.com/icon.png",
@@ -140,27 +70,14 @@ export default function NewGroupList() {
             weeks: replayOptionData.weeks,
         };
 
-        setServerData(newServerData);
-    }, [groupName, replayOptionData, validateTimes]);
-
-    const { loading: serverLoading, fetchData: fetchServerData } = useApi<
-        { status: number; message: string },
-        ServerData
-    >(`http://localhost:3001/api/v1/auth/server/`, "POST", serverData);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // 検証エラーがある場合は送信しない
         if (validationError) {
-            console.log("エラー:", validationError);
             setValidationErrorDialogOpen(true);
             return;
         }
 
         try {
-            await fetchServerData();
-            router.push(`/server/GroupList`);
+            await fetchServerData(newServerData);
+            router.push(`/GroupList`);
         } catch (error) {
             console.error("サーバー更新エラー:", error);
         }
@@ -169,13 +86,9 @@ export default function NewGroupList() {
     return (
         <>
             <Dialog
-                open={valodationErroeDialogOpen}
+                open={validationErrorDialogOpen}
                 onClose={() => setValidationErrorDialogOpen(false)}
-                sx={{
-                    "& .MuiPaper-root": {
-                        backgroundColor: "#2e2f34",
-                    },
-                }}
+                sx={{ "& .MuiPaper-root": { backgroundColor: "#2e2f34" } }}
             >
                 <div className="bg-background text-white p-[16px] rounded-[20px]">
                     <div className="text-center border-b border-border">
@@ -198,13 +111,8 @@ export default function NewGroupList() {
                 <GroupInfo groupName={groupName} setGroupName={setGroupName} />
                 <NoticeOption />
                 <ReplayOption onDataChange={handleReplayOptionChange} />
-
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <SubmitButton
-                            buttonValue={serverLoading ? "作成中..." : "グループを作成"}
-                        />
-                    </div>
+                    <SubmitButton buttonValue={serverLoading ? "作成中..." : "グループを作成"} />
                 </form>
             </div>
         </>

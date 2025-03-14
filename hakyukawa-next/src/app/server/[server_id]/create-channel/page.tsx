@@ -4,14 +4,14 @@ import Header from "@/components/common/Header";
 import { useParams, useRouter } from "next/navigation";
 import SubmitButton from "@/components/common/SubmitButton";
 import NoticeOption from "@/components/common/GroupOptions/NoticeOption";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useApi from "@/hooks/useApi";
 
 interface ChannelResponse {
     message: string;
     channel_id: string;
     channelName: string;
-    erroe: string | null;
+    error: string | null;
 }
 
 export default function CreateChannel() {
@@ -21,28 +21,14 @@ export default function CreateChannel() {
     const [validate, setValidate] = useState<boolean>(false);
     const [channelName, setChannelName] = useState<string>("");
 
-    const [apiParams, setApiParams] = useState({
-        server_id: `${server_id}`,
-        channel_name: "general",
-    });
-
-    useEffect(() => {
-        setApiParams({
-            server_id: `${server_id}`,
-            channel_name: channelName,
-        });
-    }, [channelName, server_id]);
-
     const { error: createError, fetchData } = useApi<ChannelResponse>(
-        `http://localhost:3001/api/v1/auth/server/channel/`,
-        "POST",
-        apiParams
+        "http://localhost:3001/api/v1/auth/server/channel/",
+        "POST"
     );
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // バリデーションチェック
         if (!channelName.trim()) {
             setValidate(true);
             return;
@@ -51,9 +37,11 @@ export default function CreateChannel() {
         }
 
         try {
-            await fetchData();
+            await fetchData({
+                server_id: server_id,
+                channel_name: channelName,
+            });
 
-            // `createError` や `validate` の状態を再確認
             if (!createError) {
                 router.push(`/server/${server_id}`);
             }
