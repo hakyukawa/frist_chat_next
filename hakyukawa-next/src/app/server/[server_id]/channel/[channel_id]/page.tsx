@@ -5,7 +5,6 @@ import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { useChannels } from "@/hooks/useChannels";
 import { VscSend } from "react-icons/vsc";
-
 interface Channel {
     channel_id: string;
     channel_name: string;
@@ -179,6 +178,7 @@ export default function Message() {
             ws.close();
         };
     }, [channel_id, accessToken]);
+
 
     useEffect(() => {
         if (channel && channel.data && channel_id) {
