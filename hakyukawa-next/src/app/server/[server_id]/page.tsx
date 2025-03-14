@@ -37,7 +37,6 @@ export default function ServerSelect() {
 
     const handleClick = (channelId: string) => {
         return () => {
-            localStorage.setItem("previousPath", pathname);
             router.push(`/server/${server_id}/channel/${channelId}`);
         };
     };
