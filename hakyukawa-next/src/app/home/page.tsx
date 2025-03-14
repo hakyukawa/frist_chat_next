@@ -13,6 +13,7 @@ import { useServers } from "@/hooks/useServers";
 import { AvatarGroup, Avatar } from "@mui/material";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Footer from "@/components/common/footer";
 
 export default function Home() {
     const { data: user, error: userError, loading: userLoading } = useProfile();
@@ -52,7 +53,7 @@ export default function Home() {
     return (
         <>
             <Header setting settingLink="/config" addFriend addFriendLink="/addFriend" notice />
-            <div className="p-[16px]">
+            <div className="p-[16px] pb-[80px]">
                 {user ? (
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col justify-between h-[100px]">
@@ -113,6 +114,7 @@ export default function Home() {
                         : null}
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

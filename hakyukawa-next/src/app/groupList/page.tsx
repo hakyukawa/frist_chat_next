@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/common/Header";
+import Footer from "@/components/common/footer";
 import Group from "@/components/common/Group";
 import Search from "@/components/common/Search";
 import { useServers } from "@/hooks/useServers";
@@ -20,7 +21,7 @@ export default function GroupList() {
     return (
         <>
             <Header backPage backPageLink="/home" backPageText="グループ" addGroup setting />
-            <div className="p-4">
+            <div className="p-[16px] pb-[80px]">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 {filteredGroups && filteredGroups.length > 0 ? (
                     filteredGroups.map((group) => (
@@ -34,6 +35,7 @@ export default function GroupList() {
                     <p>該当するサーバーが見つかりません</p>
                 )}
             </div>
+            <Footer />
         </>
     );
 }

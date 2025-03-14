@@ -2,6 +2,7 @@
 
 import React from "react";
 import Header from "@/components/common/Header";
+import Footer from "@/components/common/footer";
 import ChangeItem from "@/components/common/ChangeItem";
 
 export default function PointexChange() {
@@ -37,8 +38,8 @@ export default function PointexChange() {
 
     return (
         <div>
-            <Header backPage backPageLink="/home" backPageText="ポイント引き換え" />
-            <div className="p-4">
+            <Header backPage backPageLink="/pointexChange" backPageText="ポイント引き換え" />
+            <div className="p-[16px] pb-[80px]">
                 <div className="border border-main rounded-[10px]">
                     <div className="text-center py-4">
                         <p className="text-[1.3rem] font-semibold">所持ポイント</p>
@@ -64,6 +65,7 @@ export default function PointexChange() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }
