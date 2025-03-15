@@ -66,7 +66,7 @@ export default function Profile() {
                             />
                             <div className="flex justify-between text-[1.5rem]">
                                 <p>所持ポイント</p>
-                                <p className="font-semibold">{3000}</p>
+                                <p className="font-semibold">{user.user_point}</p>
                             </div>
 
                             <div className="text-[1.3rem] mt-3">
