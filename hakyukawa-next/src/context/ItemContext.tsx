@@ -17,7 +17,7 @@ const ItemContext = createContext<ItemContextType | undefined>(undefined);
 
 export function ItemProvider({ children }: { children: ReactNode }) {
     const [itemList, setItemList] = useState<ItemType[]>([
-        { name: "ひつじ", selected: true, image: "/img/iconDecor010.svg" },
+        { name: "ひつじ", selected: false, image: "/img/iconDecor010.svg" },
         { name: "猫耳", selected: false, image: "/img/iconDecor011.svg" },
         { name: "地球", selected: false, image: "/img/iconDecor012.svg" },
         { name: "アイテム4", selected: false, image: "/img/iconDecor013.svg" },
