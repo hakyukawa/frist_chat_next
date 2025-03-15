@@ -13,7 +13,7 @@ export default function PointexChange() {
 
     const normalItem = [
         {
-            name: "アイテム名",
+            name: "ロイヤル",
             point: 200,
             image: "/img/iconDecor001.svg",
         },
@@ -48,7 +48,7 @@ export default function PointexChange() {
             image: "/img/iconDecor012.svg",
         },
         {
-            name: "アイテム名",
+            name: "土星",
             point: 200,
             image: "/img/iconDecor013.svg",
         },

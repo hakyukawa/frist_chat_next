@@ -20,7 +20,7 @@ export function ItemProvider({ children }: { children: ReactNode }) {
         { name: "ひつじ", selected: false, image: "/img/iconDecor010.svg" },
         { name: "猫耳", selected: false, image: "/img/iconDecor011.svg" },
         { name: "地球", selected: false, image: "/img/iconDecor012.svg" },
-        { name: "アイテム4", selected: false, image: "/img/iconDecor013.svg" },
+        { name: "土星", selected: false, image: "/img/iconDecor013.svg" },
         { name: "虹", selected: false, image: "/img/iconDecor014.svg" },
         { name: "雪", selected: false, image: "/img/iconDecor015.svg" },
     ]);
