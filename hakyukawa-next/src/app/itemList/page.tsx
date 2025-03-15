@@ -9,13 +9,17 @@ import Link from "next/link";
 export default function ItemList() {
     const { itemList, setItemList } = useItemContext();
 
-    const handleItemClick = (index: number, image: string) => {
-        console.log(`クリックされた画像: ${image}`);
-        localStorage.setItem("selectedItemImage", image);
+    // `have` が true のアイテムだけを取得
+    const ownedItems = itemList.filter((item) => item.have);
+
+    const handleItemClick = (selectedItem: string) => {
+        console.log(`クリックされた画像: ${selectedItem}`);
+        localStorage.setItem("selectedItemImage", selectedItem);
+
         setItemList(
-            itemList.map((item, i) => ({
+            itemList.map((item) => ({
                 ...item,
-                selected: i === index,
+                selected: item.image === selectedItem,
             }))
         );
     };
@@ -25,13 +29,13 @@ export default function ItemList() {
             <Header backPage backPageLink="/profile" backPageText="所持アイテム一覧" />
             <div className="p-[16px] flex flex-col items-center">
                 <div className="flex flex-wrap justify-between">
-                    {itemList.map((item, index) => (
+                    {ownedItems.map((item) => (
                         <Item
-                            key={index}
+                            key={item.image}
                             image={item.image}
                             name={item.name}
                             selected={item.selected}
-                            onClick={() => handleItemClick(index, item.image)}
+                            onClick={() => handleItemClick(item.image)}
                         />
                     ))}
                 </div>

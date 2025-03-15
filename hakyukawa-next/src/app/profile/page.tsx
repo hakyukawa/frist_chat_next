@@ -13,6 +13,7 @@ export default function Profile() {
     const { data: user } = useProfile();
     const { itemList, setItemList } = useItemContext();
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const ownedItems = itemList.filter((item) => item.have);
 
     // const [name, setName] = useState<string>("");
     // useEffect(() => {
@@ -96,7 +97,7 @@ export default function Profile() {
                 </div>
 
                 <div className="flex flex-wrap justify-between">
-                    {itemList.slice(0, 3).map((item, index) => (
+                    {ownedItems.slice(0, 3).map((item, index) => (
                         <Item
                             key={index}
                             image={item.image}
