@@ -15,26 +15,25 @@ import { Avatar, AvatarGroup } from "@mui/material";
 import { useServerMembers } from "@/hooks/useServerMembers";
 import { useServerInfo } from "@/hooks/useServerInfo";
 
+interface ServerData {
+    server_name: string;
+    icon_url: string;
+    until_reply: string;
+    start_at: string;
+    end_at: string;
+    weeks: string[];
+    start_core_time: string;
+    end_core_time: string;
+}
+
 interface ReplayOptionData {
     start_at: string;
     end_at: string;
     start_core_time: string;
     end_core_time: string;
     weeks: string[];
-    until_replay: string;
+    until_reply: string; // until_replay から until_reply に変更
 }
-
-interface ServerData {
-    server_name: string;
-    icon_url: string;
-    until_replay: string;
-    start_at: string;
-    end_at: string;
-    weeks: string[];
-    start_core_time: string;
-    end_core_time: string;
-}
-
 const friendIcons = (key: number) => {
     return (
         <Avatar
@@ -58,7 +57,7 @@ const defaultReplayOptionData: ReplayOptionData = {
     start_core_time: "00:00:00",
     end_core_time: "00:00:00",
     weeks: [],
-    until_replay: "00:00:00",
+    until_reply: "00:00:00",
 };
 
 export default function NewGroupList() {
@@ -158,10 +157,11 @@ export default function NewGroupList() {
         setValidationError(error);
 
         // サーバーデータを構築
+        // serverDataを構築する際に変数名を修正
         const newServerData: ServerData = {
             server_name: groupName || "default_name",
             icon_url: "https://example.com/icon.png",
-            until_replay: replayOptionData.until_replay,
+            until_reply: replayOptionData.until_reply, // until_replay から until_reply に修正
             start_at: replayOptionData.start_at,
             end_at: replayOptionData.end_at,
             start_core_time: replayOptionData.start_core_time,

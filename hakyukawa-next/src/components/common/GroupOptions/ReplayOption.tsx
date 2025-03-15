@@ -13,9 +13,8 @@ interface ReplayOptionData {
     start_core_time: string;
     end_core_time: string;
     weeks: string[];
-    until_replay: string;
+    until_reply: string; // until_reply から until_replay に変更
 }
-
 interface WeekDay {
     date: string;
     isSelected: boolean;
@@ -90,7 +89,7 @@ export default function ReplayOption({ onDataChange, data }: ReplayOptionProps) 
                 start_core_time: formatTimeToHHMMSS(startCoreTime),
                 end_core_time: formatTimeToHHMMSS(endCoreTime),
                 weeks: selectedWeeks,
-                until_replay: untilReplay || "00:00:00", // 空の場合はデフォルト値を設定
+                until_reply: untilReplay || "00:00:00", // 空の場合はデフォルト値を設定
             });
         }
     }, [startAt, endAt, startCoreTime, endCoreTime, weekDays, untilReplay]);
