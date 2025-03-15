@@ -4,37 +4,15 @@ import React from "react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/footer";
 import ChangeItem from "@/components/common/ChangeItem";
+import { useItemContext } from "@/context/ItemContext";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function PointexChange() {
-    const nowPoint = 1300;
+    const { data: profile } = useProfile();
+    const userPoint = profile?.user_point;
+    const { itemList } = useItemContext();
 
-    const foodItem = [
-        {
-            name: "ナポリタン",
-            point: 200,
-            image: "img/iconDecor003.svg",
-        },
-        {
-            name: "ラーメン",
-            point: 200,
-            image: "img/iconDecor004.svg",
-        },
-        {
-            name: "たこ焼き",
-            point: 200,
-            image: "img/iconDecor005.svg",
-        },
-        {
-            name: "寿司",
-            point: 200,
-            image: "img/iconDecor006.svg",
-        },
-        {
-            name: "天ぷら",
-            point: 200,
-            image: "img/iconDecor007.svg",
-        },
-    ];
+    const foodItem = itemList.filter((item) => !item.have && item.genre === "food");
 
     return (
         <div>
@@ -44,7 +22,7 @@ export default function PointexChange() {
                     <div className="text-center py-4">
                         <p className="text-[1.3rem] font-semibold">所持ポイント</p>
                         <p className="text-[2.7rem] text-main font-extrabold">
-                            {nowPoint}
+                            {userPoint}
                             <span className="text-[20px]">pt</span>
                         </p>
                     </div>

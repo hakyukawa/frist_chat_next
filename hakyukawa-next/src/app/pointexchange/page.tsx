@@ -6,91 +6,18 @@ import SeeAll from "@/components/common/SeeAll";
 import ChangeItem from "@/components/common/ChangeItem";
 import Footer from "@/components/common/footer";
 import { useProfile } from "@/hooks/useProfile";
+import { useItemContext } from "@/context/ItemContext";
 
 export default function PointexChange() {
     const { data: profile } = useProfile();
     const userPoint = profile?.user_point;
+    const { itemList } = useItemContext();
 
-    const normalItem = [
-        {
-            name: "ロイヤル",
-            point: 200,
-            image: "/img/iconDecor001.svg",
-        },
-        {
-            name: "リボン",
-            point: 200,
-            image: "/img/iconDecor002.svg",
-        },
-        {
-            name: "うし",
-            point: 200,
-            image: "/img/iconDecor008.svg",
-        },
-        {
-            name: "パンダ",
-            point: 200,
-            image: "/img/iconDecor009.svg",
-        },
-        {
-            name: "ひつじ",
-            point: 200,
-            image: "/img/iconDecor010.svg",
-        },
-        {
-            name: "猫耳",
-            point: 200,
-            image: "/img/iconDecor011.svg",
-        },
-        {
-            name: "地球",
-            point: 200,
-            image: "/img/iconDecor012.svg",
-        },
-        {
-            name: "土星",
-            point: 200,
-            image: "/img/iconDecor013.svg",
-        },
-        {
-            name: "虹",
-            point: 200,
-            image: "/img/iconDecor014.svg",
-        },
-        {
-            name: "雪",
-            point: 200,
-            image: "/img/iconDecor015.svg",
-        },
-    ];
+    // haveがfalseでgenreがnormalのアイテムを取得
+    const normalItem = itemList.filter((item) => !item.have && item.genre === "normal");
 
-    const foodItem = [
-        {
-            name: "ナポリタン",
-            point: 200,
-            image: "img/iconDecor003.svg",
-        },
-        {
-            name: "ラーメン",
-            point: 200,
-            image: "img/iconDecor004.svg",
-        },
-        {
-            name: "たこ焼き",
-            point: 200,
-            image: "img/iconDecor005.svg",
-        },
-        {
-            name: "寿司",
-            point: 200,
-            image: "img/iconDecor006.svg",
-        },
-        {
-            name: "天ぷら",
-            point: 200,
-            image: "img/iconDecor007.svg",
-        },
-    ];
+    // haveがfalseでgenreがfoodのアイテムを取得
+    const foodItem = itemList.filter((item) => !item.have && item.genre === "food");
 
     return (
         <div>

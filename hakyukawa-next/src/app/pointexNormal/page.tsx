@@ -4,62 +4,16 @@ import React from "react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/footer";
 import ChangeItem from "@/components/common/ChangeItem";
+import { useItemContext } from "@/context/ItemContext";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function PointexChange() {
-    const nowPoint = 1300;
+    const { data: profile } = useProfile();
+    const userPoint = profile?.user_point;
+    const { itemList } = useItemContext();
 
-    const normalItem = [
-        {
-            name: "アイテム名",
-            point: 200,
-            image: "/img/iconDecor001.svg",
-        },
-        {
-            name: "リボン",
-            point: 200,
-            image: "/img/iconDecor002.svg",
-        },
-        {
-            name: "うし",
-            point: 200,
-            image: "/img/iconDecor008.svg",
-        },
-        {
-            name: "パンダ",
-            point: 200,
-            image: "/img/iconDecor009.svg",
-        },
-        {
-            name: "ひつじ",
-            point: 200,
-            image: "/img/iconDecor010.svg",
-        },
-        {
-            name: "猫耳",
-            point: 200,
-            image: "/img/iconDecor011.svg",
-        },
-        {
-            name: "地球",
-            point: 200,
-            image: "/img/iconDecor012.svg",
-        },
-        {
-            name: "アイテム名",
-            point: 200,
-            image: "/img/iconDecor013.svg",
-        },
-        {
-            name: "虹",
-            point: 200,
-            image: "/img/iconDecor014.svg",
-        },
-        {
-            name: "雪",
-            point: 200,
-            image: "/img/iconDecor015.svg",
-        },
-    ];
+    const normalItem = itemList.filter((item) => !item.have && item.genre === "normal");
+
     return (
         <div>
             <Header backPage backPageLink="/pointexChange" backPageText="ポイント引き換え" />
@@ -68,7 +22,7 @@ export default function PointexChange() {
                     <div className="text-center py-4">
                         <p className="text-[1.3rem] font-semibold">所持ポイント</p>
                         <p className="text-[2.7rem] text-main font-extrabold">
-                            {nowPoint}
+                            {userPoint}
                             <span className="text-[20px]">pt</span>
                         </p>
                     </div>
