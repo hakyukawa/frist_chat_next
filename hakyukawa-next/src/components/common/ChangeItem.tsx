@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Dialog } from "@mui/material";
 import { useState } from "react";
 import { PiSealCheck } from "react-icons/pi";
+import { useItemContext } from "@/context/ItemContext"; // 正確なパスに調整してください
 
 interface Item {
     name: string;
@@ -12,20 +13,37 @@ interface Item {
 export default function Item({ name, point, image }: Item) {
     const [open, setOpen] = useState(false);
     const [checkOpen, setCheckOpen] = useState(false);
+    const { itemList, setItemList } = useItemContext();
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleChangeOpen = () => {
+        // アイテムリストから名前が一致するアイテムを見つけて、haveをtrueに設定
+        const updatedItemList = itemList.map((item) => {
+            if (item.name === name) {
+                return { ...item, have: true };
+            }
+            return item;
+        });
+
+        // 更新されたアイテムリストを設定
+        setItemList(updatedItemList);
+
+        // 元のダイアログを閉じる
+        setOpen(false);
+
+        // 交換完了のダイアログを開く
         setCheckOpen(true);
     };
-
     return (
         <>
             <Dialog
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={() => {
+                    setOpen(false);
+                }}
                 sx={{
                     "& .MuiPaper-root": {
                         backgroundColor: "#2e2f34",
@@ -58,7 +76,10 @@ export default function Item({ name, point, image }: Item) {
 
             <Dialog
                 open={checkOpen}
-                onClose={() => setCheckOpen(false)}
+                onClose={() => {
+                    setCheckOpen(false);
+                    setOpen(false);
+                }}
                 sx={{
                     "& .MuiPaper-root": {
                         backgroundColor: "#2e2f34",
